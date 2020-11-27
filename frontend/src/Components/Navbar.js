@@ -60,7 +60,7 @@ export default class Navbar extends Component {
                                             )
                                         })
                                     }
-                                    <li>
+                                    <li onClick={this.closeNavbar}>
                                         <Link to='/login'>
                                             <HiOutlineUserCircle className='link-icon' />
                                             {'User'.toUpperCase()}
