@@ -19,7 +19,7 @@ const products = [{
         },
         discountPrice: 70,
         price: 50,
-        InStock: 30,
+        InStock: 0,
         rating: 0,
         numReviews: 0,
     },

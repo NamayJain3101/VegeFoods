@@ -3,7 +3,6 @@ import { GoHome } from 'react-icons/go'
 import { GiSelfLove } from 'react-icons/gi'
 import { SiInstacart } from 'react-icons/si'
 import { BiCart } from 'react-icons/bi'
-import { HiOutlineUserCircle } from 'react-icons/hi'
 
 export const NavLinksData = [{
     id: 1,
