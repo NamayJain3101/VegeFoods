@@ -4,10 +4,10 @@ import { withRouter } from 'react-router-dom'
 import { FaBars, FaHeart, FaShoppingCart } from 'react-icons/fa'
 
 const Product = ({ product, history }) => {
-    const { image, name, price, discountPrice } = product
+    const { _id, image, name, price, discountPrice } = product
     return (
         <ProductWrapper>
-            <div className='img-wrapper' onClick={() => { history.push(`/shop/${name}`) }}>
+            <div className='img-wrapper' onClick={() => { history.push(`/shop/${_id}`) }}>
                 <img src={image} alt={name} className='img-fluid w-100' />
             </div>
             <div className={discountPrice ? 'discount' : 'discount d-none'}>
@@ -22,7 +22,7 @@ const Product = ({ product, history }) => {
                     </p>
                 </div>
                 <div className="buttons">
-                    <button onClick={() => { history.push(`/shop/${name}`) }}><FaBars /></button>
+                    <button onClick={() => { history.push(`/shop/${_id}`) }}><FaBars /></button>
                     <button><FaHeart /></button>
                     <button><FaShoppingCart /></button>
                 </div>

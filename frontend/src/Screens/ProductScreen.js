@@ -1,27 +1,30 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import { useDispatch, useSelector } from 'react-redux'
 import { Button, Col, Container, Form, Row } from 'react-bootstrap'
 import styled from 'styled-components'
 import Rating from '../Components/Rating'
+import Loader from '../Components/Loader'
+import Message from '../Components/Message'
 import Subscribe from '../Components/Subscribe'
+import { listProductDetails } from '../Actions/productActions'
 
 const ProductScreen = ({ match, history }) => {
 
-    const [product, setProduct] = useState({})
+    const productDetails = useSelector(state => state.productDetails)
+    const { product, loading, error } = productDetails
+
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        const fetchProduct = async () => {
-            const { data } = await axios.get(`/api/products/${match.params.name}`)
-            setProduct(data)
-        }
-        fetchProduct()
-    }, [match])
+        dispatch(listProductDetails(match.params.id))
+    }, [dispatch, match])
 
     let desc;
     if (product.description) {
-        if (product.description.color) {
+        if (product.description.color && product.description.color.length !== 0) {
             desc = [...product.description.color]
-        } else if (product.description.flavour) {
+        }
+        if (product.description.flavour && product.description.flavour.length !== 0) {
             desc = [...product.description.flavour]
         }
     }
@@ -39,8 +42,8 @@ const ProductScreen = ({ match, history }) => {
 
     return (
         <div>
-            {product && (
-                <ProductScreenWrapper>
+            <ProductScreenWrapper>
+                {loading ? <Loader /> : error ? <Message variant='danger'>{error}</Message> : (
                     <Container>
                         <Button type='button' variant='light' onClick={() => history.push('/shop')}>Go Back</Button>
                         <Row>
@@ -56,8 +59,8 @@ const ProductScreen = ({ match, history }) => {
                             </h2>
                                 {desc && (
                                     <Form.Control className='desc' as='select' value={description} onChange={(e) => { setDescription(e.target.value) }}>
-                                        {desc.map((cat, index) => (
-                                            <option key={index} value={cat}>{cat}</option>
+                                        {desc.map((item, index) => (
+                                            <option key={index} value={item}>{item}</option>
                                         ))}
                                     </Form.Control>
                                 )}
@@ -71,8 +74,8 @@ const ProductScreen = ({ match, history }) => {
                             </Col>
                         </Row>
                     </Container>
-                </ProductScreenWrapper>
-            )}
+                )}
+            </ProductScreenWrapper>
             <Subscribe />
         </div>
     )
