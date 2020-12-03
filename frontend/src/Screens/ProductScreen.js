@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Col, Container, Form, Row } from 'react-bootstrap'
 import styled from 'styled-components'
+import Tilt from 'react-tilt'
 import Rating from '../Components/Rating'
 import Loader from '../Components/Loader'
 import Message from '../Components/Message'
@@ -62,8 +63,19 @@ const ProductScreen = ({ match, history }) => {
                     <Container>
                         <Button type='button' variant='light' onClick={() => history.push('/shop')}>Go Back</Button>
                         <Row>
-                            <Col lg={6}>
-                                <img src={product.image} alt={product.name} className='img-fluid w-100' />
+                            <Col lg={6} className='img-container'>
+                                <Tilt className="Tilt"
+                                    options={{
+                                        max: 45,
+                                        perspective: 500,
+                                        scale: 1.2,
+                                        speed: 300,
+                                        transition: true,
+                                        easing: "cubic-bezier(.03,.98,.52,.99)"
+                                    }}
+                                >
+                                    <img src={product.image} alt={product.name} className='img-fluid w-100' />
+                                </Tilt>
                             </Col>
                             <Col lg={6} className='description'>
                                 <h2 className='text-uppercase'>{product.name}</h2>
@@ -132,6 +144,13 @@ const ProductScreenWrapper = styled.div`
         margin-right: 10px;
         font-family: sans-serif !important;
         text-decoration: line-through;
+    }
+    .row > .img-container {
+        border-radius: 50%;
+        overflow: hidden;
+    }
+    .row > .img-container > img {
+        border-radius: 50%;
     }
     .description {
         display: flex;

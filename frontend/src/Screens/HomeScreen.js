@@ -10,6 +10,7 @@ import Message from '../Components/Message'
 import Services from '../Components/Services'
 import Subscribe from '../Components/Subscribe'
 import { Link } from 'react-router-dom'
+import Tilt from 'react-tilt'
 
 const HomeScreen = () => {
 
@@ -57,7 +58,18 @@ const HomeScreen = () => {
                         <Row>
                             <Col md={6}>
                                 <div className='img-container'>
-                                    <img src={productBestProduct.image} alt='best Deal' className='img-fluid' />
+                                    <Tilt className="Tilt"
+                                        options={{
+                                            max: 35,
+                                            perspective: 700,
+                                            scale: 1.1,
+                                            speed: 900,
+                                            transition: true,
+                                            easing: "cubic-bezier(.03,.98,.52,.99)"
+                                        }}
+                                    >
+                                        <img src={productBestProduct.image} alt='best Deal' className='img-fluid' />
+                                    </Tilt>
                                 </div>
                             </Col>
                             <Col md={5}>
@@ -120,7 +132,7 @@ const BestDealWrapper = styled.div`
         margin-bottom: 2rem;
     }
     .row > div > .img-container img {
-        transform: scale(1.5);
+        transform: scale(1.3);
         border-radius: 50%;
     }
     .price {

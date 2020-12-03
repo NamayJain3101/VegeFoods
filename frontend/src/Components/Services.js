@@ -2,6 +2,7 @@ import React from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
 import styled from 'styled-components'
 import { ServicesData } from '../Data/ServicesData'
+import Tilt from 'react-tilt'
 
 const Services = () => {
     return (
@@ -16,20 +17,31 @@ const Services = () => {
                                     md={3}
                                     key={item.id}
                                 >
-                                    <div className='media mb-md-0 mb-4'>
-                                        <div
-                                            className='mb-2 media-icon'
-                                            style={{ background: `${item.color}` }}
-                                        >
-                                            <div>
-                                                {item.icon}
+                                    <Tilt className="Tilt"
+                                        options={{
+                                            max: 50,
+                                            perspective: 400,
+                                            scale: 1.0,
+                                            speed: 300,
+                                            transition: true,
+                                            easing: "cubic-bezier(.03,.98,.52,.99)"
+                                        }}
+                                    >
+                                        <div className='media mb-md-0 mb-4'>
+                                            <div
+                                                className='mb-2 media-icon'
+                                                style={{ background: `${item.color}` }}
+                                            >
+                                                <div>
+                                                    {item.icon}
+                                                </div>
+                                            </div>
+                                            <div className='media-body'>
+                                                <h6>{item.title}</h6>
+                                                <p className='text-muted'>{item.subtitle}</p>
                                             </div>
                                         </div>
-                                        <div className='media-body'>
-                                            <h6>{item.title}</h6>
-                                            <p className='text-muted'>{item.subtitle}</p>
-                                        </div>
-                                    </div>
+                                    </Tilt>
                                 </Col>
                             )
                         })

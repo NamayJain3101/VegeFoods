@@ -13,13 +13,13 @@ const RegisterScreen = () => {
             <LoginWrapper>
                 <Container>
                     <Row>
-                        <Col lg={5} className='d-none d-lg-flex pr-lg-5'>
+                        <Col lg={6} className='d-none d-lg-flex pr-lg-5'>
                             <Tilt className="Tilt"
                                 options={{
-                                    max: 35,
+                                    max: 45,
                                     perspective: 700,
                                     scale: 1.2,
-                                    speed: 300,
+                                    speed: 700,
                                     transition: true,
                                     easing: "cubic-bezier(.03,.98,.52,.99)"
                                 }}
@@ -44,7 +44,7 @@ const RegisterScreen = () => {
 }
 
 const LoginWrapper = styled.div`
-    background: linear-gradient(170deg, yellowgreen, #0aa34f, yellowgreen);
+    background: linear-gradient(170deg, yellowgreen, lightgreen, yellowgreen);
     padding: 3rem 0;
     .container {
         padding: 3rem;
