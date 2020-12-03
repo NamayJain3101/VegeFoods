@@ -10,6 +10,25 @@
     user-select: none;
 }
 
+::-webkit-scrollbar {
+    width: 10px;
+    position: absolute;
+    top: 66px;
+}
+
+::-webkit-scrollbar-track {
+    box-shadow: inset 10px 10px 5px lightgreen;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgb(20, 148, 20);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: green;
+}
+
 a {
     text-decoration: none !important;
 }
@@ -21,5 +40,31 @@ body {
 @media (max-width: 700px) {
     body {
         margin-top: 100px !important;
+    }
+}
+
+.Toastify__toast-container {
+    width: 50vw !important;
+}
+
+.Toastify__toast--default {
+    background: black !important;
+}
+
+.Toastify__toast-body {
+    margin: 10px !important;
+}
+
+.Toastify__toast {
+    min-height: auto !important;
+}
+
+@media(max-width: 701px) {
+    .Toastify__toast-container {
+        width: 90vw !important;
+        margin: 0 auto !important;
+        bottom: 3rem !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
     }
 }

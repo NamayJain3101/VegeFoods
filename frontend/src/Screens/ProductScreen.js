@@ -6,18 +6,23 @@ import Rating from '../Components/Rating'
 import Loader from '../Components/Loader'
 import Message from '../Components/Message'
 import Subscribe from '../Components/Subscribe'
-import { listProductDetails } from '../Actions/productActions'
+import Product from '../Components/Product'
+import { listProductDetails, listProducts } from '../Actions/productActions'
 
 const ProductScreen = ({ match, history }) => {
 
     const productDetails = useSelector(state => state.productDetails)
     const { product, loading, error } = productDetails
 
+    const productList = useSelector(state => state.productList)
+    const { products, error: errorProducts, loading: loadingProducts } = productList
+
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(listProductDetails(match.params.id))
-    }, [dispatch, match])
+        dispatch(listProducts(product.category, ''))
+    }, [dispatch, match, product.category])
 
     let desc;
     if (product.description) {
@@ -40,6 +45,16 @@ const ProductScreen = ({ match, history }) => {
         setQty(qty - 1)
     }
 
+    const addToCartHandler = (qty, description) => {
+        console.log(desc)
+        if (!description && desc && desc.length !== 0) {
+            description = desc[0]
+        } else if (!desc) {
+            description = ''
+        }
+        history.push(`/cart/${product._id}?qty=${qty}&desc=${description}`)
+    }
+
     return (
         <div>
             <ProductScreenWrapper>
@@ -55,8 +70,8 @@ const ProductScreen = ({ match, history }) => {
                                 <Rating value={product.rating} text={product.numReviews} />
                                 <h2 className='price'>
                                     {product.discountPrice && <span className='text-muted'>&#8377;{product.discountPrice}</span>}
-                                &#8377;{product.price}/Kg
-                            </h2>
+                                    &#8377;{product.price}/Kg
+                                </h2>
                                 {desc && (
                                     <Form.Control className='desc' as='select' value={description} onChange={(e) => { setDescription(e.target.value) }}>
                                         {desc.map((item, index) => (
@@ -70,12 +85,39 @@ const ProductScreen = ({ match, history }) => {
                                     <button disabled={qty >= product.InStock} onClick={incQty}>+</button>
                                 </div>
                                 <h6>{product.InStock > 0 ? `${product.InStock} Kg available` : `Out Of Stock`}</h6>
-                                <Button disabled={product.InStock <= 0} className='cartButton' variant='success' type='button'>Add To Cart</Button>
+                                <Button
+                                    disabled={product.InStock <= 0}
+                                    className='cartButton'
+                                    variant='success'
+                                    type='button'
+                                    onClick={(q, d) => addToCartHandler(qty, description)}
+                                >
+                                    Add To Cart
+                                </Button>
                             </Col>
                         </Row>
                     </Container>
                 )}
             </ProductScreenWrapper>
+            <SimilarProductsWrapper>
+                <Container>
+                    <h5 className='text-success text-center'>Products</h5>
+                    <h2 className='text-center'>Related Products</h2>
+                    {loadingProducts ? <Loader /> : errorProducts ? <Message variant='danger'>{errorProducts}</Message> : (
+                        <Row>
+                            {
+                                products.map(product => {
+                                    return (
+                                        <Col key={product.name} md={6} lg={3}>
+                                            <Product product={product} />
+                                        </Col>
+                                    )
+                                })
+                            }
+                        </Row>
+                    )}
+                </Container>
+            </SimilarProductsWrapper>
             <Subscribe />
         </div>
     )
@@ -168,6 +210,24 @@ const ProductScreenWrapper = styled.div`
         .cartButton {
             width: 100%;
         }
+    }
+`
+
+const SimilarProductsWrapper = styled.div`
+    background: #fff;
+    padding-bottom: 5rem;
+    h5 {
+        font-style: italic;
+        margin-bottom: 1rem;
+    }
+    h2 {
+        font-weight: bold;
+        margin-bottom: 3rem;
+    }
+    .row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 `
 

@@ -36,8 +36,8 @@ const MainCarousel = ({ history }) => {
                 </div>
             </OwlCarousel>
             <div className='desc'>
-                <h1 className='mb-3'>100% FRESH ORGANIC FOOD</h1>
-                <h5 className='mb-5'>WE DELIVER ORGANIC VEGETABLES AND FRUITS</h5>
+                <h1 className='mb-3 font-weight-bold'>100% FRESH ORGANIC FOOD</h1>
+                <h5 className='mb-5 font-weight-bold'>WE DELIVER ORGANIC VEGETABLES AND FRUITS</h5>
                 <Button type='button' variant='success' onClick={() => history.push(`/contact`)}>View Details</Button>
             </div>
         </MainCarouselWrapper>
@@ -49,6 +49,8 @@ const MainCarouselWrapper = styled.div`
     margin-bottom: 4rem;
     .item {
         height: calc(100vh - 125px);
+        filter: contrast(0.8);
+        filter: blur(100%);
     }
     .item > img {
         height: 100% !important;

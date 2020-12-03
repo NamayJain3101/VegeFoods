@@ -15,6 +15,7 @@ const Message = ({ variant, children }) => {
 }
 
 const MessageWrapper = styled.div`
+    width: 100%;
     .alert {
         width: 70%;
         margin: 4rem auto;

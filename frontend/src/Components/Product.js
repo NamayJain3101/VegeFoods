@@ -2,9 +2,29 @@ import React from 'react'
 import styled from 'styled-components'
 import { withRouter } from 'react-router-dom'
 import { FaBars, FaHeart, FaShoppingCart } from 'react-icons/fa'
+import { useDispatch } from 'react-redux'
+import { addToCart } from '../Actions/cartActions'
 
 const Product = ({ product, history }) => {
     const { _id, image, name, price, discountPrice } = product
+
+    let desc;
+    if (product.description) {
+        if (product.description.color && product.description.color.length !== 0) {
+            desc = [...product.description.color]
+        }
+        if (product.description.flavour && product.description.flavour.length !== 0) {
+            desc = [...product.description.flavour]
+        }
+    }
+
+    const dispatch = useDispatch()
+
+    const addToCartHandler = (id, desc) => {
+        dispatch(addToCart(id, 1, desc))
+        history.push('/cart')
+    }
+
     return (
         <ProductWrapper>
             <div className='img-wrapper' onClick={() => { history.push(`/shop/${_id}`) }}>
@@ -15,7 +35,7 @@ const Product = ({ product, history }) => {
             </div>
             <div className='desc'>
                 <div className='data'>
-                    <h6>{name.toUpperCase()}</h6>
+                    <h6 className='text-uppercase'>{name}</h6>
                     <p>
                         {discountPrice && <span className='text-muted'>&#8377;{discountPrice}</span>}
                         &#8377;{price}
@@ -24,7 +44,7 @@ const Product = ({ product, history }) => {
                 <div className="buttons">
                     <button onClick={() => { history.push(`/shop/${_id}`) }}><FaBars /></button>
                     <button><FaHeart /></button>
-                    <button><FaShoppingCart /></button>
+                    <button onClick={(id, des) => addToCartHandler(_id, desc[0])}><FaShoppingCart /></button>
                 </div>
             </div>
         </ProductWrapper>
