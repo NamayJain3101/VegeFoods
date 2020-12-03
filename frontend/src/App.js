@@ -10,6 +10,8 @@ import ContactScreen from './Screens/ContactScreen'
 import ShopScreen from './Screens/ShopScreen'
 import ProductScreen from './Screens/ProductScreen'
 import CartScreen from './Screens/CartScreen'
+import LoginScreen from './Screens/LoginScreen'
+import RegisterScreen from './Screens/RegisterScreen'
 
 const App = () => {
 	return (
@@ -22,6 +24,8 @@ const App = () => {
 				<Route path='/shop' exact component={ShopScreen} />
 				<Route path='/shop/:id' exact component={ProductScreen} />
 				<Route path='/cart/:id?' exact component={CartScreen} />
+				<Route path='/login' exact component={LoginScreen} />
+				<Route path='/register' exact component={RegisterScreen} />
 			</Switch>
 			<Footer />
 		</BrowserRouter>

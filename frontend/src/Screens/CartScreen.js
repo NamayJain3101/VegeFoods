@@ -10,7 +10,7 @@ import { Button, Col, Container, ListGroup, ListGroupItem, Row } from 'react-boo
 import Subscribe from '../Components/Subscribe'
 import Message from '../Components/Message'
 import { Link } from 'react-router-dom'
-import { FaCross, FaTrash } from 'react-icons/fa'
+import { FaTrash } from 'react-icons/fa'
 
 const CartScreen = ({ match, location, history }) => {
 
@@ -102,7 +102,7 @@ const CartScreen = ({ match, location, history }) => {
                                         })}
                                     </ListGroup>
                                 </Col>
-                                <Col lg={4} className='price-details mt-4 mt-lg-0'>
+                                <Col lg={4} className='price-details mt-5 mt-lg-0'>
                                     <ListGroup>
                                         <ListGroupItem className='title'>
                                             <h5 className='font-weight-bold text-capitalize'>
@@ -234,7 +234,7 @@ const CartWrapper = styled.div`
         width: calc(100% - 10px);
         background: linear-gradient(to bottom right, grey, black, grey);
         padding: 0.7rem 1.5rem;
-        outline: 1px solid green;
+        outline: 2px solid black;
         outline-offset: 4px;
         border: none;
         border-radius: 0;
@@ -260,7 +260,7 @@ const CartWrapper = styled.div`
     }
     @media(max-width: 800px) {
         .myCart {
-            max-height: 1000px;
+            max-height: 700px;
             overflow: auto;
         }
         .list-group-item {
