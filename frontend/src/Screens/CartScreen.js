@@ -85,11 +85,11 @@ const CartScreen = ({ match, location, history }) => {
                                                 return (
                                                     <ListGroupItem key={item.product}>
                                                         <div className='img-container'>
-                                                            <img src={item.image} alt={item.name} className='img-fluid' />
+                                                            <img src={item.image} style={{ cursor: 'pointer' }} onClick={() => history.push(`/shop/${item.product}`)} alt={item.name} className='img-fluid' />
                                                         </div>
                                                         <div className='desc'>
-                                                            <h4>{item.name}</h4>
-                                                            <h5 className='text-muted mb-3'>{item.desc && item.desc}</h5>
+                                                            <h4 style={{ cursor: 'pointer' }} onClick={() => history.push(`/shop/${item.product}`)}>{item.name}</h4>
+                                                            <h5 className='text-muted mb-3 text-capitalize'>{item.desc && item.desc}</h5>
                                                             <h4 className='mb-3 price'>&#8377;{item.price}</h4>
                                                             {item.InStock <= 0
                                                                 ? <h4 className='text-danger mb-3'>Currently Out Of Stock</h4>
