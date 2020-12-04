@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { Button, Col, Container, Row } from 'react-bootstrap'
 import Subscribe from '../Components/Subscribe'
@@ -6,37 +6,47 @@ import LoginImg from '../Assets/login.png'
 import { Link } from 'react-router-dom'
 import { BsArrowRight } from 'react-icons/bs'
 import Tilt from 'react-tilt'
+import * as Scroll from 'react-scroll'
+import { Animated } from "react-animated-css"
 
 const RegisterScreen = () => {
+    useEffect(() => {
+        Scroll.animateScroll.scrollToTop({
+            duration: 1500,
+            smooth: 'easeInOutQuint'
+        })
+    })
     return (
         <div>
             <LoginWrapper>
-                <Container>
-                    <Row>
-                        <Col lg={6} className='d-none d-lg-flex pr-lg-5'>
-                            <Tilt className="Tilt"
-                                options={{
-                                    max: 45,
-                                    perspective: 700,
-                                    scale: 1.2,
-                                    speed: 700,
-                                    transition: true,
-                                    easing: "cubic-bezier(.03,.98,.52,.99)"
-                                }}
-                            >
-                                <img src={LoginImg} alt='login' className='w-100 img-fluid' />
-                            </Tilt>                        </Col>
-                        <Col lg={6} className='form'>
-                            <h3 className='text-center text-uppercase font-weight-bold'>Sign Up</h3>
-                            <input type="text" name="name" id="name" placeholder='Name' />
-                            <input type="email" name="email" id="email" placeholder='Email' />
-                            <input type="password" name="password" id="password" placeholder='Password' />
-                            <input type="password" name="ConfirmPassword" id="ConfirmPassword" placeholder='Confirm Password' />
-                            <Button variant='success' className='btn btn-block text-uppercase'>sign up</Button>
-                            <Link to='/login'>Have an Account! Login <BsArrowRight /> </Link>
-                        </Col>
-                    </Row>
-                </Container>
+                <Animated animationIn="flipInX" animationOut="zoomOutDown" isVisible={true}>
+                    <Container>
+                        <Row>
+                            <Col lg={6} className='d-none d-lg-flex pr-lg-5'>
+                                <Tilt className="Tilt"
+                                    options={{
+                                        max: 45,
+                                        perspective: 700,
+                                        scale: 1.2,
+                                        speed: 700,
+                                        transition: true,
+                                        easing: "cubic-bezier(.03,.98,.52,.99)"
+                                    }}
+                                >
+                                    <img src={LoginImg} alt='login' className='w-100 img-fluid' />
+                                </Tilt>                        </Col>
+                            <Col lg={6} className='form'>
+                                <h3 className='text-center text-uppercase font-weight-bold'>Sign Up</h3>
+                                <input type="text" name="name" id="name" placeholder='Name' />
+                                <input type="email" name="email" id="email" placeholder='Email' />
+                                <input type="password" name="password" id="password" placeholder='Password' />
+                                <input type="password" name="ConfirmPassword" id="ConfirmPassword" placeholder='Confirm Password' />
+                                <Button variant='success' className='btn btn-block text-uppercase'>sign up</Button>
+                                <Link to='/login'>Have an Account! Login <BsArrowRight /> </Link>
+                            </Col>
+                        </Row>
+                    </Container>
+                </Animated>
             </LoginWrapper>
             <Subscribe />
         </div>
@@ -93,6 +103,7 @@ const LoginWrapper = styled.div`
         padding: 2rem;
         .container {
             padding: 2rem;
+            box-shadow: 3px 3px 20px 5px green;
         }
         .container h3 {
             margin-bottom: 2rem;

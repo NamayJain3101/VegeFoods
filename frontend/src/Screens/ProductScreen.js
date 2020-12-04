@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import * as Scroll from 'react-scroll'
 import { Button, Col, Container, Form, Row } from 'react-bootstrap'
 import styled from 'styled-components'
 import Tilt from 'react-tilt'
@@ -23,6 +24,10 @@ const ProductScreen = ({ match, history }) => {
     useEffect(() => {
         dispatch(listProductDetails(match.params.id))
         dispatch(listProducts(product.category, ''))
+        Scroll.animateScroll.scrollToTop({
+            duration: 1500,
+            smooth: 'easeInOutQuint'
+        })
     }, [dispatch, match, product.category])
 
     let desc;

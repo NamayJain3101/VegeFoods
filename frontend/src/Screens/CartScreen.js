@@ -11,6 +11,8 @@ import Subscribe from '../Components/Subscribe'
 import Message from '../Components/Message'
 import { Link } from 'react-router-dom'
 import { FaTrash } from 'react-icons/fa'
+import * as Scroll from 'react-scroll'
+import { Animated } from "react-animated-css";
 
 const CartScreen = ({ match, location, history }) => {
 
@@ -28,6 +30,10 @@ const CartScreen = ({ match, location, history }) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
+        Scroll.animateScroll.scrollToTop({
+            duration: 1500,
+            smooth: 'easeInOutQuint'
+        })
         if (productId) {
             dispatch(addToCart(productId, qty, desc))
         }
@@ -68,85 +74,89 @@ const CartScreen = ({ match, location, history }) => {
                     ) : (
                             <Row>
                                 <Col lg={8}>
-                                    <ListGroup className='myCart'>
-                                        <ListGroupItem className='title'>
-                                            <h5 className='font-weight-bold text-capitalize'>
-                                                My Cart ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
+                                    <Animated animationIn="zoomInUp" animationInDelay={700} animationOut="zoomOutDown" isVisible={true}>
+                                        <ListGroup className='myCart'>
+                                            <ListGroupItem className='title'>
+                                                <h5 className='font-weight-bold text-capitalize'>
+                                                    My Cart ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
                                             </h5>
-                                        </ListGroupItem>
-                                        {cartItems.map(item => {
-                                            return (
-                                                <ListGroupItem key={item.product}>
-                                                    <div className='img-container'>
-                                                        <img src={item.image} alt={item.name} className='img-fluid' />
-                                                    </div>
-                                                    <div className='desc'>
-                                                        <h4>{item.name}</h4>
-                                                        <h5 className='text-muted mb-3'>{item.desc && item.desc}</h5>
-                                                        <h4 className='mb-3 price'>&#8377;{item.price}</h4>
-                                                        {item.InStock <= 0
-                                                            ? <h4 className='text-danger mb-3'>Currently Out Of Stock</h4>
-                                                            : <h5 className='text-success mb-3'>{item.InStock} Kg available</h5>
-                                                        }
-                                                    </div>
-                                                    <div className='subtotal'>
-                                                        <div className='quantity'>
-                                                            <button disabled={item.qty <= 1} onClick={(id, qty, desc, name) => decQty(item.product, item.qty, item.desc, item.name)}>-</button>
-                                                            <div className='input'>{`${item.qty} Kg`}</div>
-                                                            <button disabled={item.qty >= item.InStock} onClick={(id, qty, desc, name) => incQty(item.product, item.qty, item.desc, item.name)}>+</button>
+                                            </ListGroupItem>
+                                            {cartItems.map(item => {
+                                                return (
+                                                    <ListGroupItem key={item.product}>
+                                                        <div className='img-container'>
+                                                            <img src={item.image} alt={item.name} className='img-fluid' />
                                                         </div>
-                                                        <Button className='btn btn-danger mt-4' onClick={(id, name) => removeFromCartHandler(item.product, item.name)}><FaTrash /> Delete</Button>
-                                                    </div>
-                                                </ListGroupItem>
-                                            )
-                                        })}
-                                    </ListGroup>
+                                                        <div className='desc'>
+                                                            <h4>{item.name}</h4>
+                                                            <h5 className='text-muted mb-3'>{item.desc && item.desc}</h5>
+                                                            <h4 className='mb-3 price'>&#8377;{item.price}</h4>
+                                                            {item.InStock <= 0
+                                                                ? <h4 className='text-danger mb-3'>Currently Out Of Stock</h4>
+                                                                : <h5 className='text-success mb-3'>{item.InStock} Kg available</h5>
+                                                            }
+                                                        </div>
+                                                        <div className='subtotal'>
+                                                            <div className='quantity'>
+                                                                <button disabled={item.qty <= 1} onClick={(id, qty, desc, name) => decQty(item.product, item.qty, item.desc, item.name)}>-</button>
+                                                                <div className='input'>{`${item.qty} Kg`}</div>
+                                                                <button disabled={item.qty >= item.InStock} onClick={(id, qty, desc, name) => incQty(item.product, item.qty, item.desc, item.name)}>+</button>
+                                                            </div>
+                                                            <Button className='btn btn-danger mt-4' onClick={(id, name) => removeFromCartHandler(item.product, item.name)}><FaTrash /> Delete</Button>
+                                                        </div>
+                                                    </ListGroupItem>
+                                                )
+                                            })}
+                                        </ListGroup>
+                                    </Animated>
                                 </Col>
                                 <Col lg={4} className='price-details mt-5 mt-lg-0'>
-                                    <ListGroup>
-                                        <ListGroupItem className='title'>
-                                            <h5 className='font-weight-bold text-capitalize'>
-                                                Price Details
+                                    <Animated animationIn="zoomInUp" animationInDelay={700} animationOut="zoomOutDown" isVisible={true}>
+                                        <ListGroup>
+                                            <ListGroupItem className='title'>
+                                                <h5 className='font-weight-bold text-capitalize'>
+                                                    Price Details
                                         </h5>
-                                        </ListGroupItem>
-                                        <ListGroupItem>
-                                            <h5>
-                                                Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)}):
+                                            </ListGroupItem>
+                                            <ListGroupItem>
+                                                <h5>
+                                                    Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)}):
                                             </h5>
-                                            <h5 className='price'>
-                                                &#8377;{cartItems.reduce((acc, item) => acc + item.qty * item.price, 0).toFixed(2)}
+                                                <h5 className='price'>
+                                                    &#8377;{cartItems.reduce((acc, item) => acc + item.qty * item.price, 0).toFixed(2)}
+                                                </h5>
+                                            </ListGroupItem>
+                                            <ListGroupItem>
+                                                <h5>
+                                                    Shipping Price:
                                             </h5>
-                                        </ListGroupItem>
-                                        <ListGroupItem>
-                                            <h5>
-                                                Shipping Price:
+                                                <h5 className='price'>
+                                                    &#8377;{(cartItems.reduce((acc, item) => acc + item.qty * item.price, 0) < 500) ? '100.00' : '0.00'}
+                                                </h5>
+                                            </ListGroupItem>
+                                            <ListGroupItem>
+                                                <h5>
+                                                    Total Price:
                                             </h5>
-                                            <h5 className='price'>
-                                                &#8377;{(cartItems.reduce((acc, item) => acc + item.qty * item.price, 0) < 500) ? '100.00' : '0.00'}
-                                            </h5>
-                                        </ListGroupItem>
-                                        <ListGroupItem>
-                                            <h5>
-                                                Total Price:
-                                            </h5>
-                                            <h5 className='price'>
-                                                &#8377;{(cartItems.reduce((acc, item) => acc + item.qty * item.price, 0) < 500)
-                                                    ? (cartItems.reduce((acc, item) => acc + item.qty * item.price, 0) + 100).toFixed(2)
-                                                    : (cartItems.reduce((acc, item) => acc + item.qty * item.price, 0)).toFixed(2)
-                                                }
-                                            </h5>
-                                        </ListGroupItem>
-                                        <ListGroupItem>
-                                            <Button
-                                                variant='success'
-                                                disabled={cartItems.length === 0}
-                                                className='btn btn-block checkout'
-                                                onClick={checkoutHandler}
-                                            >
-                                                Checkout
+                                                <h5 className='price'>
+                                                    &#8377;{(cartItems.reduce((acc, item) => acc + item.qty * item.price, 0) < 500)
+                                                        ? (cartItems.reduce((acc, item) => acc + item.qty * item.price, 0) + 100).toFixed(2)
+                                                        : (cartItems.reduce((acc, item) => acc + item.qty * item.price, 0)).toFixed(2)
+                                                    }
+                                                </h5>
+                                            </ListGroupItem>
+                                            <ListGroupItem>
+                                                <Button
+                                                    variant='success'
+                                                    disabled={cartItems.length === 0}
+                                                    className='btn btn-block checkout'
+                                                    onClick={checkoutHandler}
+                                                >
+                                                    Checkout
                                             </Button>
-                                        </ListGroupItem>
-                                    </ListGroup>
+                                            </ListGroupItem>
+                                        </ListGroup>
+                                    </Animated>
                                 </Col>
                             </Row>
                         )}
@@ -242,19 +252,19 @@ const CartWrapper = styled.div`
         color: lime;
         letter-spacing: 2px;
     }
-    .price-details > .list-group > .list-group-item {
+    .price-details > .animated > .list-group > .list-group-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 1.5rem;
     }
-    .price-details > .list-group > .list-group-item h5 {
+    .price-details > .animated > .list-group > .list-group-item h5 {
         margin: 0;
     }
-    .price-details > .list-group > .title {
+    .price-details > .animated > .list-group > .title {
         padding: 1rem;
     }
-    .price-details > .list-group > .title h5 {
+    .price-details > .animated > .list-group > .title h5 {
         width: 100%;
         text-align: center;
     }

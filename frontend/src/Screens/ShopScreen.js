@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import * as Scroll from 'react-scroll'
+import Veg1 from '../Assets/veg1.jpg'
 import Hero from '../Components/Hero'
 import Subscribe from '../Components/Subscribe'
-
-import Veg1 from '../Assets/veg1.jpg'
 import { Button, Col, Container, Row } from 'react-bootstrap'
 import Product from '../Components/Product'
 import styled from 'styled-components'
@@ -29,6 +29,10 @@ const ShopScreen = () => {
     const [focus, setFocus] = useState(false)
 
     useEffect(() => {
+        Scroll.animateScroll.scrollToTop({
+            duration: 1500,
+            smooth: 'easeInOutQuint'
+        })
         dispatch(listProducts(category, searchName))
         dispatch(listCategories())
     }, [category, dispatch, searchName])
