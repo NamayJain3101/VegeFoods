@@ -62,7 +62,7 @@ const CartScreen = ({ match, location, history }) => {
 
     return (
         <div>
-            <Hero img={Veg1} title='My Cart' max='true' />
+            <Hero img={Veg1} title='My Cart' />
             <CartWrapper>
                 <Container>
                     {(cartItems.length === 0) ? (

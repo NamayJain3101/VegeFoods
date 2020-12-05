@@ -3,13 +3,21 @@ import styled from 'styled-components'
 import { Col, Row } from 'react-bootstrap'
 import { Link, withRouter } from 'react-router-dom'
 import { IoIosArrowUp } from 'react-icons/io'
+import * as Scroll from 'react-scroll'
 
 const Footer = ({ history }) => {
+    const scrollTop = () => {
+        Scroll.animateScroll.scrollToTop({
+            duration: 1500,
+            smooth: 'easeInOutQuint',
+            delay: 500
+        })
+    }
     return (
         <FooterWrapper>
-            <Link to='/' className='goTop'>
+            <button onClick={scrollTop} className='goTop'>
                 <IoIosArrowUp />
-            </Link>
+            </button>
             <Row>
                 <Col sm={4}>
                     <h5 onClick={() => history.push('/')} style={{ cursor: 'pointer' }}>Vegefoods</h5>
@@ -77,6 +85,8 @@ const FooterWrapper = styled.div`
         left: 50%;
         transform: translate(-50%, 50%);
         z-index: 2;
+        outline: none;
+        border: none;
     }
     @media (max-width: 701px) {
         padding: 3rem 1rem;

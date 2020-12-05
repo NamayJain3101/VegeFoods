@@ -18,7 +18,7 @@ const AboutScreen = () => {
     })
     return (
         <div>
-            <Animated animationIn="zoomInUp" animationInDelay={2000} animationOut="zoomOutDown" isVisible={true}>
+            <Animated animationIn="zoomInUp" animationInDelay={1000} animationOut="zoomOutDown" isVisible={true}>
                 <Hero img={Veg1} max='true' title='About Us' />
                 <AboutSection />
                 <Services />

@@ -51,7 +51,7 @@ const ShopScreen = () => {
 
     return (
         <div>
-            <Hero img={Veg1} max='true' title='Products' />
+            <Hero img={Veg1} title='Products' />
             {loading ? <Loader /> : error ? <Message variant='danger'>{error}</Message> : (
                 <React.Fragment>
                     <CategoryWrapper>

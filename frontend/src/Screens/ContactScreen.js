@@ -22,7 +22,7 @@ const ContactScreen = () => {
             <Hero img={Veg1} max='true' title='Contact Us' />
             <ContactWrapper>
                 <Container>
-                    <Animated animationIn="flipInX" animationInDelay={2000} animationOut="zoomOutDown" isVisible={true}>
+                    <Animated animationIn="flipInX" animationInDelay={1000} animationOut="zoomOutDown" isVisible={true}>
                         <div className="row">
                             {
                                 ContactData.map(item => {

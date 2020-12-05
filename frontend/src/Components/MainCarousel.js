@@ -2,6 +2,7 @@ import React from 'react'
 
 import Veg1 from '../Assets/veg1.jpg'
 import Veg2 from '../Assets/veg2.jpg'
+import Veg3 from '../Assets/Veg3.jpg'
 
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
@@ -20,7 +21,7 @@ const MainCarousel = ({ history }) => {
                 autoplay={true}
                 autoplayTimeout={9000}
                 autoplaySpeed={3000}
-                items={2}
+                items={3}
                 responsive={{
                     0: {
                         items: 1,
@@ -28,6 +29,9 @@ const MainCarousel = ({ history }) => {
                     }
                 }}
             >
+                <div className={'item'}>
+                    <img src={Veg3} alt='image3' className='img-responsive' />
+                </div>
                 <div className={'item'}>
                     <img src={Veg1} alt='image1' className='img-responsive' />
                 </div>
