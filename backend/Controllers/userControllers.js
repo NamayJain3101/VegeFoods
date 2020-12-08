@@ -14,6 +14,7 @@ const authUser = asyncHandler(async(req, res) => {
             name: user.name,
             email: user.email,
             isAdmin: user.isAdmin,
+            wishlistItems: user.wishlistItems,
             token: generateToken(user._id)
         })
     } else {
@@ -43,6 +44,7 @@ const registerUser = asyncHandler(async(req, res) => {
             name: user.name,
             email: user.email,
             isAdmin: user.isAdmin,
+            wishlistItems: user.wishlistItems,
             token: generateToken(user._id)
         })
     } else {
@@ -61,7 +63,8 @@ const getUserProfile = asyncHandler(async(req, res) => {
             _id: user._id,
             name: user.name,
             email: user.email,
-            isAdmin: user.isAdmin
+            isAdmin: user.isAdmin,
+            wishlistItems: user.wishlistItems
         })
     } else {
         res.status(404)
@@ -94,4 +97,82 @@ const updateUserProfile = asyncHandler(async(req, res) => {
     }
 })
 
-export { authUser, getUserProfile, registerUser, updateUserProfile }
+// @desc    get User Wishlist
+// @route   GET /api/users/profile/wishlist
+// @access  Private
+const getWishlist = asyncHandler(async(req, res) => {
+    const user = await User.findById(req.user._id)
+    if (user) {
+        res.json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            wishlistItems: user.wishlistItems
+        })
+    } else {
+        res.status(404)
+        throw new Error('User not found')
+    }
+})
+
+// @desc    Add Item to User Wishlist
+// @route   POST /api/users/profile/wishlist
+// @access  Private
+const addItemToWishlist = asyncHandler(async(req, res) => {
+    const user = await User.findById(req.user._id)
+    if (user) {
+        if (user.wishlistItems && (user.wishlistItems.length === 0)) {
+            user.wishlistItems = [req.body.wishlist]
+        } else {
+            const existItem = user.wishlistItems.find(x => {
+                return x.product == req.body.wishlist.product
+            })
+            if (!existItem) {
+                user.wishlistItems = [...user.wishlistItems, req.body.wishlist]
+            } else {
+                res.status(400)
+                throw new Error('Item already in wishlist')
+            }
+        }
+        const updatedUser = await user.save()
+        res.json({
+            wishlistItems: updatedUser.wishlistItems
+        })
+    } else {
+        res.status(404)
+        throw new Error('User not found')
+    }
+})
+
+// @desc    Remove Item to User Wishlist
+// @route   PUT /api/users/profile/wishlist
+// @access  Private
+const removeItemFromWishlist = asyncHandler(async(req, res) => {
+    const user = await User.findById(req.user._id)
+    if (user) {
+        if (user.wishlistItems && (user.wishlistItems.length === 0)) {
+            user.wishlistItems = []
+        } else {
+            user.wishlistItems = user.wishlistItems.filter(x => {
+                return x.product != req.body.wishlist.product
+            })
+        }
+        const updatedUser = await user.save()
+        res.json({
+            wishlistItems: updatedUser.wishlistItems
+        })
+    } else {
+        res.status(404)
+        throw new Error('User not found')
+    }
+})
+
+export {
+    authUser,
+    getUserProfile,
+    registerUser,
+    updateUserProfile,
+    addItemToWishlist,
+    getWishlist,
+    removeItemFromWishlist
+}

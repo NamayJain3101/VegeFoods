@@ -14,6 +14,7 @@ import LoginScreen from './Screens/LoginScreen'
 import RegisterScreen from './Screens/RegisterScreen'
 import ProfileScreen from './Screens/ProfileScreen'
 import AccountPage from './Screens/AccountPage'
+import WishlistScreen from './Screens/WishlistScreen'
 
 const App = () => {
 	return (
@@ -31,6 +32,7 @@ const App = () => {
 				<Route path='/register' exact component={RegisterScreen} />
 				<Route path='/my-account/profile' exact component={ProfileScreen} />
 				<Route path='/my-account' exact component={AccountPage} />
+				<Route path='/wishlist' exact component={WishlistScreen} />
 			</Switch>
 			<Footer />
 		</BrowserRouter>

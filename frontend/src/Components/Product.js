@@ -2,11 +2,12 @@ import React from 'react'
 import styled from 'styled-components'
 import { withRouter } from 'react-router-dom'
 import { FaBars, FaHeart, FaShoppingCart } from 'react-icons/fa'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { addToCart } from '../Actions/cartActions'
+import { addItemToWishlist } from '../Actions/userActions'
 
 const Product = ({ product, history }) => {
-    const { _id, image, name, price, discountPrice } = product
+    const { _id, image, name, price, discountPrice, InStock } = product
 
     let desc;
     if (product.description) {
@@ -18,11 +19,30 @@ const Product = ({ product, history }) => {
         }
     }
 
+    const userLogin = useSelector(state => state.userLogin)
+    const { userInfo } = userLogin
+
     const dispatch = useDispatch()
 
     const addToCartHandler = (id, desc) => {
         dispatch(addToCart(id, 1, desc))
         history.push('/cart')
+    }
+
+    const addToWishlistHandler = (id) => {
+        if (!userInfo) {
+            history.push('/login')
+        } else {
+            dispatch(addItemToWishlist({
+                wishlist: {
+                    product: _id,
+                    name,
+                    image,
+                    price,
+                    InStock
+                }
+            }))
+        }
     }
 
     return (
@@ -43,7 +63,7 @@ const Product = ({ product, history }) => {
                 </div>
                 <div className="buttons">
                     <button onClick={() => { history.push(`/shop/${_id}`) }}><FaBars /></button>
-                    <button><FaHeart /></button>
+                    <button onClick={(id) => addToWishlistHandler(_id)}><FaHeart /></button>
                     <button onClick={(id, des) => addToCartHandler(_id, desc[0])}><FaShoppingCart /></button>
                 </div>
             </div>

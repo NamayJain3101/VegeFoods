@@ -10,6 +10,7 @@ import Message from '../Components/Message'
 import Subscribe from '../Components/Subscribe'
 import Product from '../Components/Product'
 import { listProductDetails, listProducts } from '../Actions/productActions'
+import { addItemToWishlist } from '../Actions/userActions'
 
 const ProductScreen = ({ match, history }) => {
 
@@ -18,6 +19,9 @@ const ProductScreen = ({ match, history }) => {
 
     const productList = useSelector(state => state.productList)
     const { products, error: errorProducts, loading: loadingProducts } = productList
+
+    const userLogin = useSelector(state => state.userLogin)
+    const { userInfo } = userLogin
 
     const dispatch = useDispatch()
 
@@ -59,6 +63,22 @@ const ProductScreen = ({ match, history }) => {
             description = ''
         }
         history.push(`/cart/${product._id}?qty=${qty}&desc=${description}`)
+    }
+
+    const addToWishlistHandler = () => {
+        if (!userInfo) {
+            history.push('/login')
+        } else {
+            dispatch(addItemToWishlist({
+                wishlist: {
+                    product: product._id,
+                    name: product.name,
+                    image: product.image,
+                    price: product.price,
+                    InStock: product.InStock
+                }
+            }))
+        }
     }
 
     return (
@@ -111,6 +131,14 @@ const ProductScreen = ({ match, history }) => {
                                 >
                                     Add To Cart
                                 </Button>
+                                <Button
+                                    className='wishlistButton'
+                                    variant='success'
+                                    type='button'
+                                    onClick={() => addToWishlistHandler()}
+                                >
+                                    Add To Wishlist
+                                </Button>
                             </Col>
                         </Row>
                     </Container>
@@ -149,6 +177,10 @@ const ProductScreenWrapper = styled.div`
         margin-right: 10px;
         font-family: sans-serif !important;
         text-decoration: line-through;
+    }
+    .row {
+        display: flex;
+        align-items: center;
     }
     .row > .img-container {
         border-radius: 50%;
@@ -206,11 +238,24 @@ const ProductScreenWrapper = styled.div`
         padding: 1rem 3rem;
         border-radius: 3rem;
         border: none;
-        background: black;
+        background: linear-gradient(to bottom right, grey, black, grey);
         width: 50%;
     }
     .cartButton:hover, .cartButton:focus, .cartButton:active {
         background: #82ae46;
+    } 
+    .wishlistButton {
+        outline: none;
+        padding: 1rem 3rem;
+        border-radius: 3rem;
+        border: none;
+        background: linear-gradient(to bottom right, yellow, orange, yellow);
+        width: 50%;
+        color: black;
+    }
+    .wishlistButton:hover, .wishlistButton:focus, .wishlistButton:active {
+        background: #82ae46;
+        color: white;
     } 
     @media(max-width: 701px) {
         padding: 5rem 2rem;

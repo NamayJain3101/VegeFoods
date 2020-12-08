@@ -20,6 +20,17 @@ const userSchema = mongoose.Schema({
         required: true,
         default: false
     },
+    wishlistItems: [{
+        name: { type: String, required: true },
+        image: { type: String, required: true },
+        price: { type: Number, required: true },
+        InStock: { type: Number, required: true },
+        product: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: 'Product'
+        },
+    }]
 }, {
     timestamps: true
 })
