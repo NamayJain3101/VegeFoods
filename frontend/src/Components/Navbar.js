@@ -1,86 +1,117 @@
-import React, { Component } from 'react'
+import React from 'react'
+import { NavDropdown } from 'react-bootstrap'
 import { HiOutlineUserCircle } from 'react-icons/hi'
-import { Link } from 'react-router-dom'
+import { IoMdArrowDropright } from 'react-icons/io'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, withRouter } from 'react-router-dom'
+import { LinkContainer } from 'react-router-bootstrap'
 import styled from 'styled-components'
+import { logout } from '../Actions/userActions'
 import { NavLinksData } from '../Data/NavLinksData'
 
-export default class Navbar extends Component {
+const Navbar = ({ history }) => {
 
-    closeNavbar = () => {
+    const closeNavbar = () => {
         document.querySelector('.toggler').checked = false;
     }
 
-    render() {
-        return (
-            <NavWrapper>
-                <nav id="main-nav">
-                    <Link to='/'>
-                        <h1><span>VEGEFOODS</span></h1>
-                    </Link>
-                    <ul>
-                        {
-                            NavLinksData.map(link => {
-                                return (
-                                    <li key={link.id}>
-                                        <Link to={link.path}>
-                                            {link.icon}
-                                            {link.text.toUpperCase()}
-                                        </Link>
-                                    </li>
-                                )
-                            })
-                        }
-                        <li>
-                            <Link to='/login'>
-                                <HiOutlineUserCircle className='link-icon' />
-                                {'User'.toUpperCase()}
-                            </Link>
-                        </li>
-                    </ul>
-                </nav>
+    const userLogin = useSelector(state => state.userLogin)
+    const { userInfo } = userLogin
+
+    const dispatch = useDispatch()
+
+    const logoutHandler = () => {
+        dispatch(logout())
+    }
+
+    return (
+        <NavWrapper>
+            <nav id="main-nav">
                 <Link to='/'>
-                    <h1 className="logo">VEGEFOODS</h1>
+                    <h1><span>VEGEFOODS</span></h1>
                 </Link>
-                <div className="menu-wrap">
-                    <input type="checkbox" className="toggler" />
-                    <div className="hamburger"><div></div></div>
-                    <div className="menu">
-                        <div>
-                            <div>
-                                <ul>
-                                    {
-                                        NavLinksData.map(link => {
-                                            return (
-                                                <li key={link.id} onClick={this.closeNavbar}>
-                                                    <Link to={link.path}>
-                                                        {link.icon}
-                                                        {link.text.toUpperCase()}
-                                                    </Link>
-                                                </li>
-                                            )
-                                        })
-                                    }
-                                    <li onClick={this.closeNavbar}>
-                                        <Link to='/login'>
-                                            <HiOutlineUserCircle className='link-icon' />
-                                            {'User'.toUpperCase()}
-                                        </Link>
-                                    </li>
-                                </ul>
+                <ul>
+                    {
+                        NavLinksData.map(link => {
+                            return (
+                                <li key={link.id}>
+                                    <Link to={link.path}>
+                                        {link.icon}
+                                        {link.text.toUpperCase()}
+                                    </Link>
+                                </li>
+                            )
+                        })
+                    }
+                    <li>
+                        {userInfo ? (
+                            <div className='userInfo'>
+                                <HiOutlineUserCircle className='link-icon' />
+                                <NavDropdown drop='down' alignRight title={userInfo.name.split(' ')[0]} id='username'>
+                                    <LinkContainer to='/my-account'>
+                                        <NavDropdown.Item>My Account</NavDropdown.Item>
+                                    </LinkContainer>
+                                    <NavDropdown.Item onClick={logoutHandler}>Logout</NavDropdown.Item>
+                                </NavDropdown>
                             </div>
+                        ) : (
+                                <Link to='/login'>
+                                    <HiOutlineUserCircle className='link-icon' />
+                                    {'Login'.toUpperCase()}
+                                </Link>
+                            )}
+                    </li>
+                </ul>
+            </nav>
+            <Link to='/'>
+                <h1 className="logo">VEGEFOODS</h1>
+            </Link>
+            <div className="menu-wrap">
+                <input type="checkbox" className="toggler" />
+                <div className="hamburger"><div></div></div>
+                <div className="menu">
+                    <div>
+                        <div>
+                            <ul>
+                                {
+                                    NavLinksData.map(link => {
+                                        return (
+                                            <li key={link.id} onClick={closeNavbar}>
+                                                <Link to={link.path}>
+                                                    {link.icon}
+                                                    {link.text.toUpperCase()}
+                                                </Link>
+                                            </li>
+                                        )
+                                    })
+                                }
+                                <li>
+                                    {userInfo ? (
+                                        <Link to='/my-account' onClick={closeNavbar}>
+                                            <HiOutlineUserCircle className='link-icon' />
+                                            {userInfo.name.split(' ')[0].toUpperCase()}
+                                            <IoMdArrowDropright className='link-icon' />
+                                        </Link>
+                                    ) : (
+                                            <Link to='/login' onClick={closeNavbar}>
+                                                <HiOutlineUserCircle className='link-icon' />
+                                                {'Login'.toUpperCase()}
+                                            </Link>
+                                        )}
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-                <div className="grass-border" />
-            </NavWrapper>
-        )
-    }
+            </div>
+            <div className="grass-border" />
+        </NavWrapper>
+    )
 }
 
 const NavWrapper = styled.header`
     position: relative;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-
     .logo {
         padding: 0.5rem;
         position: fixed;
@@ -94,6 +125,22 @@ const NavWrapper = styled.header`
         font-size: 25px;
         font-weight: bold;
 
+    }
+    a {
+        color: black !important;
+    }
+    a:hover {
+        color: black !important;
+    }
+
+    .userInfo * {
+        padding: 0 !important;
+    }
+    .dropdown-menu & .show {
+        padding: 0.5rem 0;
+    }
+    .dropdown-item.active, .dropdown-item:active {
+        background: #f8f9fa;
     }
 
     #main-nav {
@@ -147,7 +194,6 @@ const NavWrapper = styled.header`
         padding: 1rem 0.6rem;
         margin: 0 0.50rem;
         line-height: 2;
-        /* letter-spacing: 2px; */
         transition: border-bottom 0.2s;
         display: flex;
         align-items: center;
@@ -155,7 +201,20 @@ const NavWrapper = styled.header`
         flex-flow: column;
     }
 
-    #main-nav ul li a .link-icon {
+    #main-nav ul li div{
+        text-decoration: none;
+        color: #000000;
+        padding: 1rem 0rem;
+        margin: 0rem;
+        line-height: 2;
+        transition: border-bottom 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-flow: column;
+    }
+
+    #main-nav ul li a .link-icon, #main-nav ul li div .link-icon {
         font-size: 1.8em;
     }
 
@@ -343,9 +402,6 @@ const NavWrapper = styled.header`
         #main-nav ul li a .link-icon {
             margin-right: 0.6rem;
         }
-        .grass-border {
-            top: 7rem;
-        }
     }
 
     @media screen and (orientation:landscape) {
@@ -358,3 +414,5 @@ const NavWrapper = styled.header`
         }
     }
 `
+
+export default (withRouter)(Navbar)

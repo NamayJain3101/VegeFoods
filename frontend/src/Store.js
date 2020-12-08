@@ -4,6 +4,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 
 import { productBestReducer, productDetailsReducer, productListCategoryReducer, productListReducer, productListSuggestionsReducer, productTopRatedReducer } from './Reducers/productReducers'
 import { cartReducer } from './Reducers/cartReducers'
+import { userDetailsReducer, userloginReducer, userRegisterReducer, userUpdateProfileReducer } from './Reducers/userReducer'
 
 const reducer = combineReducers({
     productList: productListReducer,
@@ -13,12 +14,18 @@ const reducer = combineReducers({
     productTopRated: productTopRatedReducer,
     productBest: productBestReducer,
     cart: cartReducer,
+    userLogin: userloginReducer,
+    userRegister: userRegisterReducer,
+    userDetails: userDetailsReducer,
+    userUpdateProfile: userUpdateProfileReducer,
 })
 
 const cartItemsFromStorage = localStorage.getItem('cartItems-VegeFoods') ? JSON.parse(localStorage.getItem('cartItems-VegeFoods')) : []
+const userInfoFromStorage = localStorage.getItem('userInfo-VegeFoods') ? JSON.parse(localStorage.getItem('userInfo-VegeFoods')) : null
 
 const initialState = {
-    cart: { cartItems: cartItemsFromStorage }
+    cart: { cartItems: cartItemsFromStorage },
+    userLogin: { userInfo: userInfoFromStorage },
 }
 
 const middleware = [thunk]

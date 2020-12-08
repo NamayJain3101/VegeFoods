@@ -1,32 +1,49 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { useDispatch, useSelector } from 'react-redux'
 import { Button, Col, Container, Row } from 'react-bootstrap'
 import Subscribe from '../Components/Subscribe'
-import Loader from '../Components/Loader'
 import LoginImg from '../Assets/login.png'
-import { Link } from 'react-router-dom'
-import { BsArrowRight } from 'react-icons/bs'
 import Tilt from 'react-tilt'
 import * as Scroll from 'react-scroll'
 import { Animated } from "react-animated-css"
-import { login } from '../Actions/userActions'
+import { useDispatch, useSelector } from 'react-redux'
+import Loader from '../Components/Loader'
+import { getUserDetails, updateUserProfile } from '../Actions/userActions'
+import { USER_REGISTER_RESET } from '../Constants/usersConstants'
 
-const LoginScreen = ({ location, history }) => {
-
+const RegisterScreen = ({ location, history }) => {
+    const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [message, setMessage] = useState('')
+
+    const userDetails = useSelector(state => state.userDetails)
+    const { loading, error, user } = userDetails
 
     const userLogin = useSelector(state => state.userLogin)
-    const { userInfo, loading, error } = userLogin
+    const { userInfo } = userLogin
+
+    const userUpdateProfile = useSelector(state => state.userUpdateProfile)
+    const { success, loading: updateLoading } = userUpdateProfile
 
     const dispatch = useDispatch()
 
-    const redirect = location.search ? location.search.split('=')[1] : '/'
-
-    const submitHandler = (e) => {
-        e.preventDefault()
-        dispatch(login(email, password))
+    const submitHandler = () => {
+        if (password !== confirmPassword) {
+            dispatch({
+                type: USER_REGISTER_RESET
+            })
+            setMessage('Passwords do not match')
+        } else {
+            dispatch(updateUserProfile({
+                id: user._id,
+                name,
+                email,
+                password
+            }))
+            setMessage('')
+        }
     }
 
     useEffect(() => {
@@ -34,10 +51,17 @@ const LoginScreen = ({ location, history }) => {
             duration: 1500,
             smooth: 'easeInOutQuint'
         })
-        if (userInfo) {
-            history.push(redirect)
+        if (!userInfo) {
+            history.push('/login')
+        } else {
+            if (!user.name || (user._id !== userInfo._id)) {
+                dispatch(getUserDetails('profile'))
+            } else {
+                setName(user.name)
+                setEmail(user.email)
+            }
         }
-    }, [history, redirect, userInfo])
+    }, [dispatch, history, user, userInfo])
     return (
         <div>
             <LoginWrapper>
@@ -59,32 +83,17 @@ const LoginScreen = ({ location, history }) => {
                                 </Tilt>
                             </Col>
                             <Col lg={6} className='form'>
-                                <h3 className='text-center text-uppercase font-weight-bold'>Login</h3>
-                                {loading ? <Loader /> : (
+                                <h3 className='text-center text-uppercase font-weight-bold'>Profile</h3>
+                                {loading || updateLoading ? <Loader /> : (
                                     <React.Fragment>
-                                        <form onSubmit={submitHandler}>
-                                            <input
-                                                type="email"
-                                                value={email}
-                                                name="email"
-                                                id="email"
-                                                onChange={(e) => setEmail(e.target.value)}
-                                                placeholder='Email'
-                                                className={`${error ? 'error-input' : ''}`}
-                                            />
-                                            <input
-                                                type="password"
-                                                value={password}
-                                                name="password"
-                                                id="password"
-                                                onChange={(e) => setPassword(e.target.value)}
-                                                placeholder='Password'
-                                                className={`${error ? 'error-input' : ''}`}
-                                            />
-                                            {error && <p className='text-danger text-capitalize error'>{error}</p>}
-                                            <Button variant='success' type='submit' className='btn btn-block'>LOGIN</Button>
-                                        </form>
-                                        <Link to={redirect ? `/register?redirect=${redirect}` : `/register`}>Create an Account <BsArrowRight /> </Link>
+                                        <input type="text" value={name} onChange={(e) => setName(e.target.value)} name="name" id="name" placeholder='Name' />
+                                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} name="email" id="email" placeholder='Email' />
+                                        <input type="password" className={message ? 'error-input' : ''} onChange={(e) => setPassword(e.target.value)} name="password" id="password" placeholder='Password' />
+                                        <input type="password" className={message ? 'error-input' : ''} onChange={(e) => setConfirmPassword(e.target.value)} name="ConfirmPassword" id="ConfirmPassword" placeholder='Confirm Password' />
+                                        {message && <p className='text-danger text-capitalize error'>{message}</p>}
+                                        {error && <p className='text-danger text-capitalize error'>{error}</p>}
+                                        {success && <p className='text-success text-capitalize error'>Profile Updated Successfully</p>}
+                                        <Button variant='success' className='btn btn-block text-uppercase' onClick={submitHandler}>update</Button>
                                     </React.Fragment>
                                 )}
                             </Col>
@@ -101,7 +110,7 @@ const LoginWrapper = styled.div`
     background: linear-gradient(170deg, yellowgreen, lightgreen, yellowgreen);
     padding: 3rem 0;
     .container {
-        padding: 5rem;
+        padding: 3rem;
         background: white;
         border-radius: 2rem;
         box-shadow: 5px 5px 40px 5px green;
@@ -112,7 +121,7 @@ const LoginWrapper = styled.div`
         justify-content: space-between;
     }
     .container h3 {
-        margin-bottom: 4rem;
+        margin-bottom: 3rem;
     }
     .container input {
         width: 100%;
@@ -150,10 +159,13 @@ const LoginWrapper = styled.div`
         box-shadow: 1px 1px 5px 1px red;
     }
     @media(max-width: 600px) {
-        padding: 3rem;
+        padding: 2rem;
         .container {
-            padding: 3rem;
-            box-shadow: 5px 5px 20px 5px green;
+            padding: 2rem;
+            box-shadow: 3px 3px 20px 5px green;
+        }
+        .container h3 {
+            margin-bottom: 2rem;
         }
     }
     @media(max-width: 400px) {
@@ -164,4 +176,4 @@ const LoginWrapper = styled.div`
     }
 `
 
-export default LoginScreen
+export default RegisterScreen

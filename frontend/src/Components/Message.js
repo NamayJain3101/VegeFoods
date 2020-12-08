@@ -24,7 +24,7 @@ const MessageWrapper = styled.div`
         border-radius: 4rem;
         font-size: 1.2em;
     }
-    @media(max-width: 701px) {
+    @media(max-width: 1001px) {
         .alert {
             width: 90%;
             margin: 3rem auto;

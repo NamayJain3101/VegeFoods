@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Button, Col, Container, Row } from 'react-bootstrap'
 import Subscribe from '../Components/Subscribe'
@@ -8,17 +8,49 @@ import { BsArrowRight } from 'react-icons/bs'
 import Tilt from 'react-tilt'
 import * as Scroll from 'react-scroll'
 import { Animated } from "react-animated-css"
+import { useDispatch, useSelector } from 'react-redux'
+import Loader from '../Components/Loader'
+import { register } from '../Actions/userActions'
+import { USER_REGISTER_RESET } from '../Constants/usersConstants'
 
-const RegisterScreen = () => {
+const RegisterScreen = ({ location, history }) => {
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [message, setMessage] = useState('')
+
+    const userRegister = useSelector(state => state.userRegister)
+    const { userInfo, loading, error } = userRegister
+
+    const dispatch = useDispatch()
+
+    const redirect = location.search ? location.search.split('=')[1] : '/'
+
+    const submitHandler = () => {
+        if (password !== confirmPassword) {
+            dispatch({
+                type: USER_REGISTER_RESET
+            })
+            setMessage('Passwords do not match')
+        } else {
+            dispatch(register(name, email, password))
+            setMessage('')
+        }
+    }
+
     useEffect(() => {
         Scroll.animateScroll.scrollToTop({
             duration: 1500,
             smooth: 'easeInOutQuint'
         })
-    })
+        if (userInfo) {
+            history.push(redirect)
+        }
+    }, [history, redirect, userInfo])
     return (
         <div>
-            <LoginWrapper>
+            <RegisterWrapper>
                 <Animated animationIn="flipInX" animationOut="zoomOutDown" isVisible={true}>
                     <Container>
                         <Row>
@@ -37,23 +69,29 @@ const RegisterScreen = () => {
                                 </Tilt>                        </Col>
                             <Col lg={6} className='form'>
                                 <h3 className='text-center text-uppercase font-weight-bold'>Sign Up</h3>
-                                <input type="text" name="name" id="name" placeholder='Name' />
-                                <input type="email" name="email" id="email" placeholder='Email' />
-                                <input type="password" name="password" id="password" placeholder='Password' />
-                                <input type="password" name="ConfirmPassword" id="ConfirmPassword" placeholder='Confirm Password' />
-                                <Button variant='success' className='btn btn-block text-uppercase'>sign up</Button>
-                                <Link to='/login'>Have an Account! Login <BsArrowRight /> </Link>
+                                {loading ? <Loader /> : (
+                                    <React.Fragment>
+                                        <input type="text" onChange={(e) => setName(e.target.value)} name="name" id="name" placeholder='Name' />
+                                        <input type="email" onChange={(e) => setEmail(e.target.value)} name="email" id="email" placeholder='Email' />
+                                        <input type="password" className={message ? 'error-input' : ''} onChange={(e) => setPassword(e.target.value)} name="password" id="password" placeholder='Password' />
+                                        <input type="password" className={message ? 'error-input' : ''} onChange={(e) => setConfirmPassword(e.target.value)} name="ConfirmPassword" id="ConfirmPassword" placeholder='Confirm Password' />
+                                        {message && <p className='text-danger text-capitalize error'>{message}</p>}
+                                        {error && <p className='text-danger text-capitalize error'>{error}</p>}
+                                        <Button variant='success' className='btn btn-block text-uppercase' onClick={submitHandler}>sign up</Button>
+                                        <Link to={redirect ? `/login?redirect=${redirect}` : `/login`}>Have an Account! Login <BsArrowRight /> </Link>
+                                    </React.Fragment>
+                                )}
                             </Col>
                         </Row>
                     </Container>
                 </Animated>
-            </LoginWrapper>
+            </RegisterWrapper>
             <Subscribe />
         </div>
     )
 }
 
-const LoginWrapper = styled.div`
+const RegisterWrapper = styled.div`
     background: linear-gradient(170deg, yellowgreen, lightgreen, yellowgreen);
     padding: 3rem 0;
     .container {
@@ -98,6 +136,12 @@ const LoginWrapper = styled.div`
         flex-flow: column;
         align-items: center;
         justify-content: center;
+    }
+    .error {
+        text-align: center;
+    }
+    .error-input {
+        box-shadow: 1px 1px 5px 1px red;
     }
     @media(max-width: 600px) {
         padding: 2rem;
