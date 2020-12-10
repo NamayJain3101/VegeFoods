@@ -27,7 +27,8 @@ const RegisterScreen = ({ location, history }) => {
 
     const redirect = location.search ? location.search.split('=')[1] : '/'
 
-    const submitHandler = () => {
+    const submitHandler = (e) => {
+        e.preventDefault()
         if (password !== confirmPassword) {
             dispatch({
                 type: USER_REGISTER_RESET
@@ -69,18 +70,20 @@ const RegisterScreen = ({ location, history }) => {
                                 </Tilt>                        </Col>
                             <Col lg={6} className='form'>
                                 <h3 className='text-center text-uppercase font-weight-bold'>Sign Up</h3>
-                                {loading ? <Loader /> : (
-                                    <React.Fragment>
-                                        <input type="text" onChange={(e) => setName(e.target.value)} name="name" id="name" placeholder='Name' />
-                                        <input type="email" onChange={(e) => setEmail(e.target.value)} name="email" id="email" placeholder='Email' />
-                                        <input type="password" className={message ? 'error-input' : ''} onChange={(e) => setPassword(e.target.value)} name="password" id="password" placeholder='Password' />
-                                        <input type="password" className={message ? 'error-input' : ''} onChange={(e) => setConfirmPassword(e.target.value)} name="ConfirmPassword" id="ConfirmPassword" placeholder='Confirm Password' />
-                                        {message && <p className='text-danger text-capitalize error'>{message}</p>}
-                                        {error && <p className='text-danger text-capitalize error'>{error}</p>}
-                                        <Button variant='success' className='btn btn-block text-uppercase' onClick={submitHandler}>sign up</Button>
-                                        <Link to={redirect ? `/login?redirect=${redirect}` : `/login`}>Have an Account! Login <BsArrowRight /> </Link>
-                                    </React.Fragment>
-                                )}
+                                <form onSubmit={submitHandler}>
+                                    {loading ? <Loader /> : (
+                                        <React.Fragment>
+                                            <input type="text" required onChange={(e) => setName(e.target.value)} name="name" id="name" placeholder='Name' />
+                                            <input type="email" required onChange={(e) => setEmail(e.target.value)} name="email" id="email" placeholder='Email' />
+                                            <input type="password" required className={message ? 'error-input' : ''} onChange={(e) => setPassword(e.target.value)} name="password" id="password" placeholder='Password' />
+                                            <input type="password" required className={message ? 'error-input' : ''} onChange={(e) => setConfirmPassword(e.target.value)} name="ConfirmPassword" id="ConfirmPassword" placeholder='Confirm Password' />
+                                            {message && <p className='text-danger text-capitalize error'>{message}</p>}
+                                            {error && <p className='text-danger text-capitalize error'>{error}</p>}
+                                            <Button variant='success' type='submit' className='btn btn-block text-uppercase'>sign up</Button>
+                                        </React.Fragment>
+                                    )}
+                                </form>
+                                <Link to={redirect ? `/login?redirect=${redirect}` : `/login`}>Have an Account! Login <BsArrowRight /> </Link>
                             </Col>
                         </Row>
                     </Container>

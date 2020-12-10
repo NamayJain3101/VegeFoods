@@ -25,9 +25,15 @@ const reducer = combineReducers({
 
 const cartItemsFromStorage = localStorage.getItem('cartItems-VegeFoods') ? JSON.parse(localStorage.getItem('cartItems-VegeFoods')) : []
 const userInfoFromStorage = localStorage.getItem('userInfo-VegeFoods') ? JSON.parse(localStorage.getItem('userInfo-VegeFoods')) : null
+const shippingAddressFromStorage = localStorage.getItem('shippingAddress-VegeFoods') ? JSON.parse(localStorage.getItem('shippingAddress-VegeFoods')) : {}
+const paymentMethodFromStorage = localStorage.getItem('paymentMethod-VegeFoods') ? JSON.parse(localStorage.getItem('paymentMethod-VegeFoods')) : {}
 
 const initialState = {
-    cart: { cartItems: cartItemsFromStorage },
+    cart: {
+        cartItems: cartItemsFromStorage,
+        shippingAddress: shippingAddressFromStorage,
+        paymentMethod: paymentMethodFromStorage
+    },
     userLogin: { userInfo: userInfoFromStorage },
 }
 

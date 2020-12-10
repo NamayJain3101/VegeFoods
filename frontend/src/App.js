@@ -15,6 +15,9 @@ import RegisterScreen from './Screens/RegisterScreen'
 import ProfileScreen from './Screens/ProfileScreen'
 import AccountPage from './Screens/AccountPage'
 import WishlistScreen from './Screens/WishlistScreen'
+import ShippingScreen from './Screens/ShippingScreen'
+import PaymentScreen from './Screens/PaymentScreen'
+import PlaceOrderScreen from './Screens/PlaceOrderScreen'
 
 const App = () => {
 	return (
@@ -33,6 +36,9 @@ const App = () => {
 				<Route path='/my-account/profile' exact component={ProfileScreen} />
 				<Route path='/my-account' exact component={AccountPage} />
 				<Route path='/wishlist' exact component={WishlistScreen} />
+				<Route path='/shipping' exact component={ShippingScreen} />
+				<Route path='/payment' exact component={PaymentScreen} />
+				<Route path='/place-order' exact component={PlaceOrderScreen} />
 			</Switch>
 			<Footer />
 		</BrowserRouter>
