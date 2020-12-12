@@ -1,10 +1,17 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Col, ListGroupItem, Row } from 'react-bootstrap'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import CheckoutSteps from '../Components/CheckoutSteps'
 import Message from '../Components/Message'
+import Loader from '../Components/Loader'
 import * as Scroll from 'react-scroll'
+import { createOrder } from '../Actions/orderActions'
+import { USER_DETAILS_RESET } from '../Constants/usersConstants'
+import { ORDER_CREATE_RESET } from '../Constants/orderConstants'
+import Axios from 'axios'
+import { PayPalButton } from 'react-paypal-button-v2'
+import uuid from 'react-uuid'
 
 const PlaceOrderScreen = ({ history }) => {
 
@@ -15,13 +22,54 @@ const PlaceOrderScreen = ({ history }) => {
         return (Math.round(num * 100) / 100).toFixed(2)
     }
 
+    const dispatch = useDispatch()
+
     cart.itemsPrice = addDecimals(cart.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0))
     cart.shippingPrice = addDecimals(cart.itemsPrice > 500 ? 0 : 100)
     cart.taxPrice = addDecimals(Number((0.15 * cart.itemsPrice).toFixed(2)))
     cart.totalPrice = addDecimals((Number(cart.itemsPrice) + Number(cart.shippingPrice) + Number(cart.taxPrice)).toFixed(2))
 
-    const placeOrderHandler = () => {
+    const userLogin = useSelector(state => state.userLogin)
+    const { userInfo } = userLogin
 
+    const orderCreate = useSelector(state => state.orderCreate)
+    const { order, loading, success, error } = orderCreate
+
+    const [sdkReady, setSdkReady] = useState(false)
+
+    const codPaymentHandler = () => {
+        dispatch(createOrder({
+            orderItems: cartItems,
+            shippingAddress: shippingAddress,
+            paymentMethod: paymentMethod,
+            itemsPrice: cart.itemsPrice,
+            shippingPrice: cart.shippingPrice,
+            taxPrice: cart.taxPrice,
+            totalPrice: cart.totalPrice,
+            paymentResult: {
+                id: uuid(),
+                status: "PAY-ON-DELIVERY",
+                payer: {
+                    email_address: userInfo.email
+                },
+                update_time: Date.now()
+            }
+        }))
+    }
+
+    const successPaymentHandler = (paymentResult) => {
+        if (paymentResult.status === "COMPLETED") {
+            dispatch(createOrder({
+                orderItems: cartItems,
+                shippingAddress: shippingAddress,
+                paymentMethod: paymentMethod,
+                itemsPrice: cart.itemsPrice,
+                shippingPrice: cart.shippingPrice,
+                taxPrice: cart.taxPrice,
+                totalPrice: cart.totalPrice,
+                paymentResult: paymentResult
+            }))
+        }
     }
 
     useEffect(() => {
@@ -30,7 +78,35 @@ const PlaceOrderScreen = ({ history }) => {
             smooth: 'easeInOutQuint',
             delay: 500
         })
-    })
+
+        if (userInfo) {
+            const addPaypalScript = async () => {
+                const { data: clientId } = await Axios.get('/api/config/paypal')
+                const script = document.createElement('script')
+                script.type = 'text/javascript'
+                script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=INR`
+                script.async = true
+                script.onload = () => {
+                    setSdkReady(true)
+                }
+                document.body.appendChild(script)
+            }
+            if (!window.paypal) {
+                addPaypalScript()
+            } else {
+                setSdkReady(true)
+            }
+        } else {
+            history.push('/login')
+        }
+
+        if (success) {
+            history.push(`/orders/${order._id}`)
+            dispatch({ type: USER_DETAILS_RESET })
+            dispatch({ type: ORDER_CREATE_RESET })
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [history, success])
 
     return (
         <div>
@@ -64,7 +140,7 @@ const PlaceOrderScreen = ({ history }) => {
                                                 </Col>
                                                 <Col xs={8} md={6} className='desc'>
                                                     <h4 style={{ cursor: 'pointer' }} onClick={() => history.push(`/shop/${item.product}`)}>{item.name}</h4>
-                                                    <h5 className='text-muted mb-3 text-capitalize'>({item.desc && item.desc})</h5>
+                                                    <h5 className='text-muted mb-3 text-capitalize'>{item.desc && `(${item.desc})`}</h5>
                                                     <h4 className='price'>{item.qty} Kg x &#8377;{item.price} = &#8377;{item.qty * item.price}</h4>
                                                 </Col>
                                             </ListGroupItem>
@@ -113,15 +189,28 @@ const PlaceOrderScreen = ({ history }) => {
                                     &#8377;{cart.totalPrice}
                                 </h5>
                             </ListGroupItem>
+                            <ListGroupItem>
+                                {loading && <Loader />}
+                                {error && <Message variant='danger'>{error}</Message>}
+                            </ListGroupItem>
                             <ListGroupItem className='px-4 py-3'>
-                                <Button
-                                    variant='success'
-                                    disabled={cartItems.length === 0}
-                                    className='btn btn-block checkout'
-                                    onClick={placeOrderHandler}
-                                >
-                                    Place Order
-                            </Button>
+                                {paymentMethod === 'Cash' && (
+                                    <Button
+                                        variant='success'
+                                        disabled={cartItems.length === 0}
+                                        className='btn btn-block checkout'
+                                        onClick={codPaymentHandler}
+                                    >
+                                        Place Order
+                                    </Button>
+                                )}
+                                {paymentMethod === 'PayPal' && (
+                                    <div className='mx-auto paypal'>
+                                        {!sdkReady ? <Loader /> : (
+                                            <PayPalButton amount={cart.totalPrice} currency='INR' onSuccess={successPaymentHandler} />
+                                        )}
+                                    </div>
+                                )}
                             </ListGroupItem>
                         </div>
                     </Col>
@@ -132,7 +221,7 @@ const PlaceOrderScreen = ({ history }) => {
 }
 
 const PlaceOrderWrapper = styled.div`
-    background: linear-gradient(170deg, yellowgreen, lightgreen, yellowgreen);
+    background: linear-gradient(170deg, greenyellow, lightgreen, greenyellow);
     padding: 3rem;
     padding-bottom: 5rem;
     width: 100%;
@@ -186,6 +275,9 @@ const PlaceOrderWrapper = styled.div`
         border-radius: 2rem;
         text-transform: uppercase;
         letter-spacing: 2px;
+    }
+    .paypal {
+        width: 100%;
     }
     @media(max-width: 700px) {
         padding: 3rem 1rem;

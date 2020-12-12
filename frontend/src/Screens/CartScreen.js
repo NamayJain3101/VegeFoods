@@ -55,8 +55,8 @@ const CartScreen = ({ match, location, history }) => {
         history.push(`/login?redirect=shipping`)
     }
 
-    const removeFromCartHandler = (id, name) => {
-        dispatch(removeFromCart(id))
+    const removeFromCartHandler = (id, name, desc) => {
+        dispatch(removeFromCart(id, desc))
         toast(`Successfully removed '${name}' from your cart`)
     }
 
@@ -81,9 +81,9 @@ const CartScreen = ({ match, location, history }) => {
                                                     My Cart ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
                                             </h5>
                                             </ListGroupItem>
-                                            {cartItems.map(item => {
+                                            {cartItems.map((item, index) => {
                                                 return (
-                                                    <ListGroupItem key={item.product}>
+                                                    <ListGroupItem key={index}>
                                                         <div className='img-container'>
                                                             <img src={item.image} style={{ cursor: 'pointer' }} onClick={() => history.push(`/shop/${item.product}`)} alt={item.name} className='img-fluid' />
                                                         </div>
@@ -102,7 +102,7 @@ const CartScreen = ({ match, location, history }) => {
                                                                 <div className='input'>{`${item.qty} Kg`}</div>
                                                                 <button disabled={item.qty >= item.InStock} onClick={(id, qty, desc, name) => incQty(item.product, item.qty, item.desc, item.name)}>+</button>
                                                             </div>
-                                                            <Button className='btn btn-danger mt-4' onClick={(id, name) => removeFromCartHandler(item.product, item.name)}><FaTrash /> Delete</Button>
+                                                            <Button className='btn btn-danger mt-4' onClick={(id, name, desc) => removeFromCartHandler(item.product, item.name, item.desc)}><FaTrash /> Delete</Button>
                                                         </div>
                                                     </ListGroupItem>
                                                 )
@@ -116,12 +116,12 @@ const CartScreen = ({ match, location, history }) => {
                                             <ListGroupItem className='title'>
                                                 <h5 className='font-weight-bold text-capitalize'>
                                                     Price Details
-                                        </h5>
+                                                </h5>
                                             </ListGroupItem>
                                             <ListGroupItem>
                                                 <h5>
                                                     Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)}):
-                                            </h5>
+                                                </h5>
                                                 <h5 className='price'>
                                                     &#8377;{cartItems.reduce((acc, item) => acc + item.qty * item.price, 0).toFixed(2)}
                                                 </h5>
@@ -129,7 +129,7 @@ const CartScreen = ({ match, location, history }) => {
                                             <ListGroupItem>
                                                 <h5>
                                                     Shipping Price:
-                                            </h5>
+                                                </h5>
                                                 <h5 className='price'>
                                                     &#8377;{(cartItems.reduce((acc, item) => acc + item.qty * item.price, 0) < 500) ? '100.00' : '0.00'}
                                                 </h5>
@@ -137,7 +137,7 @@ const CartScreen = ({ match, location, history }) => {
                                             <ListGroupItem>
                                                 <h5>
                                                     Total Price:
-                                            </h5>
+                                                </h5>
                                                 <h5 className='price'>
                                                     &#8377;{(cartItems.reduce((acc, item) => acc + item.qty * item.price, 0) < 500)
                                                         ? (cartItems.reduce((acc, item) => acc + item.qty * item.price, 0) + 100).toFixed(2)
@@ -153,7 +153,7 @@ const CartScreen = ({ match, location, history }) => {
                                                     onClick={checkoutHandler}
                                                 >
                                                     Checkout
-                                            </Button>
+                                                </Button>
                                             </ListGroupItem>
                                         </ListGroup>
                                     </Animated>

@@ -9,7 +9,7 @@ import { addItemToWishlist } from '../Actions/userActions'
 const Product = ({ product, history }) => {
     const { _id, image, name, price, discountPrice, InStock } = product
 
-    let desc;
+    let desc = [""];
     if (product.description) {
         if (product.description.color && product.description.color.length !== 0) {
             desc = [...product.description.color]

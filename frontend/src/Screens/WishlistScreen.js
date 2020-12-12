@@ -98,6 +98,7 @@ const WishlistScreen = ({ history }) => {
 }
 
 const WishlistWrapper = styled.div`
+    background: linear-gradient(170deg, greenyellow, lightgreen, greenyellow);
     padding: 5rem 2rem;
     padding-bottom: 4rem;
     .row > div > div {
@@ -105,10 +106,10 @@ const WishlistWrapper = styled.div`
         flex-flow: column;
         align-items: center;
         justify-content: center;
-        border: 1px solid #f0f0f0;
         border-radius: 2rem;
-        box-shadow: 2px 2px 20px 2px #bbd3c2;
+        box-shadow: 2px 2px 20px 2px green;
         margin: 1rem;
+        background: white;
         margin-bottom: 3rem;
         padding-bottom: 2rem;
         cursor: pointer;

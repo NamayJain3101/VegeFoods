@@ -10,15 +10,10 @@ const orderSchema = mongoose.Schema({
         name: { type: String, required: true },
         qty: { type: Number, required: true },
         image: { type: String, required: true },
-        description: {
-            color: {
-                type: String,
-                required: false
-            },
-            flavour: {
-                type: String,
-                required: false
-            },
+        desc: {
+            type: String,
+            required: false,
+            default: ""
         },
         price: { type: Number, required: true },
         product: {
