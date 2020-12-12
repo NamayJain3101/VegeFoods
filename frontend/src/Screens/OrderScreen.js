@@ -8,7 +8,7 @@ import Message from '../Components/Message'
 import OrderSummary from '../Components/OrderSummary'
 import * as Scroll from 'react-scroll'
 
-const OrderScreen = ({ match }) => {
+const OrderScreen = ({ match, history }) => {
 
     const orderId = match.params.id
 
@@ -17,13 +17,20 @@ const OrderScreen = ({ match }) => {
     const orderDetails = useSelector(state => state.orderDetails)
     const { order, loading, error } = orderDetails
 
+    const userLogin = useSelector(state => state.userLogin)
+    const { userInfo } = userLogin
+
     useEffect(() => {
         Scroll.animateScroll.scrollToTop({
             duration: 1500,
             smooth: 'easeInOutQuint'
         })
-        dispatch(getOrderDetails(orderId))
-    }, [dispatch, orderId])
+        if (!userInfo) {
+            history.push('/')
+        } else {
+            dispatch(getOrderDetails(orderId))
+        }
+    }, [dispatch, history, orderId, userInfo])
     return (
         <div>
             <OrderScreenWrapper>
