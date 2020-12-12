@@ -12,6 +12,7 @@ import { ORDER_CREATE_RESET } from '../Constants/orderConstants'
 import Axios from 'axios'
 import { PayPalButton } from 'react-paypal-button-v2'
 import uuid from 'react-uuid'
+import { clearCart } from '../Actions/cartActions'
 
 const PlaceOrderScreen = ({ history }) => {
 
@@ -55,6 +56,7 @@ const PlaceOrderScreen = ({ history }) => {
                 update_time: Date.now()
             }
         }))
+        dispatch(clearCart())
     }
 
     const successPaymentHandler = (paymentResult) => {
@@ -69,6 +71,7 @@ const PlaceOrderScreen = ({ history }) => {
                 totalPrice: cart.totalPrice,
                 paymentResult: paymentResult
             }))
+            dispatch(clearCart())
         }
     }
 
