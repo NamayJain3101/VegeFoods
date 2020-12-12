@@ -1,7 +1,7 @@
 import React from 'react'
 import { Nav, NavItem } from 'react-bootstrap'
 import styled from 'styled-components'
-import { FiPackage, FiShoppingBag, FiTruck } from 'react-icons/fi'
+import { FiPackage, FiPocket, FiShoppingBag } from 'react-icons/fi'
 
 const OrderSummary = ({ placed, paid, delivered, mb }) => {
     return (
@@ -15,7 +15,7 @@ const OrderSummary = ({ placed, paid, delivered, mb }) => {
                 <div className='line mt-1' style={paid ? { background: 'green' } : { background: 'grey' }}></div>
                 <NavItem>
                     <div className='status' style={paid ? { background: 'lightgreen' } : { background: 'grey' }}>
-                        {paid ? <FiTruck style={{ color: 'black' }} /> : <FiTruck style={{ color: 'white' }} />}
+                        {paid ? <FiPocket style={{ color: 'black' }} /> : <FiPocket style={{ color: 'white' }} />}
                     </div>
                 </NavItem>
                 <div className='line mt-1' style={delivered ? { background: 'green' } : { background: 'grey' }}></div>

@@ -36,7 +36,7 @@ const OrderScreen = ({ match }) => {
                                     <p className='text-center w-75 mx-auto font-italic'>Hey {order.user.name.split(' ')[0]}, we have delivered your order.</p>
                                 ) : order.isPaid ? (
                                     <p className='text-center w-75 mx-auto font-italic'>Hey {order.user.name.split(' ')[0]}, we have recieved your order and are getting it ready to be delivered.</p>
-                                ) : <p className='text-center w-75 mx-auto font-italic'>Hey {order.user.name.split(' ')[0]}, we have recieved your order and are currently precessing it.</p>
+                                ) : <p className='text-center w-75 mx-auto font-italic'>Hey {order.user.name.split(' ')[0]}, we have recieved your order and are getting it ready to be delivered.</p>
                             }
                             <hr style={{ border: '1px solid white' }}></hr>
                             <OrderSummary placed paid={order.isPaid} delivered={order.isDelivered} />
