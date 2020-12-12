@@ -6,6 +6,7 @@ import { getOrderDetails } from '../Actions/orderActions'
 import Loader from '../Components/Loader'
 import Message from '../Components/Message'
 import OrderSummary from '../Components/OrderSummary'
+import * as Scroll from 'react-scroll'
 
 const OrderScreen = ({ match }) => {
 
@@ -17,6 +18,10 @@ const OrderScreen = ({ match }) => {
     const { order, loading, error } = orderDetails
 
     useEffect(() => {
+        Scroll.animateScroll.scrollToTop({
+            duration: 1500,
+            smooth: 'easeInOutQuint'
+        })
         dispatch(getOrderDetails(orderId))
     }, [dispatch, orderId])
     return (
@@ -31,15 +36,17 @@ const OrderScreen = ({ match }) => {
                                     <p className='text-center w-75 mx-auto font-italic'>Hey {order.user.name.split(' ')[0]}, we have delivered your order.</p>
                                 ) : order.isPaid ? (
                                     <p className='text-center w-75 mx-auto font-italic'>Hey {order.user.name.split(' ')[0]}, we have recieved your order and are getting it ready to be delivered.</p>
-                                ) : <p className='text-center w-75 mx-auto font-italic'>Hey {order.user.name.split(' ')[0]}, we have recieved your order and are getting it ready to be delivered.</p>
+                                ) : <p className='text-center w-75 mx-auto font-italic'>Hey {order.user.name.split(' ')[0]}, we have recieved your order and are currently precessing it.</p>
                             }
                             <hr style={{ border: '1px solid white' }}></hr>
                             <OrderSummary placed paid={order.isPaid} delivered={order.isDelivered} />
-                            <ListGroupItem className='px-2 px-md-3 orderId'>
-                                <strong>Order ID:</strong> {order._id}
-                            </ListGroupItem>
-                            <ListGroupItem className='px-2 px-md-3'>
-                                <strong>Order Date:</strong> {order.createdAt.substring(0, 10)}
+                            <ListGroupItem className='px-2 px-md-3 py-2' style={{ border: 'none' }}>
+                                <div className='overflow w-100'>
+                                    <strong>Order ID:</strong> {order._id}
+                                </div>
+                                <div className='overflow mt-2 w-100'>
+                                    <strong>Order Date:</strong> {order.createdAt.substring(0, 10)}
+                                </div>
                             </ListGroupItem>
                             <hr style={{ border: '1px solid white' }}></hr>
                             <div className='orderItems'>
@@ -83,7 +90,7 @@ const OrderScreen = ({ match }) => {
                                         </div>
                                         <div className='py-2'>
                                             <b>Status: </b>
-                                            {order.isDelivered ? 'Delivered' : order.isPaid ? 'Paid' : 'Confirmed'}
+                                            <i className='text-uppercase'>{order.isDelivered ? 'Delivered' : order.isPaid ? 'Paid' : 'Confirmed'}</i>
                                         </div>
                                     </Col>
                                     <Col md={4} className='summary mt-3 my-md-0'>
@@ -126,6 +133,12 @@ const OrderScreenWrapper = styled.div`
         border-radius: 2rem;
         box-shadow: 2px 2px 20px 2px green;
         background: white;
+    }
+    .overflow {
+        overflow: auto;
+    }
+    .overflow::-webkit-scrollbar {
+        display: none;
     }
     .list-group-item {
         letter-spacing: 2px;
@@ -179,9 +192,8 @@ const OrderScreenWrapper = styled.div`
         align-items: flex-start;
         justify-content: center;
     }
-    @media(max-width: 400px) {
-        letter-spacing: 1px;
-        font-size: 0.8rem;
+    @media(max-width: 700px) {
+        padding: 2rem;
     }
 `
 

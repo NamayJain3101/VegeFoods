@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Col, Container, Row } from 'react-bootstrap'
+import { Col, Row } from 'react-bootstrap'
 import { FaPlus } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
@@ -65,7 +65,7 @@ const MyOrdersScreen = ({ history }) => {
                                                     <h5>Total: </h5>
                                                     <h5 className='price'>&#8377;{item.totalPrice}</h5>
                                                 </div>
-                                                <div className='status text-center'>
+                                                <div className='status text-center' onClick={() => history.push(`/orders/${item._id}`)}>
                                                     <OrderStatus placed paid={item.isPaid} mb='1rem' />
                                                     Status: {item.isPaid ? 'PAID' : item.isDelivered ? 'DELIVERED' : 'CONFIRMED'}
                                                 </div>
