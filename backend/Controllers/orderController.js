@@ -62,8 +62,27 @@ const getUserOrders = asyncHandler(async(req, res) => {
     res.json(orders)
 })
 
+// @desc    Count orders for stats
+// @route   GET /api/orders/stats
+// @access  Private/Admin
+const getOrdersStats = asyncHandler(async(req, res) => {
+    const totalOrders = await Order.find({}).countDocuments()
+    const prevDate = new Date
+    prevDate.setDate(prevDate.getDate() - 1)
+    const paidOrders = await Order.find({ isPaid: true, createdAt: { $gt: prevDate } }).countDocuments()
+    const deliveredOrders = await Order.find({ isDelivered: true, createdAt: { $gt: prevDate } }).countDocuments()
+    const latestOrders = await Order.find({ createdAt: { $gt: prevDate } }).countDocuments()
+    res.json({
+        totalOrders,
+        paidOrders,
+        deliveredOrders,
+        latestOrders
+    })
+})
+
 export {
     addOrderItems,
     getOrderById,
-    getUserOrders
+    getUserOrders,
+    getOrdersStats
 }

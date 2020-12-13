@@ -1,4 +1,4 @@
-import { USER_ADD_WISHLIST_FAIL, USER_ADD_WISHLIST_REQUEST, USER_ADD_WISHLIST_SUCCESS, USER_DETAILS_FAIL, USER_DETAILS_REQUEST, USER_DETAILS_RESET, USER_DETAILS_SUCCESS, USER_GET_WISHLIST_FAIL, USER_GET_WISHLIST_REQUEST, USER_GET_WISHLIST_SUCCESS, USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_REGISTER_FAIL, USER_REGISTER_REQUEST, USER_REGISTER_RESET, USER_REGISTER_SUCCESS, USER_REMOVE_WISHLIST_FAIL, USER_REMOVE_WISHLIST_REQUEST, USER_REMOVE_WISHLIST_RESET, USER_REMOVE_WISHLIST_SUCCESS, USER_UPDATE_PROFILE_FAIL, USER_UPDATE_PROFILE_REQUEST, USER_UPDATE_PROFILE_RESET, USER_UPDATE_PROFILE_SUCCESS } from "../Constants/usersConstants";
+import { USER_ADD_WISHLIST_FAIL, USER_ADD_WISHLIST_REQUEST, USER_ADD_WISHLIST_SUCCESS, USER_DETAILS_FAIL, USER_DETAILS_REQUEST, USER_DETAILS_RESET, USER_DETAILS_SUCCESS, USER_GET_WISHLIST_FAIL, USER_GET_WISHLIST_REQUEST, USER_GET_WISHLIST_SUCCESS, USER_LIST_FAIL, USER_LIST_REQUEST, USER_LIST_SUCCESS, USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_REGISTER_FAIL, USER_REGISTER_REQUEST, USER_REGISTER_RESET, USER_REGISTER_SUCCESS, USER_REMOVE_WISHLIST_FAIL, USER_REMOVE_WISHLIST_REQUEST, USER_REMOVE_WISHLIST_RESET, USER_REMOVE_WISHLIST_SUCCESS, USER_STATS_FAIL, USER_STATS_REQUEST, USER_STATS_SUCCESS, USER_UPDATE_PROFILE_FAIL, USER_UPDATE_PROFILE_REQUEST, USER_UPDATE_PROFILE_RESET, USER_UPDATE_PROFILE_SUCCESS } from "../Constants/usersConstants";
 
 export const userloginReducer = (state = {}, action) => {
     switch (action.type) {
@@ -159,6 +159,49 @@ export const removeFromWishlistReducer = (state = {}, action) => {
             }
         case USER_REMOVE_WISHLIST_RESET:
             return {}
+        default:
+            return {...state }
+    }
+}
+
+export const userListStatsReducer = (state = { stats: {} }, action) => {
+    switch (action.type) {
+        case USER_STATS_REQUEST:
+            return {
+                ...state,
+                loading: true
+            }
+        case USER_STATS_SUCCESS:
+            return {
+                loading: false,
+                stats: action.payload
+            }
+        case USER_STATS_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            }
+        default:
+            return {...state }
+    }
+}
+
+export const userListReducer = (state = { users: [] }, action) => {
+    switch (action.type) {
+        case USER_LIST_REQUEST:
+            return {
+                loading: true
+            }
+        case USER_LIST_SUCCESS:
+            return {
+                loading: false,
+                userWishlist: action.payload
+            }
+        case USER_LIST_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            }
         default:
             return {...state }
     }

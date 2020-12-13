@@ -4,17 +4,22 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 
 import { productBestReducer, productDetailsReducer, productListCategoryReducer, productListReducer, productListSuggestionsReducer, productTopRatedReducer } from './Reducers/productReducers'
 import { cartReducer } from './Reducers/cartReducers'
-import { addToWishlistReducer, removeFromWishlistReducer, userDetailsReducer, userloginReducer, userRegisterReducer, userUpdateProfileReducer, userWishlistReducer } from './Reducers/userReducer'
-import { orderCreateReducer, orderDetailsReducer, orderListMyReducer } from './Reducers/orderReducers'
+import { addToWishlistReducer, removeFromWishlistReducer, userDetailsReducer, userloginReducer, userRegisterReducer, userUpdateProfileReducer, userWishlistReducer, userListStatsReducer } from './Reducers/userReducer'
+import { orderCreateReducer, orderDetailsReducer, orderListMyReducer, orderListStatsReducer } from './Reducers/orderReducers'
 
 const reducer = combineReducers({
+    //Products
     productList: productListReducer,
     productListCategory: productListCategoryReducer,
     productListSuggestion: productListSuggestionsReducer,
     productDetails: productDetailsReducer,
     productTopRated: productTopRatedReducer,
     productBest: productBestReducer,
+
+    //Cart
     cart: cartReducer,
+
+    //Users
     userLogin: userloginReducer,
     userRegister: userRegisterReducer,
     userDetails: userDetailsReducer,
@@ -22,9 +27,15 @@ const reducer = combineReducers({
     userWishlist: userWishlistReducer,
     addToWishlist: addToWishlistReducer,
     removeFromWishlist: removeFromWishlistReducer,
+
+    //Orders
     orderCreate: orderCreateReducer,
     orderDetails: orderDetailsReducer,
     orderListMy: orderListMyReducer,
+
+    //Admin
+    orderListStats: orderListStatsReducer,
+    userListStats: userListStatsReducer,
 })
 
 const cartItemsFromStorage = localStorage.getItem('cartItems-VegeFoods') ? JSON.parse(localStorage.getItem('cartItems-VegeFoods')) : []

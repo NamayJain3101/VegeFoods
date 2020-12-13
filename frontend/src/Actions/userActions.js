@@ -1,4 +1,4 @@
-import { USER_ADD_WISHLIST_FAIL, USER_ADD_WISHLIST_REQUEST, USER_ADD_WISHLIST_SUCCESS, USER_DETAILS_FAIL, USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS, USER_GET_WISHLIST_FAIL, USER_GET_WISHLIST_REQUEST, USER_GET_WISHLIST_SUCCESS, USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_REGISTER_FAIL, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_REMOVE_WISHLIST_FAIL, USER_REMOVE_WISHLIST_REQUEST, USER_REMOVE_WISHLIST_SUCCESS, USER_UPDATE_PROFILE_FAIL, USER_UPDATE_PROFILE_REQUEST, USER_UPDATE_PROFILE_SUCCESS } from "../Constants/usersConstants"
+import { USER_ADD_WISHLIST_FAIL, USER_ADD_WISHLIST_REQUEST, USER_ADD_WISHLIST_SUCCESS, USER_DETAILS_FAIL, USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS, USER_GET_WISHLIST_FAIL, USER_GET_WISHLIST_REQUEST, USER_GET_WISHLIST_SUCCESS, USER_LIST_FAIL, USER_LIST_REQUEST, USER_LIST_SUCCESS, USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_REGISTER_FAIL, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_REMOVE_WISHLIST_FAIL, USER_REMOVE_WISHLIST_REQUEST, USER_REMOVE_WISHLIST_SUCCESS, USER_STATS_FAIL, USER_STATS_REQUEST, USER_STATS_SUCCESS, USER_UPDATE_PROFILE_FAIL, USER_UPDATE_PROFILE_REQUEST, USER_UPDATE_PROFILE_SUCCESS } from "../Constants/usersConstants"
 import axios from 'axios'
 
 export const login = (email, password) => async(dispatch) => {
@@ -180,6 +180,56 @@ export const removeItemFromWishlist = (product) => async(dispatch, getState) => 
     } catch (error) {
         dispatch({
             type: USER_REMOVE_WISHLIST_FAIL,
+            payload: error.response && error.response.data.message ? error.response.data.message : error.message
+        })
+    }
+}
+
+export const listUserStats = () => async(dispatch, getState) => {
+    try {
+        dispatch({
+            type: USER_STATS_REQUEST
+        })
+        const { userLogin: { userInfo } } = getState()
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+        const { data } = await axios.get(`/api/users/stats`, config)
+        dispatch({
+            type: USER_STATS_SUCCESS,
+            payload: data
+        })
+    } catch (error) {
+        dispatch({
+            type: USER_STATS_FAIL,
+            payload: error.response && error.response.data.message ? error.response.data.message : error.message
+        })
+    }
+}
+
+export const listUsers = () => async(dispatch, getState) => {
+    try {
+        dispatch({
+            type: USER_LIST_REQUEST
+        })
+        const { userLogin: { userInfo } } = getState()
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+        const { data } = await axios.get(`/api/users`, config)
+        dispatch({
+            type: USER_LIST_SUCCESS,
+            payload: data
+        })
+    } catch (error) {
+        dispatch({
+            type: USER_LIST_FAIL,
             payload: error.response && error.response.data.message ? error.response.data.message : error.message
         })
     }

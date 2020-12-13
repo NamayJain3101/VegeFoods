@@ -20,6 +20,8 @@ import PaymentScreen from './Screens/PaymentScreen'
 import PlaceOrderScreen from './Screens/PlaceOrderScreen'
 import OrderScreen from './Screens/OrderScreen'
 import MyOrdersScreen from './Screens/MyOrdersScreen'
+import AdminScreen from './Screens/AdminScreen'
+import Statistics from './Screens/StatisticsScreen'
 
 const App = () => {
 	return (
@@ -28,7 +30,8 @@ const App = () => {
 			<Switch>
 				<Route path='/' exact component={HomeScreen} />
 				<Route path='/about' exact component={AboutScreen} />
-				<Route path='/about' exact component={AboutScreen} />
+				<Route path='/admin' exact component={AdminScreen} />
+				<Route path='/admin/statistics' exact component={Statistics} />
 				<Route path='/contact' exact component={ContactScreen} />
 				<Route path='/shop' exact component={ShopScreen} />
 				<Route path='/shop/:id' exact component={ProductScreen} />

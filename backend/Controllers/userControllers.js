@@ -167,6 +167,28 @@ const removeItemFromWishlist = asyncHandler(async(req, res) => {
     }
 })
 
+// @desc    Get All User
+// @route   GET /api/users
+// @access  Private/Admin
+const getUsers = asyncHandler(async(req, res) => {
+    const users = await User.find({})
+    res.json(users)
+})
+
+// @desc    Count users for stats
+// @route   GET /api/users/stats
+// @access  Private/Admin
+const getUsersStats = asyncHandler(async(req, res) => {
+    const totalUsers = await User.find({}).countDocuments()
+    const prevDate = new Date
+    prevDate.setDate(prevDate.getDate() - 1)
+    const latestUsers = await User.find({ createdAt: { $gt: prevDate } }).countDocuments()
+    res.json({
+        totalUsers,
+        latestUsers
+    })
+})
+
 export {
     authUser,
     getUserProfile,
@@ -174,5 +196,7 @@ export {
     updateUserProfile,
     addItemToWishlist,
     getWishlist,
-    removeItemFromWishlist
+    removeItemFromWishlist,
+    getUsers,
+    getUsersStats
 }
