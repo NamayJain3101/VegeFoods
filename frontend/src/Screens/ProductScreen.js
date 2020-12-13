@@ -36,12 +36,7 @@ const ProductScreen = ({ match, history }) => {
 
     let desc;
     if (product.description) {
-        if (product.description.color && product.description.color.length !== 0) {
-            desc = [...product.description.color]
-        }
-        if (product.description.flavour && product.description.flavour.length !== 0) {
-            desc = [...product.description.flavour]
-        }
+        desc = product.description.replaceAll(" ", "").split(',')
     }
 
     const [description, setDescription] = useState(desc && desc[0])
@@ -56,11 +51,8 @@ const ProductScreen = ({ match, history }) => {
     }
 
     const addToCartHandler = (qty, description) => {
-        console.log(desc)
         if (!description && desc && desc.length !== 0) {
             description = desc[0]
-        } else if (!desc) {
-            description = ''
         }
         history.push(`/cart/${product._id}?qty=${qty}&desc=${description}`)
     }

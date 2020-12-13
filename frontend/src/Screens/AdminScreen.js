@@ -14,8 +14,7 @@ const AdminScreen = ({ history }) => {
     useEffect(() => {
         Scroll.animateScroll.scrollToTop({
             duration: 1500,
-            smooth: 'easeInOutQuint',
-            delay: 500
+            smooth: 'easeInOutQuint'
         })
         if (!userInfo || !userInfo.isAdmin) {
             history.push('/')

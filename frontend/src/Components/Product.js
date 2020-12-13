@@ -11,12 +11,7 @@ const Product = ({ product, history }) => {
 
     let desc = [""];
     if (product.description) {
-        if (product.description.color && product.description.color.length !== 0) {
-            desc = [...product.description.color]
-        }
-        if (product.description.flavour && product.description.flavour.length !== 0) {
-            desc = [...product.description.flavour]
-        }
+        desc = product.description.replaceAll(" ", "").split(',')
     }
 
     const userLogin = useSelector(state => state.userLogin)

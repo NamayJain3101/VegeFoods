@@ -29,7 +29,7 @@ export const removeFromCart = (id, desc) => (dispatch, getState) => {
     localStorage.setItem('cartItems-VegeFoods', JSON.stringify(getState().cart.cartItems))
 }
 
-export const clearCart = () => (dispatch, getState) => {
+export const clearCart = () => (dispatch) => {
     dispatch({
         type: CART_CLEAR,
     })

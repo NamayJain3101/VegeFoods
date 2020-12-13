@@ -2,9 +2,7 @@ const products = [{
         name: 'Tomato',
         image: '/Images/Tomato.jpg',
         category: 'Vegetables',
-        description: {
-            color: ['red', 'orange']
-        },
+        description: "red, orange",
         price: 40,
         InStock: 20,
         rating: 0,
@@ -14,9 +12,7 @@ const products = [{
         name: 'Bell Pepper',
         image: '/Images/BellPepper.jpg',
         category: 'Vegetables',
-        description: {
-            color: ['red', 'green', 'yellow']
-        },
+        description: "red, green, yellow",
         discountPrice: 70,
         price: 50,
         InStock: 30,
@@ -27,9 +23,7 @@ const products = [{
         name: 'Carrots',
         image: '/Images/Carrots.jpg',
         category: 'Vegetables',
-        description: {
-            color: ['red', 'orange']
-        },
+        description: "red, orange",
         price: 40,
         InStock: 20,
         rating: 0,
@@ -39,9 +33,7 @@ const products = [{
         name: 'Apple',
         image: '/Images/Apple.jpg',
         category: 'Fruits',
-        description: {
-            color: ['red', 'green']
-        },
+        description: "red, green",
         price: 60,
         InStock: 20,
         rating: 0,
@@ -60,9 +52,7 @@ const products = [{
         name: 'Fruit Juice',
         image: '/Images/FruitJuice.jpg',
         category: 'Juice',
-        description: {
-            flavour: ['Apple', 'Orange', 'Guava']
-        },
+        description: "apple, orange, guava",
         price: 100,
         InStock: 25,
         rating: 0,
