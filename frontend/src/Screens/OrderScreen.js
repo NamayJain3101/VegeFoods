@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react'
-import { Col, ListGroupItem, Row } from 'react-bootstrap'
+import { Button, Col, ListGroupItem, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { getOrderDetails } from '../Actions/orderActions'
+import { deliverOrder, getOrderDetails } from '../Actions/orderActions'
 import Loader from '../Components/Loader'
 import Message from '../Components/Message'
 import OrderSummary from '../Components/OrderSummary'
 import * as Scroll from 'react-scroll'
+import { ORDER_DELIVER_RESET } from '../Constants/orderConstants'
+import { IoMdClose } from 'react-icons/io'
 
 const OrderScreen = ({ match, history }) => {
 
@@ -20,6 +22,13 @@ const OrderScreen = ({ match, history }) => {
     const userLogin = useSelector(state => state.userLogin)
     const { userInfo } = userLogin
 
+    const orderDeliver = useSelector(state => state.orderDeliver)
+    const { loading: loadingDeliver, success: successDeliver } = orderDeliver
+
+    const deliverHandler = () => {
+        dispatch(deliverOrder(order))
+    }
+
     useEffect(() => {
         Scroll.animateScroll.scrollToTop({
             duration: 1500,
@@ -30,13 +39,20 @@ const OrderScreen = ({ match, history }) => {
         } else {
             dispatch(getOrderDetails(orderId))
         }
-    }, [dispatch, history, orderId, userInfo])
+        if (successDeliver) {
+            dispatch({
+                type: ORDER_DELIVER_RESET
+            })
+        }
+    }, [dispatch, history, orderId, successDeliver, userInfo])
+
     return (
         <div>
             <OrderScreenWrapper>
-                <div className='order-details'>
+                <div className='order-details w-100'>
                     {loading ? <Loader /> : error ? <Message variant='danger'>{error}</Message> : (
                         <React.Fragment>
+                            <Button variant='danger' className='closeButton btn btn-danger' onClick={() => history.go(-1)}><IoMdClose /></Button>
                             <h5 className='text-center text-uppercase text-success mt-3' style={{ letterSpacing: '2px' }}>Thanks for shopping!!</h5>
                             {
                                 order.isDelivered ? (
@@ -99,6 +115,11 @@ const OrderScreen = ({ match, history }) => {
                                             <b>Status: </b>
                                             <i className='text-uppercase'>{order.isDelivered ? 'Delivered' : order.isPaid ? 'Paid' : 'Confirmed'}</i>
                                         </div>
+                                        {userInfo && userInfo.isAdmin && !order.isDelivered && (
+                                            loadingDeliver ? <Loader /> : (
+                                                <Button variant='warning' type='button' className='my-2 text-capitalize px-3 py-2' onClick={deliverHandler}>Mark Order As Delivered</Button>
+                                            )
+                                        )}
                                     </Col>
                                     <Col md={4} className='summary mt-3 my-md-0'>
                                         <div className='py-2 price'>
@@ -140,6 +161,17 @@ const OrderScreenWrapper = styled.div`
         border-radius: 2rem;
         box-shadow: 2px 2px 20px 2px green;
         background: white;
+        position: relative;
+    }
+    .closeButton {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 1rem 1.2rem;
+        border-top-right-radius: 2rem;
+        border-bottom-left-radius: 2rem;
+        z-index: 2;
+        background: #bd2130;
     }
     .overflow {
         overflow: auto;

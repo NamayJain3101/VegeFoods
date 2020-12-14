@@ -66,8 +66,8 @@ const MyOrdersScreen = ({ history }) => {
                                                     <h5 className='price'>&#8377;{item.totalPrice}</h5>
                                                 </div>
                                                 <div className='status text-center' onClick={() => history.push(`/orders/${item._id}`)}>
-                                                    <OrderStatus placed paid={item.isPaid} mb='1rem' />
-                                                    Status: {item.isPaid ? 'PAID' : item.isDelivered ? 'DELIVERED' : 'CONFIRMED'}
+                                                    <OrderStatus placed paid={item.isPaid} delivered={item.isDelivered} mb='1rem' />
+                                                    Status: {item.isDelivered ? 'DELIVERED' : item.isPaid ? 'PAID' : 'CONFIRMED'}
                                                 </div>
                                             </div>
                                         </Col>

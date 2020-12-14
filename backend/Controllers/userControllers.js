@@ -171,7 +171,7 @@ const removeItemFromWishlist = asyncHandler(async(req, res) => {
 // @route   GET /api/users
 // @access  Private/Admin
 const getUsers = asyncHandler(async(req, res) => {
-    const users = await User.find({})
+    const users = await User.find({}).select('-password')
     res.json(users)
 })
 

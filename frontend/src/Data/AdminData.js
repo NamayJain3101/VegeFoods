@@ -6,21 +6,21 @@ import { IoFastFoodOutline } from 'react-icons/io5'
 export const AdminData = [{
     id: 1,
     text: 'View Users',
-    path: '/admin/users',
+    path: '/admin/userlist',
     icon: <CgUserList className='link-icon' />,
     background: 'linear-gradient(to bottom right, magenta, violet, magenta)'
 },
 {
     id: 2,
     text: 'View Products',
-    path: '/admin/products',
+    path: '/admin/productlist',
     icon: <IoFastFoodOutline className='link-icon' />,
     background: 'linear-gradient(to bottom right, aqua, #00afff, aqua)'
 },
 {
     id: 3,
     text: 'View Orders',
-    path: '/admin/orders',
+    path: '/admin/orderlist',
     icon: <ImList className='link-icon' />,
     background: 'linear-gradient(to bottom right, lightgreen, lime, lightgreen)'
 }

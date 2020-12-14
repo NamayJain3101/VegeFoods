@@ -4,8 +4,8 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 
 import { productBestReducer, productDetailsReducer, productListCategoryReducer, productListReducer, productListSuggestionsReducer, productTopRatedReducer } from './Reducers/productReducers'
 import { cartReducer } from './Reducers/cartReducers'
-import { addToWishlistReducer, removeFromWishlistReducer, userDetailsReducer, userloginReducer, userRegisterReducer, userUpdateProfileReducer, userWishlistReducer, userListStatsReducer } from './Reducers/userReducer'
-import { orderCreateReducer, orderDetailsReducer, orderListMyReducer, orderListStatsReducer } from './Reducers/orderReducers'
+import { addToWishlistReducer, removeFromWishlistReducer, userDetailsReducer, userloginReducer, userRegisterReducer, userUpdateProfileReducer, userWishlistReducer, userListStatsReducer, userListReducer } from './Reducers/userReducer'
+import { orderCreateReducer, orderDeliverReducer, orderDetailsReducer, orderListMyReducer, orderListReducer, orderListStatsReducer } from './Reducers/orderReducers'
 
 const reducer = combineReducers({
     //Products
@@ -36,6 +36,9 @@ const reducer = combineReducers({
     //Admin
     orderListStats: orderListStatsReducer,
     userListStats: userListStatsReducer,
+    userList: userListReducer,
+    orderList: orderListReducer,
+    orderDeliver: orderDeliverReducer,
 })
 
 const cartItemsFromStorage = localStorage.getItem('cartItems-VegeFoods') ? JSON.parse(localStorage.getItem('cartItems-VegeFoods')) : []
