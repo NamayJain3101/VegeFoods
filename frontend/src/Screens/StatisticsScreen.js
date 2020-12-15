@@ -77,7 +77,7 @@ const Statistics = ({ history }) => {
                                     <CircularProgressbar
                                         maxValue={stats.totalOrders}
                                         value={stats.paidOrders}
-                                        text={`${(stats.paidOrders / stats.latestOrders * 100).toFixed(0)}%`}
+                                        text={`${(stats.paidOrders / stats.totalOrders * 100).toFixed(0)}%`}
                                         strokeWidth={20}
                                         styles={buildStyles({
                                             pathColor: 'blue',
@@ -92,7 +92,7 @@ const Statistics = ({ history }) => {
                                     <CircularProgressbar
                                         maxValue={stats.totalOrders}
                                         value={stats.deliveredOrders}
-                                        text={`${(stats.deliveredOrders / stats.latestOrders * 100).toFixed(0)}%`}
+                                        text={`${(stats.deliveredOrders / stats.totalOrders * 100).toFixed(0)}%`}
                                         strokeWidth={20}
                                         styles={buildStyles({
                                             pathColor: 'green',

@@ -66,7 +66,9 @@ const getUserOrders = asyncHandler(async(req, res) => {
 // @route   GET /api/orders/stats
 // @access  Private/Admin
 const getOrdersStats = asyncHandler(async(req, res) => {
-    const totalOrders = await Order.find({}).countDocuments()
+    const prevWeekDate = new Date
+    prevWeekDate.setDate(prevWeekDate.getDate() - 7)
+    const totalOrders = await Order.find({ createdAt: { $gt: prevWeekDate } }).countDocuments()
     const prevDate = new Date
     prevDate.setDate(prevDate.getDate() - 1)
     const paidOrders = await Order.find({ isPaid: true, createdAt: { $gt: prevDate } }).countDocuments()
