@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react'
 import { Button, Col, Container, Row } from 'react-bootstrap'
-import { GrFormClose } from 'react-icons/gr'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast, ToastContainer } from 'react-toastify'
 import styled from 'styled-components'
 import Loader from '../Components/Loader'
 import Message from '../Components/Message'
 import * as Scroll from 'react-scroll'
-import { deleteProduct, listProducts } from '../Actions/productActions'
+import { createProduct, deleteProduct, listProducts } from '../Actions/productActions'
 import { Link } from 'react-router-dom'
+import { FaRegEdit } from 'react-icons/fa'
+import { GrClose } from 'react-icons/gr'
+import { PRODUCT_CREATE_RESET, PRODUCT_DETAILS_RESET } from '../Constants/productConstants'
 
 const ProductListScreen = ({ history }) => {
     const userLogin = useSelector(state => state.userLogin)
@@ -20,6 +22,9 @@ const ProductListScreen = ({ history }) => {
     const productDelete = useSelector(state => state.productDelete)
     const { loading: loadingDelete, error: errorDelete, success: successDelete } = productDelete
 
+    const productCreate = useSelector(state => state.productCreate)
+    const { product: createdProduct, loading: loadingCreate, error: errorCreate, success: successCreate } = productCreate
+
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -27,24 +32,40 @@ const ProductListScreen = ({ history }) => {
             duration: 1500,
             smooth: 'easeInOutQuint'
         })
+        dispatch({
+            type: PRODUCT_CREATE_RESET
+        })
+        dispatch({
+            type: PRODUCT_DETAILS_RESET
+        })
         if (!userInfo || !userInfo.isAdmin) {
             history.push('/')
+        }
+        if (successCreate) {
+            history.push(`/admin/productlist/${createdProduct._id}/edit`)
         } else {
             dispatch(listProducts('All', ''))
         }
-    }, [dispatch, history, userInfo, successDelete])
+    }, [dispatch, history, userInfo, successDelete, successCreate, createdProduct])
 
     const removeProduct = (id, name) => {
         dispatch(deleteProduct(id))
         toast(`Successfully removed '${name.toUpperCase()}'`)
     }
 
+    const createProductHandler = () => {
+        dispatch(createProduct())
+    }
+
     return (
         <div>
             <ProductListWrapper>
                 <Container>
-                    <Link to='/admin' className='btn btn-danger mb-5'>Go To Admin Panel</Link>
-                    {loading || loadingDelete ? <Loader /> : error ? <Message variant='danger'>{error}</Message> : errorDelete ? <Message variant='danger'>{errorDelete}</Message> : (
+                    <div className='mb-4 mb-md-5 productButtons'>
+                        <Link to='/admin' className='btn btn-danger mb-4 mb-md-0'>Go To Admin Panel</Link>
+                        <Button className='btn btn-dark' onClick={createProductHandler}>+ Add Product</Button>
+                    </div>
+                    {loading || loadingDelete || loadingCreate ? <Loader /> : error ? <Message variant='danger'>{error}</Message> : errorDelete ? <Message variant='danger'>{errorDelete}</Message> : errorCreate ? <Message variant='danger'>{errorCreate}</Message> : (
                         products && products.length > 0 ? (
                             <Row>
                                 {products.map(item => {
@@ -63,7 +84,10 @@ const ProductListScreen = ({ history }) => {
                                                         {item.InStock > 0 ? `(${item.InStock} Kg Available)` : '(Out of Stock)'}
                                                     </h6>
                                                 </div>
-                                                <Button variant='danger' onClick={(id, name) => removeProduct(item._id, item.name)} className='delete'><GrFormClose /></Button>
+                                                <div className="product-buttons">
+                                                    <Button variant='primary' onClick={() => history.push(`/admin/productlist/${item._id}/edit`)}><FaRegEdit /></Button>
+                                                    <Button variant='danger' onClick={(id, name) => removeProduct(item._id, item.name)} className='delete'><GrClose /></Button>
+                                                </div>
                                             </div>
                                         </Col>
                                     )
@@ -93,6 +117,28 @@ const ProductListWrapper = styled.div`
     background: linear-gradient(170deg, greenyellow, lightgreen, greenyellow);
     padding: 5rem 2rem;
     padding-bottom: 4rem;
+    .productButtons {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .product-buttons {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+    .product-buttons > button:last-of-type {
+        border-radius: 0;
+        border-top-right-radius: 2rem;
+        padding-right: 1rem;
+        font-size: 1.0rem;
+    }
+    .product-buttons > button:first-of-type {
+        border-radius: 0;
+        border-bottom-left-radius: 2rem;
+        padding-left: 1.2rem;
+        font-size: 1.0rem;
+    }
     .row > div > div {
         display: flex;
         flex-flow: column;
@@ -133,24 +179,25 @@ const ProductListWrapper = styled.div`
     .price {
         font-family: sans-serif;
     }
-    .delete {
-        position: absolute;
-        top: 0;
-        right: 0;
-        border-top-right-radius: 50%;
-        border-bottom-left-radius: 50%;
-        border: 0;
-        outline: none;
-        font-size: 2rem;
-        padding: 0 0.5rem;
-    }
-    @media(max-width: 800px) {
+    @media(max-width: 768px) {
         padding: 2rem;
         .row > div > div {
             margin: 1rem;
         }
         .row > div {
             padding: 1rem 0;
+        }
+        .productButtons {
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+    }
+    @media(max-width: 579px) {
+        .row > div > div {
+            width: 300px;
+            margin: 1rem auto;
         }
     }
 `
