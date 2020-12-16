@@ -71,8 +71,8 @@ const getOrdersStats = asyncHandler(async(req, res) => {
     const totalOrders = await Order.find({ createdAt: { $gt: prevWeekDate } }).countDocuments()
     const prevDate = new Date
     prevDate.setDate(prevDate.getDate() - 1)
-    const paidOrders = await Order.find({ isPaid: true, createdAt: { $gt: prevDate } }).countDocuments()
-    const deliveredOrders = await Order.find({ isDelivered: true, createdAt: { $gt: prevDate } }).countDocuments()
+    const paidOrders = await Order.find({ isPaid: true, paidAt: { $gt: prevDate } }).countDocuments()
+    const deliveredOrders = await Order.find({ isDelivered: true, deliveredAt: { $gt: prevDate } }).countDocuments()
     const latestOrders = await Order.find({ createdAt: { $gt: prevDate } }).countDocuments()
     res.json({
         totalOrders,

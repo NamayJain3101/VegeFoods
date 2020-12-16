@@ -143,12 +143,16 @@ const ProductScreen = ({ match, history }) => {
                     {loadingProducts ? <Loader /> : errorProducts ? <Message variant='danger'>{errorProducts}</Message> : (
                         <Row>
                             {
-                                products.map(product => {
-                                    return (
-                                        <Col key={product.name} md={6} lg={3}>
-                                            <Product product={product} />
-                                        </Col>
-                                    )
+                                products.map((product, index) => {
+                                    if (index < 4) {
+                                        return (
+                                            <Col key={product.name} md={6} lg={3}>
+                                                <Product product={product} />
+                                            </Col>
+                                        )
+                                    } else {
+                                        return <React.Fragment></React.Fragment>
+                                    }
                                 })
                             }
                         </Row>

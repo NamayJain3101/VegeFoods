@@ -71,6 +71,7 @@ const LoginScreen = ({ location, history }) => {
                                                 onChange={(e) => setEmail(e.target.value)}
                                                 placeholder='Email'
                                                 className={`${error ? 'error-input' : ''}`}
+                                                required
                                             />
                                             <input
                                                 type="password"
@@ -80,6 +81,7 @@ const LoginScreen = ({ location, history }) => {
                                                 onChange={(e) => setPassword(e.target.value)}
                                                 placeholder='Password'
                                                 className={`${error ? 'error-input' : ''}`}
+                                                required
                                             />
                                             {error && <p className='text-danger text-capitalize error'>{error}</p>}
                                             <Button variant='success' type='submit' className='btn btn-block'>LOGIN</Button>

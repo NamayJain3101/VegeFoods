@@ -52,27 +52,27 @@ const ShippingScreen = ({ history }) => {
                         <form onSubmit={submitHandler}>
                             <Row>
                                 <Col xs={12}>
-                                    <label className='mt-3 ml-3'>Address: </label>
+                                    <label className='mt-3 ml-3'>Address<span className='req'>*</span></label>
                                     <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} name="address" id="address" placeholder='Address' required />
                                 </Col>
                                 <Col md={6}>
-                                    <label className='mt-3 ml-3'>Landmark: </label>
+                                    <label className='mt-3 ml-3'>Landmark<span className='req'>*</span></label>
                                     <input type="text" value={landmark} onChange={(e) => setLandmark(e.target.value)} name="landmark" id="landmark" placeholder='Landmark' required />
                                 </Col>
                                 <Col md={6}>
-                                    <label className='mt-3 ml-3'>City: </label>
+                                    <label className='mt-3 ml-3'>City<span className='req'>*</span></label>
                                     <input type="text" value={city} onChange={(e) => setCity(e.target.value)} name="city" id="city" placeholder='City' required />
                                 </Col>
                                 <Col md={4}>
-                                    <label className='mt-3 ml-3'>State: </label>
+                                    <label className='mt-3 ml-3'>State<span className='req'>*</span></label>
                                     <input type="text" value={state} onChange={(e) => setState(e.target.value)} name="state" id="state" placeholder='State' required />
                                 </Col>
                                 <Col md={4}>
-                                    <label className='mt-3 ml-3'>Postal Code: </label>
+                                    <label className='mt-3 ml-3'>Postal Code<span className='req'>*</span></label>
                                     <input type="text" value={postalCode} onChange={(e) => setPostalCode(e.target.value)} name="postalCode" id="postalCode" placeholder='Postal Code' required />
                                 </Col>
                                 <Col md={4}>
-                                    <label className='mt-3 ml-3'>Country: </label>
+                                    <label className='mt-3 ml-3'>Country<span className='req'>*</span></label>
                                     <input type="text" value={country} onChange={(e) => setCountry(e.target.value)} name="country" id="country" placeholder='Country' required />
                                 </Col>
                             </Row>
@@ -138,6 +138,9 @@ const ShippingWrapper = styled.div`
         flex-flow: column;
         align-items: flex-start;
         justify-content: center;
+    }
+    .req {
+        color: red;
     }
     @media(max-width: 600px) {
         padding: 2rem;

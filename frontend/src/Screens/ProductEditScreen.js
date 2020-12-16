@@ -125,16 +125,31 @@ const ProductEditScreen = ({ history, match }) => {
                                         </Tilt>
                                     </Col>
                                     <Col lg={6} className='form'>
-                                        <input type="text" value={name || ''} onChange={(e) => setName(e.target.value)} name="name" id="name" placeholder='Name' />
-                                        <input type="file" name="image-file" id="image-file" onChange={uploadFilehandler} />
+                                        <label htmlFor='name' className='w-100 ml-4 text-left'>Name<span className='req'>*</span></label>
+                                        <input type="text" required value={name} onChange={(e) => setName(e.target.value)} name="name" id="name" placeholder='Name' />
+
+                                        <label htmlFor='image-file' className='w-100 ml-4 text-left'>Image<span className='req'>*</span></label>
+                                        <input type="file" required name="image-file" id="image-file" onChange={uploadFilehandler} />
                                         {message && <p className='text-danger text-capitalize error'>{message}</p>}
-                                        <input type="text" value={category || ''} onChange={(e) => setCategory(e.target.value)} name="category" id="category" placeholder='Category' />
-                                        <input type="text" value={description || ''} onChange={(e) => setDescription(e.target.value)} name="description" id="description" placeholder='Description (Separated by ",")' />
-                                        <input type="number" value={price || ''} onChange={(e) => setPrice(e.target.value)} name="price" id="price" placeholder='Price' />
-                                        <input type="number" value={discountPrice || ''} onChange={(e) => setDiscountPrice(e.target.value)} name="discountPrice" id="discountPrice" placeholder='Discount Price' />
-                                        <input type="number" value={inStock || ''} onChange={(e) => setInStock(e.target.value)} name="inStock" id="inStock" placeholder='In Stock (in Kg)' />
+
+                                        <label htmlFor='category' className='w-100 ml-4 text-left'>Category<span className='req'>*</span></label>
+                                        <input type="text" required value={category} onChange={(e) => setCategory(e.target.value)} name="category" id="category" placeholder='Category' />
+
+                                        <label htmlFor='Description' className='w-100 ml-4 text-left'>Description</label>
+                                        <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} name="description" id="description" placeholder='Description (Separated by ",")' />
+
+                                        <label htmlFor='discountPrice' className='w-100 ml-4 text-left'>Original Price</label>
+                                        <input type="number" value={discountPrice} onChange={(e) => setDiscountPrice(e.target.value)} name="discountPrice" id="discountPrice" placeholder='Original Price' />
+
+                                        <label htmlFor='Price' className='w-100 ml-4 text-left'>Selling Price<span className='req'>*</span></label>
+                                        <input type="number" required value={price} onChange={(e) => setPrice(e.target.value)} name="price" id="price" placeholder='Selling Price' />
+
+                                        <label htmlFor='InStock' className='w-100 ml-4 text-left'>In Stock<span className='req'>*</span></label>
+                                        <input type="number" required value={inStock} onChange={(e) => setInStock(e.target.value)} name="inStock" id="inStock" placeholder='In Stock (in Kg)' />
+
                                         {error && <p className='text-danger text-capitalize error'>{error}</p>}
                                         {errorUpdate && <p className='text-danger text-capitalize error'>{errorUpdate}</p>}
+
                                         <Button variant='success' className='btn btn-block text-uppercase' onClick={submitHandler}>update</Button>
                                     </Col>
                                 </React.Fragment>
@@ -196,6 +211,16 @@ const ProductEditWrapper = styled.div`
     }
     .container input:focus {
         box-shadow: 1px 1px 15px 3px lightgreen;
+    }
+    .container label {
+        font-weight: bold;
+        text-transform: capitalize;
+        letter-spacing: 3px;
+        margin-top: 10px;
+        color: grey;
+    }
+    .req {
+        color: red;
     }
     .container button {
         border-radius: 2rem;
