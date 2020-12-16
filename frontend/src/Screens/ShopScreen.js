@@ -76,6 +76,7 @@ const ShopScreen = () => {
                                 name="search"
                                 id="search"
                                 value={search}
+                                style={{ outline: 'none' }}
                                 onClick={() => setFocus(true)}
                                 onBlur={() => setTimeout(() => {
                                     setFocus(false)
