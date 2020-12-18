@@ -52,7 +52,7 @@ const AccountPage = ({ history }) => {
                             )
                         })}
                         <Col md={6} className='my-4'>
-                            <div className='option mx-auto' onClick={logoutHandler} style={{ background: 'linear-gradient(to bottom right, yellow, orange, yellow)' }}>
+                            <div className='option mx-auto' onClick={logoutHandler} style={{ background: 'linear-gradient(to bottom right, grey, white, grey)' }}>
                                 <h3 className='text-center text-capitalize mb-4'><AiOutlineLogout className='link-icon' /></h3>
                                 <h3 className='text-center text-capitalize'>Logout</h3>
                             </div>

@@ -27,6 +27,7 @@ import OrderListScreen from './Screens/OrderListScreen'
 import ProductListScreen from './Screens/ProductListScreen'
 import UserEditScreen from './Screens/UserEditScreen'
 import ProductEditScreen from './Screens/ProductEditScreen'
+import WalletScreen from './Screens/WalletScreen'
 
 const App = () => {
 	return (
@@ -51,6 +52,7 @@ const App = () => {
 				<Route path='/my-account/profile' exact component={ProfileScreen} />
 				<Route path='/my-account/myOrders' exact component={MyOrdersScreen} />
 				<Route path='/my-account' exact component={AccountPage} />
+				<Route path='/my-wallet' exact component={WalletScreen} />
 				<Route path='/wishlist' exact component={WishlistScreen} />
 				<Route path='/shipping' exact component={ShippingScreen} />
 				<Route path='/payment' exact component={PaymentScreen} />

@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Loader from '../Components/Loader'
 import { getUserDetails, updateUserProfile } from '../Actions/userActions'
 import { USER_REGISTER_RESET } from '../Constants/usersConstants'
+import { IoMdClose } from 'react-icons/io'
 
 const RegisterScreen = ({ location, history }) => {
     const [name, setName] = useState('')
@@ -67,6 +68,7 @@ const RegisterScreen = ({ location, history }) => {
             <LoginWrapper>
                 <Animated animationIn="flipInX" animationOut="zoomOutDown" isVisible={true}>
                     <Container>
+                        <Button variant='danger' className='closeButton m-0 btn btn-danger' onClick={() => history.go(-1)}><IoMdClose /></Button>
                         <Row>
                             <Col lg={6} className='d-none d-lg-flex pr-lg-5'>
                                 <Tilt className="Tilt"
@@ -114,6 +116,18 @@ const LoginWrapper = styled.div`
         background: white;
         border-radius: 2rem;
         box-shadow: 5px 5px 40px 5px green;
+        position: relative;
+        overflow: hidden;
+    }
+    .closeButton {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 1rem;
+        border-radius: 0 !important;
+        border-bottom-left-radius: 2rem !important;
+        z-index: 2;
+        background: #bd2130;
     }
     .row {
         display: flex;

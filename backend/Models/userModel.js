@@ -20,6 +20,15 @@ const userSchema = mongoose.Schema({
         required: true,
         default: false
     },
+    wallet: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+    rechargeTime: {
+        type: String,
+        required: false
+    },
     wishlistItems: [{
         name: { type: String, required: true },
         image: { type: String, required: true },

@@ -13,6 +13,7 @@ import Axios from 'axios'
 import { PayPalButton } from 'react-paypal-button-v2'
 import uuid from 'react-uuid'
 import { clearCart } from '../Actions/cartActions'
+import { getUserDetails, updateUserProfile } from '../Actions/userActions'
 
 const PlaceOrderScreen = ({ history }) => {
 
@@ -36,6 +37,9 @@ const PlaceOrderScreen = ({ history }) => {
     const orderCreate = useSelector(state => state.orderCreate)
     const { order, loading, success, error } = orderCreate
 
+    const userDetails = useSelector((state) => state.userDetails)
+    const { loading: loadingUser, error: errorUser, user } = userDetails
+
     const [sdkReady, setSdkReady] = useState(false)
 
     const codPaymentHandler = () => {
@@ -55,6 +59,32 @@ const PlaceOrderScreen = ({ history }) => {
                 },
                 update_time: Date.now()
             }
+        }))
+        dispatch(clearCart())
+    }
+
+    const walletPaymentHandler = () => {
+        dispatch(createOrder({
+            orderItems: cartItems,
+            shippingAddress: shippingAddress,
+            paymentMethod: paymentMethod,
+            itemsPrice: cart.itemsPrice,
+            shippingPrice: cart.shippingPrice,
+            taxPrice: cart.taxPrice,
+            totalPrice: cart.totalPrice,
+            paymentResult: {
+                id: uuid(),
+                status: "COMPLETED",
+                payer: {
+                    email_address: userInfo.email
+                },
+                update_time: Date.now()
+            }
+        }))
+        const wallet = Number(user.wallet) - Number(cart.totalPrice)
+        dispatch(updateUserProfile({
+            id: user._id,
+            wallet: wallet.toFixed(2)
         }))
         dispatch(clearCart())
     }
@@ -94,6 +124,9 @@ const PlaceOrderScreen = ({ history }) => {
                 }
                 document.body.appendChild(script)
             }
+            if (!user.wallet) {
+                dispatch(getUserDetails('profile'))
+            }
             if (!window.paypal) {
                 addPaypalScript()
             } else {
@@ -114,110 +147,124 @@ const PlaceOrderScreen = ({ history }) => {
     return (
         <div>
             <PlaceOrderWrapper>
-                <CheckoutSteps step1 step2 step3 step4 mb='1rem' />
-                <Row className='w-100 my-0 mx-auto'>
-                    <Col lg={8} className='pl-0 pr-0 pr-lg-5'>
-                        <Col className='card-view my-4 py-4 px-5'>
-                            <h5>Shipping</h5>
-                            <p className='mb-0 mt-2'>
-                                <strong>Address: </strong>
-                                {shippingAddress.address}, {shippingAddress.landmark}, {shippingAddress.city}, {shippingAddress.state},  {shippingAddress.country}-{shippingAddress.postalCode}
-                            </p>
-                        </Col>
-                        <Col className='card-view my-4 py-4 px-5'>
-                            <h5>Payment Method: </h5>
-                            <p className='mb-0 mt-2'>
-                                <strong>Method: </strong>
-                                {paymentMethod}
-                            </p>
-                        </Col>
-                        <Col className='card-view order-items px-2 my-4 py-4 px-md-5'>
-                            <h5 className='mb-4 pl-md-0'>Order Items</h5>
-                            {cartItems.length === 0 ? <Message>Your cart is empty</Message> : (
-                                <React.Fragment>
-                                    {cartItems.map((item, index) => {
-                                        return (
-                                            <ListGroupItem key={index}>
-                                                <Col xs={4} md={5} className='img-container'>
-                                                    <img src={item.image} style={{ cursor: 'pointer' }} onClick={() => history.push(`/shop/${item.product}`)} alt={item.name} className='img-fluid' />
-                                                </Col>
-                                                <Col xs={8} md={6} className='desc'>
-                                                    <h4 style={{ cursor: 'pointer' }} onClick={() => history.push(`/shop/${item.product}`)}>{item.name}</h4>
-                                                    <h5 className='text-muted mb-3 text-capitalize'>{item.desc && `(${item.desc})`}</h5>
-                                                    <h4 className='price'>{item.qty} Kg x &#8377;{item.price} = &#8377;{item.qty * item.price}</h4>
-                                                </Col>
-                                            </ListGroupItem>
-                                        )
-                                    })}
-                                </React.Fragment>
-                            )}
-                        </Col>
-                    </Col>
-                    <Col lg={4} className='p-0'>
-                        <div className="card-view order-details px-2 py-4 px-lg-3 px-xl-4 mt-4">
-                            <ListGroupItem className='title'>
-                                <h5 className='font-weight-bold text-capitalize'>
-                                    Order Summary
+                {loadingUser ? <Loader /> : errorUser ? <Message variant='danger'>{errorUser}</Message> : (
+                    <React.Fragment>
+                        <CheckoutSteps step1 step2 step3 step4 mb='1rem' />
+                        <Row className='w-100 my-0 mx-auto'>
+                            <Col lg={8} className='pl-0 pr-0 pr-lg-5'>
+                                <Col className='card-view my-4 py-4 px-5'>
+                                    <h5>Shipping</h5>
+                                    <p className='mb-0 mt-2'>
+                                        <strong>Address: </strong>
+                                        {shippingAddress.address}, {shippingAddress.landmark}, {shippingAddress.city}, {shippingAddress.state},  {shippingAddress.country}-{shippingAddress.postalCode}
+                                    </p>
+                                </Col>
+                                <Col className='card-view my-4 py-4 px-5'>
+                                    <h5>Payment Method: </h5>
+                                    <p className='mb-0 mt-2'>
+                                        <strong>Method: </strong>
+                                        {paymentMethod}
+                                    </p>
+                                </Col>
+                                <Col className='card-view order-items px-2 my-4 py-4 px-md-5'>
+                                    <h5 className='mb-4 pl-md-0'>Order Items</h5>
+                                    {cartItems.length === 0 ? <Message>Your cart is empty</Message> : (
+                                        <React.Fragment>
+                                            {cartItems.map((item, index) => {
+                                                return (
+                                                    <ListGroupItem key={index}>
+                                                        <Col xs={4} md={5} className='img-container'>
+                                                            <img src={item.image} style={{ cursor: 'pointer' }} onClick={() => history.push(`/shop/${item.product}`)} alt={item.name} className='img-fluid' />
+                                                        </Col>
+                                                        <Col xs={8} md={6} className='desc'>
+                                                            <h4 style={{ cursor: 'pointer' }} onClick={() => history.push(`/shop/${item.product}`)}>{item.name}</h4>
+                                                            <h5 className='text-muted mb-3 text-capitalize'>{item.desc && `(${item.desc})`}</h5>
+                                                            <h4 className='price'>{item.qty} Kg x &#8377;{item.price} = &#8377;{item.qty * item.price}</h4>
+                                                        </Col>
+                                                    </ListGroupItem>
+                                                )
+                                            })}
+                                        </React.Fragment>
+                                    )}
+                                </Col>
+                            </Col>
+                            <Col lg={4} className='p-0'>
+                                <div className="card-view order-details px-2 py-4 px-lg-3 px-xl-4 mt-4">
+                                    <ListGroupItem className='title'>
+                                        <h5 className='font-weight-bold text-capitalize'>
+                                            Order Summary
                             </h5>
-                            </ListGroupItem>
-                            <ListGroupItem>
-                                <h5>
-                                    Subtotal :
+                                    </ListGroupItem>
+                                    <ListGroupItem>
+                                        <h5>
+                                            Subtotal :
                             </h5>
-                                <h5 className='price'>
-                                    &#8377;{cart.itemsPrice}
-                                </h5>
-                            </ListGroupItem>
-                            <ListGroupItem>
-                                <h5>
-                                    Shipping Price:
+                                        <h5 className='price'>
+                                            &#8377;{cart.itemsPrice}
+                                        </h5>
+                                    </ListGroupItem>
+                                    <ListGroupItem>
+                                        <h5>
+                                            Shipping Price:
                             </h5>
-                                <h5 className='price'>
-                                    &#8377;{cart.shippingPrice}
-                                </h5>
-                            </ListGroupItem>
-                            <ListGroupItem>
-                                <h5>
-                                    Tax Price:
+                                        <h5 className='price'>
+                                            &#8377;{cart.shippingPrice}
+                                        </h5>
+                                    </ListGroupItem>
+                                    <ListGroupItem>
+                                        <h5>
+                                            Tax Price:
                             </h5>
-                                <h5 className='price'>
-                                    &#8377;{cart.taxPrice}
-                                </h5>
-                            </ListGroupItem>
-                            <ListGroupItem>
-                                <h5>
-                                    Total Price:
+                                        <h5 className='price'>
+                                            &#8377;{cart.taxPrice}
+                                        </h5>
+                                    </ListGroupItem>
+                                    <ListGroupItem>
+                                        <h5>
+                                            Total Price:
                             </h5>
-                                <h5 className='price'>
-                                    &#8377;{cart.totalPrice}
-                                </h5>
-                            </ListGroupItem>
-                            <ListGroupItem>
-                                {loading && <Loader />}
-                                {error && <Message variant='danger'>{error}</Message>}
-                            </ListGroupItem>
-                            <ListGroupItem className='px-4 py-3'>
-                                {paymentMethod === 'Cash' && (
-                                    <Button
-                                        variant='success'
-                                        disabled={cartItems.length === 0}
-                                        className='btn btn-block checkout'
-                                        onClick={codPaymentHandler}
-                                    >
-                                        Place Order
-                                    </Button>
-                                )}
-                                {paymentMethod === 'PayPal' && (
-                                    <div className='mx-auto paypal'>
-                                        {!sdkReady ? <Loader /> : (
-                                            <PayPalButton amount={cart.totalPrice} currency='INR' onSuccess={successPaymentHandler} />
+                                        <h5 className='price'>
+                                            &#8377;{cart.totalPrice}
+                                        </h5>
+                                    </ListGroupItem>
+                                    <ListGroupItem>
+                                        {loading && <Loader />}
+                                        {error && <Message variant='danger'>{error}</Message>}
+                                    </ListGroupItem>
+                                    <ListGroupItem className='px-4 py-3'>
+                                        {paymentMethod === 'Cash' && (
+                                            <Button
+                                                variant='success'
+                                                disabled={cartItems.length === 0}
+                                                className='btn btn-block checkout'
+                                                onClick={codPaymentHandler}
+                                            >
+                                                Place Order
+                                            </Button>
                                         )}
-                                    </div>
-                                )}
-                            </ListGroupItem>
-                        </div>
-                    </Col>
-                </Row>
+                                        {paymentMethod === 'PayPal' && (
+                                            <div className='mx-auto paypal'>
+                                                {!sdkReady ? <Loader /> : (
+                                                    <PayPalButton amount={cart.totalPrice} currency='INR' onSuccess={successPaymentHandler} />
+                                                )}
+                                            </div>
+                                        )}
+                                        {paymentMethod === 'Wallet' && (
+                                            <Button
+                                                variant='success'
+                                                disabled={cartItems.length === 0}
+                                                className='btn btn-block checkout'
+                                                onClick={walletPaymentHandler}
+                                            >
+                                                Place Order
+                                            </Button>
+                                        )}
+                                    </ListGroupItem>
+                                </div>
+                            </Col>
+                        </Row>
+                    </React.Fragment>
+                )}
             </PlaceOrderWrapper>
         </div>
     )

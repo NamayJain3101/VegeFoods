@@ -17,6 +17,7 @@ const UserEditScreen = ({ history, match }) => {
 
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
+    const [wallet, setWallet] = useState(0)
     const [isAdmin, setIsAdmin] = useState(false)
 
     const userDetails = useSelector(state => state.userDetails)
@@ -35,6 +36,7 @@ const UserEditScreen = ({ history, match }) => {
             _id: userId,
             name,
             email,
+            wallet,
             isAdmin
         }))
     }
@@ -58,6 +60,7 @@ const UserEditScreen = ({ history, match }) => {
                 } else {
                     setName(user.name)
                     setEmail(user.email)
+                    setWallet(user.wallet)
                     setIsAdmin(user.isAdmin)
                 }
             }
@@ -91,6 +94,7 @@ const UserEditScreen = ({ history, match }) => {
                                     <React.Fragment>
                                         <input type="text" value={name} onChange={(e) => setName(e.target.value)} name="name" id="name" placeholder='Name' />
                                         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} name="email" id="email" placeholder='Email' />
+                                        <input type="number" value={wallet} onChange={(e) => setWallet(e.target.value)} name="wallet" id="wallet" placeholder='Wallet' />
                                         <div className='isAdmin'>
                                             Is Admin: <input type="checkbox" name="admin" id="admin" checked={isAdmin} onChange={(e) => setIsAdmin(e.target.checked)} />
                                         </div>

@@ -14,6 +14,7 @@ const authUser = asyncHandler(async(req, res) => {
             name: user.name,
             email: user.email,
             isAdmin: user.isAdmin,
+            wallet: user.wallet,
             wishlistItems: user.wishlistItems,
             token: generateToken(user._id)
         })
@@ -44,6 +45,7 @@ const registerUser = asyncHandler(async(req, res) => {
             name: user.name,
             email: user.email,
             isAdmin: user.isAdmin,
+            wallet: user.wallet,
             wishlistItems: user.wishlistItems,
             token: generateToken(user._id)
         })
@@ -64,6 +66,7 @@ const getUserProfile = asyncHandler(async(req, res) => {
             name: user.name,
             email: user.email,
             isAdmin: user.isAdmin,
+            wallet: user.wallet,
             wishlistItems: user.wishlistItems
         })
     } else {
@@ -80,6 +83,8 @@ const updateUserProfile = asyncHandler(async(req, res) => {
     if (user) {
         user.name = req.body.name || user.name
         user.email = req.body.email || user.email
+        user.wallet = req.body.wallet || user.wallet
+        user.rechargeTime = req.body.rechargeTime || user.rechargeTime
         if (req.body.password) {
             user.password = req.body.password
         }
@@ -89,6 +94,8 @@ const updateUserProfile = asyncHandler(async(req, res) => {
             name: updatedUser.name,
             email: updatedUser.email,
             isAdmin: updatedUser.isAdmin,
+            wallet: updatedUser.wallet,
+            rechargeTime: updatedUser.rechargeTime,
             token: generateToken(updatedUser._id)
         })
     } else {
@@ -228,12 +235,16 @@ const updateUser = asyncHandler(async(req, res) => {
     if (user) {
         user.name = req.body.name || user.name
         user.email = req.body.email || user.email
+        user.wallet = req.body.wallet || user.wallet
+        user.rechargeTime = req.body.wallet ? Date.now() : user.rechargeTime
         user.isAdmin = req.body.isAdmin
         const updatedUser = await user.save()
         res.json({
             _id: updatedUser._id,
             name: updatedUser.name,
             email: updatedUser.email,
+            wallet: updatedUser.wallet,
+            rechargeTime: updatedUser.rechargeTime,
             isAdmin: updatedUser.isAdmin
         })
     } else {
