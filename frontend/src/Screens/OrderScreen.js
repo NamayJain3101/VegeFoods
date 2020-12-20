@@ -52,7 +52,7 @@ const OrderScreen = ({ match, history }) => {
                 <div className='order-details w-100'>
                     {loading ? <Loader /> : error ? <Message variant='danger'>{error}</Message> : (
                         <React.Fragment>
-                            <Button variant='danger' className='closeButton btn btn-danger' onClick={() => history.go(-1)}><IoMdClose /></Button>
+                            <Button variant='danger' className='closeButton btn btn-danger' onClick={() => history.push('/my-account/myOrders')}><IoMdClose /></Button>
                             <h5 className='text-center text-uppercase text-success mt-3' style={{ letterSpacing: '2px' }}>Thanks for shopping!!</h5>
                             {
                                 order.isDelivered ? (
