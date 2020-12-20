@@ -122,7 +122,7 @@ const ProductScreen = ({ match, history }) => {
                                 </Tilt>
                             </Col>
                             <Col lg={6} className='description'>
-                                <h2 className='text-uppercase'>★ {product.name} ★</h2>
+                                <h2 className='text-uppercase'>{product.name}</h2>
                                 <Rating value={product.rating} text={`${product.numReviews} Reviews`} />
                                 <h2 className='price'>
                                     {product.discountPrice && <span className='text-muted'>&#8377;{product.discountPrice}</span>}
@@ -231,7 +231,7 @@ const ProductScreen = ({ match, history }) => {
                             <Col xs={12} className='comment-list mt-5'>
                                 {product && product.reviews && product.reviews.length === 0 ? <Message>No Reviews</Message> : (
                                     <React.Fragment>
-                                        {product && product.reviews && product.reviews.map(review => {
+                                        {product && product.reviews && product.reviews.slice(0).reverse().map(review => {
                                             return (
                                                 <ListGroupItem key={review._id}>
                                                     <strong>{review.name}</strong>
