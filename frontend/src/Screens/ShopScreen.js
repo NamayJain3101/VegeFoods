@@ -55,19 +55,21 @@ const ShopScreen = () => {
             {loading ? <Loader /> : error ? <Message variant='danger'>{error}</Message> : (
                 <React.Fragment>
                     <CategoryWrapper>
-                        {loadingCategory ? <Loader /> : errorCategory ? <Message variant='danger'>{errorCategory}</Message> : (
-                            categories.map((item, index) => {
-                                return (
-                                    <Button
-                                        key={index}
-                                        variant='success'
-                                        type='button'
-                                        className={item === category ? 'active' : ''}
-                                        onClick={() => { selectCategory(item) }}
-                                    >{item}</Button>
-                                )
-                            })
-                        )}
+                        <div>
+                            {loadingCategory ? <Loader /> : errorCategory ? <Message variant='danger'>{errorCategory}</Message> : (
+                                categories.map((item, index) => {
+                                    return (
+                                        <Button
+                                            key={index}
+                                            variant='success'
+                                            type='button'
+                                            className={item === category ? 'active' : ''}
+                                            onClick={() => { selectCategory(item) }}
+                                        >{item}</Button>
+                                    )
+                                })
+                            )}
+                        </div>
                     </CategoryWrapper>
                     <SearchWrapper>
                         <Container className='search'>
@@ -150,11 +152,17 @@ const SearchWrapper = styled.div`
 
 const CategoryWrapper = styled.div`
     width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 5rem;
-    overflow: auto;
+    padding: 5rem 2rem;
+    > div {
+        margin: auto;
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        overflow: auto;
+    }
+    > div::-webkit-scrollbar {
+        height: 0px;
+    }
     button {
         margin: 0 0.5rem;
         background: white;
