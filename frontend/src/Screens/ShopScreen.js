@@ -157,7 +157,7 @@ const CategoryWrapper = styled.div`
         margin: auto;
         display: flex;
         align-items: center;
-        justify-content: start;
+        justify-content: center;
         overflow: auto;
     }
     > div::-webkit-scrollbar {
@@ -180,6 +180,11 @@ const CategoryWrapper = styled.div`
     }
     @media(max-width: 701px) {
         padding-bottom: 3rem;
+    }
+    @media(max-width: 500px) {
+        > div {
+            justify-content: start;
+        }
     }
 `
 

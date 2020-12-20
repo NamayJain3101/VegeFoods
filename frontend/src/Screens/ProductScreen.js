@@ -234,7 +234,7 @@ const ProductScreen = ({ match, history }) => {
                                         {product && product.reviews && product.reviews.slice(0).reverse().map(review => {
                                             return (
                                                 <ListGroupItem key={review._id}>
-                                                    <strong>{review.name}</strong>
+                                                    <strong>{review.name.toUpperCase()}</strong>
                                                     <Rating value={review.rating} />
                                                     <p>Date: {review.createdAt.substring(0, 10)}</p>
                                                     <p>{review.comment}</p>
@@ -258,12 +258,12 @@ const ProductScreen = ({ match, history }) => {
                                 products.map((product, index) => {
                                     if (index < 4) {
                                         return (
-                                            <Col key={product.name} md={6} lg={3}>
+                                            <Col key={index} md={6} lg={3}>
                                                 <Product product={product} />
                                             </Col>
                                         )
                                     } else {
-                                        return <React.Fragment></React.Fragment>
+                                        return <React.Fragment key={index}></React.Fragment>
                                     }
                                 })
                             }
