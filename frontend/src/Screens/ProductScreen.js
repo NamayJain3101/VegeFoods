@@ -457,10 +457,16 @@ const ReviewsWrapper = styled.div`
     .rating > span:nth-last-child(1n + ${props => props.rating}) {
         color: red;
     }
+    .comment {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
     .comment > textarea {
         padding: 0.5rem 1rem;
         border: 1px solid green;
         outline: none;
+        width: 90%;
     }
     .comment-list {
         max-height: 400px;

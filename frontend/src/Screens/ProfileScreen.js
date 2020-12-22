@@ -26,7 +26,7 @@ const RegisterScreen = ({ location, history }) => {
     const { userInfo } = userLogin
 
     const userUpdateProfile = useSelector(state => state.userUpdateProfile)
-    const { success, loading: updateLoading } = userUpdateProfile
+    const { success, loading: updateLoading, error: updateError } = userUpdateProfile
 
     const dispatch = useDispatch()
 
@@ -94,6 +94,7 @@ const RegisterScreen = ({ location, history }) => {
                                         <input type="password" className={message ? 'error-input' : ''} onChange={(e) => setConfirmPassword(e.target.value)} name="ConfirmPassword" id="ConfirmPassword" placeholder='Confirm Password' />
                                         {message && <p className='text-danger text-capitalize error'>{message}</p>}
                                         {error && <p className='text-danger text-capitalize error'>{error}</p>}
+                                        {updateError && <p className='text-danger text-capitalize error'>{updateError}</p>}
                                         {success && <p className='text-success text-capitalize error'>Profile Updated Successfully</p>}
                                         <Button variant='success' className='btn btn-block text-uppercase' onClick={submitHandler}>update</Button>
                                     </React.Fragment>

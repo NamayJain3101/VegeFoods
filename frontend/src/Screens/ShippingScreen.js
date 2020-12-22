@@ -18,20 +18,38 @@ const ShippingScreen = ({ history }) => {
     const [state, setState] = useState(shippingAddress.state || '')
     const [postalCode, setPostalCode] = useState(shippingAddress.postalCode || '')
     const [country, setCountry] = useState(shippingAddress.country || '')
+    const [message, setMessage] = useState('')
 
     const dispatch = useDispatch()
 
     const submitHandler = (e) => {
         e.preventDefault()
-        dispatch(saveShippingAddress({
-            address,
-            city,
-            landmark,
-            state,
-            postalCode,
-            country
-        }))
-        history.push('/payment')
+        const regExpPostalCode = /^[1-9][0-9]{5}$/g
+        const regExpAddress = /^[a-zA-Z ]{2,}$/i
+        if (!regExpPostalCode.test(postalCode)) {
+            setMessage('Invalid Postal Code')
+        }
+        else if (!regExpAddress.test(state)) {
+            setMessage('Invalid State')
+        }
+        else if (!regExpAddress.test(city)) {
+            setMessage('Invalid City')
+        }
+        else if (!regExpAddress.test(country)) {
+            setMessage('Invalid Country')
+        }
+        else {
+            dispatch(saveShippingAddress({
+                address,
+                city,
+                landmark,
+                state,
+                postalCode,
+                country
+            }))
+            setMessage('')
+            history.push('/payment')
+        }
     }
 
     useEffect(() => {
@@ -76,6 +94,7 @@ const ShippingScreen = ({ history }) => {
                                     <input type="text" value={country} onChange={(e) => setCountry(e.target.value)} name="country" id="country" placeholder='Country' required />
                                 </Col>
                             </Row>
+                            {message && <p className='text-danger text-capitalize text-center'>{message}</p>}
                             <Button variant='success' className='mt-5 mt-md-5' type='submit'>Proceed to payment</Button>
                         </form>
                     </Container>
