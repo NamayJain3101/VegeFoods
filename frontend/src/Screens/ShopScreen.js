@@ -50,6 +50,7 @@ const ShopScreen = () => {
 
     const searchProducts = () => {
         setSearchName(search)
+        setPageNumber(1)
     }
 
     return (
