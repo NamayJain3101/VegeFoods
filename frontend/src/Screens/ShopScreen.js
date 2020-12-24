@@ -42,6 +42,7 @@ const ShopScreen = () => {
     const selectCategory = (itemCategory) => {
         if (category !== itemCategory) {
             setCategory(itemCategory)
+            setPageNumber(1)
             setSearch('')
             setSearchName('')
         }
