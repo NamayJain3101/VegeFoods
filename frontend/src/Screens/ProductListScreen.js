@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Col, Container, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast, ToastContainer } from 'react-toastify'
@@ -10,6 +10,7 @@ import { createProduct, deleteProduct, listProducts } from '../Actions/productAc
 import { Link } from 'react-router-dom'
 import { FaRegEdit } from 'react-icons/fa'
 import { GrClose } from 'react-icons/gr'
+import Pagination from 'react-js-pagination'
 import { PRODUCT_CREATE_RESET, PRODUCT_DETAILS_RESET } from '../Constants/productConstants'
 
 const ProductListScreen = ({ history }) => {
@@ -17,7 +18,7 @@ const ProductListScreen = ({ history }) => {
     const { userInfo } = userLogin
 
     const productList = useSelector(state => state.productList)
-    const { products, loading, error } = productList
+    const { products, pages, error, loading, productCount } = productList
 
     const productDelete = useSelector(state => state.productDelete)
     const { loading: loadingDelete, error: errorDelete, success: successDelete } = productDelete
@@ -26,6 +27,8 @@ const ProductListScreen = ({ history }) => {
     const { product: createdProduct, loading: loadingCreate, error: errorCreate, success: successCreate } = productCreate
 
     const dispatch = useDispatch()
+
+    const [pageNumber, setPageNumber] = useState(1)
 
     useEffect(() => {
         Scroll.animateScroll.scrollToTop({
@@ -44,9 +47,9 @@ const ProductListScreen = ({ history }) => {
         if (successCreate) {
             history.push(`/admin/productlist/${createdProduct._id}/edit`)
         } else {
-            dispatch(listProducts('All', ''))
+            dispatch(listProducts('All', '', pageNumber))
         }
-    }, [dispatch, history, userInfo, successDelete, successCreate, createdProduct])
+    }, [dispatch, history, userInfo, successDelete, successCreate, createdProduct, pageNumber])
 
     const removeProduct = (id, name) => {
         dispatch(deleteProduct(id))
@@ -97,6 +100,23 @@ const ProductListScreen = ({ history }) => {
                                 <Message>No Products Found</Message>
                             )
                     )}
+                    {pages > 1 && (
+                        <Pagination
+                            hideDisabled
+                            hideFirstLastPages
+                            pageRangeDisplayed={4}
+                            activePage={pageNumber}
+                            itemsCountPerPage={8}
+                            totalItemsCount={productCount}
+                            onChange={(page) => setPageNumber(page)}
+                            itemClass='page-item'
+                            linkClass='page-link'
+                            prevPageText='<'
+                            nextPageText='>'
+                            firstPageText='<<'
+                            lastPageText='>>'
+                        />
+                    )}
                 </Container>
             </ProductListWrapper>
             <ToastContainer
@@ -117,6 +137,11 @@ const ProductListWrapper = styled.div`
     background: linear-gradient(170deg, greenyellow, lightgreen, greenyellow);
     padding: 5rem 2rem;
     padding-bottom: 4rem;
+    .row {
+        display: flex;
+        align-items: center;
+        justify-content: center; 
+    }
     .productButtons {
         display: flex;
         align-items: center;
@@ -178,6 +203,38 @@ const ProductListWrapper = styled.div`
     }
     .price {
         font-family: sans-serif;
+    }
+    .pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .page-item {
+        width: 38px !important;
+        height: 38px !important;
+        margin: 0 7px;
+        margin-bottom: 10px;
+    }
+    .page-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .page-item, .page-link {
+        border-radius: 50% !important;
+        color: green;
+        border-color: green;
+    }
+    .page-item.active .page-link {
+        background-color: green;
+        border-color: green;
+    }
+    .page-link:focus {
+        box-shadow: 0 0 0 0.2rem rgba(0, 128, 0, 0.3);
+    }
+    .page-link:hover {
+        background-color: rgba(0, 128, 0, 0.1);
     }
     @media(max-width: 768px) {
         padding: 2rem;

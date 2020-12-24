@@ -213,7 +213,7 @@ export const listUserStats = () => async(dispatch, getState) => {
     }
 }
 
-export const listUsers = () => async(dispatch, getState) => {
+export const listUsers = (pageNumber = '') => async(dispatch, getState) => {
     try {
         dispatch({
             type: USER_LIST_REQUEST
@@ -225,7 +225,7 @@ export const listUsers = () => async(dispatch, getState) => {
                 Authorization: `Bearer ${userInfo.token}`
             }
         }
-        const { data } = await axios.get(`/api/users`, config)
+        const { data } = await axios.get(`/api/users?pageNumber=${pageNumber}`, config)
         dispatch({
             type: USER_LIST_SUCCESS,
             payload: data

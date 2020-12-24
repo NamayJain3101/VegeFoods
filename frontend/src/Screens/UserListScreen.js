@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteUser, listUsers } from '../Actions/userActions'
@@ -10,16 +10,18 @@ import { IoCloseSharp } from 'react-icons/io5'
 import { TiTick, TiTimes } from 'react-icons/ti'
 import * as Scroll from 'react-scroll'
 import { Link } from 'react-router-dom'
+import Pagination from 'react-js-pagination'
 
 const UserListScreen = ({ history }) => {
 
     const colors = ['magenta', 'orange', 'lime', 'cyan']
+    const [pageNumber, setPageNumber] = useState(1)
 
     const userLogin = useSelector(state => state.userLogin)
     const { userInfo } = userLogin
 
     const userList = useSelector(state => state.userList)
-    const { users, loading, error } = userList
+    const { users, pages, userCount, loading, error } = userList
 
     const userDelete = useSelector(state => state.userDelete)
     const { error: errorDelete, success: successDelete } = userDelete
@@ -51,35 +53,55 @@ const UserListScreen = ({ history }) => {
                     <Link to='/admin' className='btn btn-danger mb-5'>Go To Admin Panel</Link>
                     <Row className='w-100 m-0'>
                         {loading ? <Loader /> : error ? <Message variant='danger'>{error}</Message> : errorDelete ? <Message variant='danger'>{errorDelete}</Message> : (
-                            users.map(user => {
-                                return (
-                                    <Col md={6} lg={4} className='my-4 px-0' key={user._id}>
-                                        <div className='mx-md-4 userItem'>
-                                            <div className="img-wrapper mb-3" style={{ background: colors[Math.floor(Math.random() * colors.length)] }}>
-                                                {user.name.substring(0, 1).toUpperCase()}
-                                            </div>
-                                            <div className="desc w-100">
-                                                <div>
-                                                    <h5>{user.name}</h5>
+                            <React.Fragment>
+                                {users.map(user => {
+                                    return (
+                                        <Col md={6} lg={4} className='my-4 px-0' key={user._id}>
+                                            <div className='mx-md-4 userItem'>
+                                                <div className="img-wrapper mb-3" style={{ background: colors[Math.floor(Math.random() * colors.length)] }}>
+                                                    {user.name.substring(0, 1).toUpperCase()}
                                                 </div>
-                                                <div>
-                                                    <h5>{user.email}</h5>
+                                                <div className="desc w-100">
+                                                    <div>
+                                                        <h5>{user.name}</h5>
+                                                    </div>
+                                                    <div>
+                                                        <h5>{user.email}</h5>
+                                                    </div>
+                                                    <div>
+                                                        <h5>Admin: {user.isAdmin ? <TiTick style={{ color: 'green', fontSize: '1.6rem', margin: '0' }} /> : <TiTimes style={{ color: 'red', fontSize: '1.6rem', margin: '0' }} />}</h5>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <h5>Admin: {user.isAdmin ? <TiTick style={{ color: 'green', fontSize: '1.6rem', margin: '0' }} /> : <TiTimes style={{ color: 'red', fontSize: '1.6rem', margin: '0' }} />}</h5>
+                                                <div className="user-buttons">
+                                                    <Button variant='primary' onClick={() => history.push(`/admin/userlist/${user._id}/edit`)}><FaRegEdit /></Button>
+                                                    <Button variant='danger' onClick={(id, name) => { deleteUserHandler(user._id, user.name) }}><IoCloseSharp /></Button>
                                                 </div>
                                             </div>
-                                            <div className="user-buttons">
-                                                <Button variant='primary' onClick={() => history.push(`/admin/userlist/${user._id}/edit`)}><FaRegEdit /></Button>
-                                                <Button variant='danger' onClick={(id, name) => { deleteUserHandler(user._id, user.name) }}><IoCloseSharp /></Button>
-                                            </div>
-                                        </div>
-                                    </Col>
-                                )
-                            })
+                                        </Col>
+                                    )
+                                })}
+                                {pages > 1 && (
+                                    <Pagination
+                                        hideDisabled
+                                        hideFirstLastPages
+                                        pageRangeDisplayed={4}
+                                        activePage={pageNumber}
+                                        itemsCountPerPage={12}
+                                        totalItemsCount={userCount}
+                                        onChange={(page) => setPageNumber(page)}
+                                        itemClass='page-item'
+                                        linkClass='page-link'
+                                        prevPageText='<'
+                                        nextPageText='>'
+                                        firstPageText='<<'
+                                        lastPageText='>>'
+                                    />
+                                )}
+                            </React.Fragment>
                         )}
                     </Row>
                 </div>
+
             </UserListWrapper>
         </div>
     )
@@ -143,6 +165,38 @@ const UserListWrapper = styled.div`
     }
     .desc > div::-webkit-scrollbar {
         height: 0;
+    }
+    .pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .page-item {
+        width: 38px !important;
+        height: 38px !important;
+        margin: 0 7px;
+        margin-bottom: 10px;
+    }
+    .page-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .page-item, .page-link {
+        border-radius: 50% !important;
+        color: green;
+        border-color: green;
+    }
+    .page-item.active .page-link {
+        background-color: green;
+        border-color: green;
+    }
+    .page-link:focus {
+        box-shadow: 0 0 0 0.2rem rgba(0, 128, 0, 0.3);
+    }
+    .page-link:hover {
+        background-color: rgba(0, 128, 0, 0.1);
     }
     @media(max-width: 768px) {
         padding: 2rem;

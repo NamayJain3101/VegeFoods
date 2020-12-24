@@ -99,7 +99,7 @@ const ShopScreen = () => {
                     </SearchWrapper>
                     <Container>
                         <ProductListWrapper>
-                            <Row>
+                            <Row className='mb-5'>
                                 {products.length > 0 ? (
                                     products.map(product => {
                                         return (
@@ -148,7 +148,7 @@ const ProductListWrapper = styled.div`
     .page-item {
         width: 38px !important;
         height: 38px !important;
-        margin: 0 5px;
+        margin: 0 7px;
         margin-bottom: 10px;
     }
     .page-link {

@@ -58,8 +58,13 @@ const getOrderById = asyncHandler(async(req, res) => {
 // @route   GET /api/orders/myOrders
 // @access  Private
 const getUserOrders = asyncHandler(async(req, res) => {
-    const orders = await Order.find({ user: req.user._id }).sort({ createdAt: -1 })
-    res.json(orders)
+    const pageSize = 9
+    const page = Number(req.query.pageNumber) || 1
+
+    const count = await Order.find({ user: req.user._id }).countDocuments()
+
+    const orders = await Order.find({ user: req.user._id }).sort({ createdAt: -1 }).populate('user', 'id name').limit(pageSize).skip(pageSize * (page - 1))
+    res.json({ orders, page, pages: Math.ceil(count / pageSize), orderCount: count })
 })
 
 // @desc    Count orders for stats
@@ -86,8 +91,13 @@ const getOrdersStats = asyncHandler(async(req, res) => {
 // @route   GET /api/orders
 // @access  Private/Admin
 const getOrders = asyncHandler(async(req, res) => {
-    const orders = await Order.find({}).sort({ createdAt: -1 }).populate('user', 'id name')
-    res.json(orders)
+    const pageSize = 9
+    const page = Number(req.query.pageNumber) || 1
+
+    const count = await Order.countDocuments()
+
+    const orders = await Order.find({}).sort({ createdAt: -1 }).populate('user', 'id name').limit(pageSize).skip(pageSize * (page - 1))
+    res.json({ orders, page, pages: Math.ceil(count / pageSize), orderCount: count })
 })
 
 // @desc    Update order to delivered

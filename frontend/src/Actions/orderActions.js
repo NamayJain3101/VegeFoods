@@ -51,7 +51,7 @@ export const getOrderDetails = (id) => async(dispatch, getState) => {
     }
 }
 
-export const listMyOrders = () => async(dispatch, getState) => {
+export const listMyOrders = (pageNumber = '') => async(dispatch, getState) => {
     try {
         dispatch({
             type: ORDER_LIST_MY_REQUEST
@@ -63,7 +63,7 @@ export const listMyOrders = () => async(dispatch, getState) => {
                 Authorization: `Bearer ${userInfo.token}`
             }
         }
-        const { data } = await axios.get(`/api/orders/myOrders`, config)
+        const { data } = await axios.get(`/api/orders/myOrders?pageNumber=${pageNumber}`, config)
         dispatch({
             type: ORDER_LIST_MY_SUCCESS,
             payload: data
@@ -101,7 +101,7 @@ export const listOrderStats = () => async(dispatch, getState) => {
     }
 }
 
-export const listOrders = (search) => async(dispatch, getState) => {
+export const listOrders = (pageNumber) => async(dispatch, getState) => {
     try {
         dispatch({
             type: ORDER_LIST_REQUEST
@@ -113,7 +113,7 @@ export const listOrders = (search) => async(dispatch, getState) => {
                 Authorization: `Bearer ${userInfo.token}`
             }
         }
-        const { data } = await axios.get(`/api/orders?search=${search}`, config)
+        const { data } = await axios.get(`/api/orders?pageNumber=${pageNumber}`, config)
         dispatch({
             type: ORDER_LIST_SUCCESS,
             payload: data
