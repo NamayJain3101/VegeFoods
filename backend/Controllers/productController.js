@@ -5,6 +5,9 @@ import Product from '../Models/productModel.js'
 // @route   GET /api/products
 // @access  Public
 const getProducts = asyncHandler(async(req, res) => {
+    const pageSize = 8
+    const page = Number(req.query.pageNumber) || 1
+
     const category = req.query.category
     const search = req.query.search ? {
         name: {
@@ -12,11 +15,40 @@ const getProducts = asyncHandler(async(req, res) => {
             $options: 'i'
         }
     } : {}
+
+    let count
+    if (category !== 'All') {
+        count = await Product.find({ 'category': `${category}`, ...search }).countDocuments()
+    } else {
+        count = await Product.find({...search }).countDocuments()
+    }
+
     let products
     if (category !== 'All') {
-        products = await Product.find({ 'category': `${category}`, ...search }).sort({ name: 1 })
+        products = await Product.find({ 'category': `${category}`, ...search }).sort({ name: 1 }).limit(pageSize).skip(pageSize * (page - 1))
     } else {
-        products = await Product.find({...search }).sort({ name: 1 })
+        products = await Product.find({...search }).sort({ name: 1 }).limit(pageSize).skip(pageSize * (page - 1))
+    }
+    res.json({ products, page, pages: Math.ceil(count / pageSize), productCount: count })
+})
+
+// @desc    Fetch all products
+// @route   GET /api/products/suggestions
+// @access  Public
+const getProductSuggestions = asyncHandler(async(req, res) => {
+    const category = req.query.category
+    const search = req.query.search ? {
+        name: {
+            $regex: req.query.search,
+            $options: 'i'
+        }
+    } : {}
+
+    let products
+    if (category !== 'All') {
+        products = await Product.find({ 'category': `${category}`, ...search }).sort({ name: 1 }).limit(6)
+    } else {
+        products = await Product.find({...search }).sort({ name: 1 }).limit(6)
     }
     res.json(products)
 })
@@ -191,6 +223,7 @@ const getReviewsStats = asyncHandler(async(req, res) => {
 export {
     getProducts,
     getProductCategories,
+    getProductSuggestions,
     getBestDeal,
     getTopProducts,
     getProductById,

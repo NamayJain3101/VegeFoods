@@ -12,10 +12,11 @@ import { listCategories, listProducts } from '../Actions/productActions'
 import Loader from '../Components/Loader'
 import Message from '../Components/Message'
 import SearchResults from '../Components/SearchResults'
+import Pagination from 'react-js-pagination'
 
 const ShopScreen = () => {
     const productList = useSelector(state => state.productList)
-    const { products, error, loading } = productList
+    const { products, pages, error, loading, productCount } = productList
 
     const productListCategory = useSelector(state => state.productListCategory)
     const { categories, error: errorCategory, loading: loadingCategory } = productListCategory
@@ -25,6 +26,7 @@ const ShopScreen = () => {
     const [category, setCategory] = useState('All')
     const [search, setSearch] = useState('')
     const [searchName, setSearchName] = useState('')
+    const [pageNumber, setPageNumber] = useState(1)
 
     const [focus, setFocus] = useState(false)
 
@@ -33,9 +35,9 @@ const ShopScreen = () => {
             duration: 1500,
             smooth: 'easeInOutQuint'
         })
-        dispatch(listProducts(category, searchName))
+        dispatch(listProducts(category, searchName, pageNumber))
         dispatch(listCategories())
-    }, [category, dispatch, searchName])
+    }, [category, dispatch, pageNumber, searchName])
 
     const selectCategory = (itemCategory) => {
         if (category !== itemCategory) {
@@ -109,6 +111,23 @@ const ShopScreen = () => {
                                 ) : <Message>No Product Found</Message>
                                 }
                             </Row>
+                            {pages > 1 && (
+                                <Pagination
+                                    hideDisabled
+                                    hideFirstLastPages
+                                    pageRangeDisplayed={4}
+                                    activePage={pageNumber}
+                                    itemsCountPerPage={8}
+                                    totalItemsCount={productCount}
+                                    onChange={(page) => setPageNumber(page)}
+                                    itemClass='page-item'
+                                    linkClass='page-link'
+                                    prevPageText='<'
+                                    nextPageText='>'
+                                    firstPageText='<<'
+                                    lastPageText='>>'
+                                />
+                            )}
                         </ProductListWrapper>
                     </Container>
                 </React.Fragment>
@@ -120,6 +139,38 @@ const ShopScreen = () => {
 
 const ProductListWrapper = styled.div`
     padding: 4rem 0;
+    .pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .page-item {
+        width: 38px !important;
+        height: 38px !important;
+        margin: 0 5px;
+        margin-bottom: 10px;
+    }
+    .page-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .page-item, .page-link {
+        border-radius: 50% !important;
+        color: green;
+        border-color: green;
+    }
+    .page-item.active .page-link {
+        background-color: green;
+        border-color: green;
+    }
+    .page-link:focus {
+        box-shadow: 0 0 0 0.2rem rgba(0, 128, 0, 0.3);
+    }
+    .page-link:hover {
+        background-color: rgba(0, 128, 0, 0.1);
+    }
 `
 
 const SearchWrapper = styled.div`

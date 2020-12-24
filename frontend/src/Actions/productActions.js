@@ -1,12 +1,12 @@
 import axios from 'axios'
-import { PRODUCT_BEST_FAIL, PRODUCT_BEST_REQUEST, PRODUCT_BEST_SUCCESS, PRODUCT_CREATE_FAIL, PRODUCT_CREATE_REQUEST, PRODUCT_CREATE_REVIEW_FAIL, PRODUCT_CREATE_REVIEW_REQUEST, PRODUCT_CREATE_REVIEW_SUCCESS, PRODUCT_CREATE_SUCCESS, PRODUCT_DELETE_FAIL, PRODUCT_DELETE_REQUEST, PRODUCT_DELETE_SUCCESS, PRODUCT_DETAILS_FAIL, PRODUCT_DETAILS_REQUEST, PRODUCT_DETAILS_SUCCESS, PRODUCT_GET_REVIEW_FAIL, PRODUCT_GET_REVIEW_REQUEST, PRODUCT_GET_REVIEW_SUCCESS, PRODUCT_LIST_CATEGORY_FAIL, PRODUCT_LIST_CATEGORY_REQUEST, PRODUCT_LIST_CATEGORY_SUCCESS, PRODUCT_LIST_FAIL, PRODUCT_LIST_REQUEST, PRODUCT_LIST_SUCCESS, PRODUCT_LIST_SUGGESTION_FAIL, PRODUCT_LIST_SUGGESTION_REQUEST, PRODUCT_LIST_SUGGESTION_SUCCESS, PRODUCT_TOP_RATED_FAIL, PRODUCT_TOP_RATED_REQUEST, PRODUCT_TOP_RATED_SUCCESS, PRODUCT_UPDATE_FAIL, PRODUCT_UPDATE_REQUEST, PRODUCT_UPDATE_SUCCESS } from "../Constants/productConstants"
+import { PRODUCT_BEST_FAIL, PRODUCT_BEST_REQUEST, PRODUCT_BEST_SUCCESS, PRODUCT_CREATE_FAIL, PRODUCT_CREATE_REQUEST, PRODUCT_CREATE_REVIEW_FAIL, PRODUCT_CREATE_REVIEW_REQUEST, PRODUCT_CREATE_REVIEW_SUCCESS, PRODUCT_CREATE_SUCCESS, PRODUCT_DELETE_FAIL, PRODUCT_DELETE_REQUEST, PRODUCT_DELETE_SUCCESS, PRODUCT_DETAILS_FAIL, PRODUCT_DETAILS_REQUEST, PRODUCT_DETAILS_SUCCESS, PRODUCT_GET_REVIEW_FAIL, PRODUCT_GET_REVIEW_REQUEST, PRODUCT_GET_REVIEW_SUCCESS, PRODUCT_LIST_CATEGORY_FAIL, PRODUCT_LIST_CATEGORY_REQUEST, PRODUCT_LIST_CATEGORY_SUCCESS, PRODUCT_LIST_FAIL, PRODUCT_LIST_REQUEST, PRODUCT_LIST_SUCCESS, PRODUCT_LIST_SUGGESTIONS_FAIL, PRODUCT_LIST_SUGGESTIONS_REQUEST, PRODUCT_LIST_SUGGESTIONS_SUCCESS, PRODUCT_TOP_RATED_FAIL, PRODUCT_TOP_RATED_REQUEST, PRODUCT_TOP_RATED_SUCCESS, PRODUCT_UPDATE_FAIL, PRODUCT_UPDATE_REQUEST, PRODUCT_UPDATE_SUCCESS } from "../Constants/productConstants"
 
-export const listProducts = (category, search) => async(dispatch) => {
+export const listProducts = (category, search, pageNumber = '') => async(dispatch) => {
     try {
         dispatch({
             type: PRODUCT_LIST_REQUEST
         })
-        const { data } = await axios.get(`/api/products?category=${category}&search=${search}`)
+        const { data } = await axios.get(`/api/products?category=${category}&search=${search}&pageNumber=${pageNumber}`)
         dispatch({
             type: PRODUCT_LIST_SUCCESS,
             payload: data
@@ -22,16 +22,16 @@ export const listProducts = (category, search) => async(dispatch) => {
 export const listProductsSuggestion = (category, search) => async(dispatch) => {
     try {
         dispatch({
-            type: PRODUCT_LIST_SUGGESTION_REQUEST
+            type: PRODUCT_LIST_SUGGESTIONS_REQUEST
         })
-        const { data } = await axios.get(`/api/products?category=${category}&search=${search}`)
+        const { data } = await axios.get(`/api/products/suggestions?category=${category}&search=${search}`)
         dispatch({
-            type: PRODUCT_LIST_SUGGESTION_SUCCESS,
+            type: PRODUCT_LIST_SUGGESTIONS_SUCCESS,
             payload: data
         })
     } catch (error) {
         dispatch({
-            type: PRODUCT_LIST_SUGGESTION_FAIL,
+            type: PRODUCT_LIST_SUGGESTIONS_FAIL,
             payload: error.response && error.response.data.message ? error.response.data.message : error.message
         })
     }

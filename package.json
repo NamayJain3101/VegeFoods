@@ -40,6 +40,7 @@
         "react-bootstrap": "^1.4.0",
         "react-circular-progressbar": "^2.0.3",
         "react-icons": "^4.1.0",
+        "react-js-pagination": "^3.0.3",
         "react-paypal-button-v2": "^2.6.2",
         "react-scroll": "^1.8.1",
         "react-uuid": "^1.0.2",
