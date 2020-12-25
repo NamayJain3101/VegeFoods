@@ -70,7 +70,6 @@ const WalletScreen = ({ history }) => {
     }, [dispatch, history, success, user, userInfo])
 
     const successPaymentHandler = (paymentResult) => {
-        console.log(paymentResult)
         const amount = Number(user.wallet) + Number(wallet)
         if (paymentResult.status === 'COMPLETED') {
             dispatch(updateUserProfile({
@@ -86,11 +85,11 @@ const WalletScreen = ({ history }) => {
             <WalletWrapper>
                 <Animated animationIn="flipInX" animationOut="zoomOutDown" isVisible={true}>
                     <Container>
-                        <h3 className='w-100 text-center text-uppercase font-weight-bold'>Recharge</h3>
+                        <h3 className='mb-3 mb-lg-5 w-100 text-center text-uppercase font-weight-bold'>Recharge</h3>
                         <Button variant='danger' className='closeButton m-0 btn btn-danger' onClick={() => history.go(-1)}><IoMdClose /></Button>
                         {loading ? <Loader /> : error ? <Message variant='danger'>{error}</Message> : (
                             <Row>
-                                <Col lg={6} className='d-none d-lg-flex pr-lg-5'>
+                                <Col lg={6} className='d-flex pr-lg-5'>
                                     <Tilt className="Tilt"
                                         options={{
                                             max: 45,
@@ -101,7 +100,7 @@ const WalletScreen = ({ history }) => {
                                             easing: "cubic-bezier(.03,.98,.52,.99)"
                                         }}
                                     >
-                                        <h1 className='wallet'>&#8377;{user.wallet}</h1>
+                                        <h1 className='wallet mb-3 mb-lg-0'>&#8377;{user.wallet}</h1>
                                     </Tilt>
                                 </Col>
                                 {updateLoading ? <Loader /> : (
@@ -160,7 +159,7 @@ const WalletWrapper = styled.div`
         font-size: 5rem;
         font-weight: bold;
         color: green;
-        line-height: 3;
+        line-height: 1.5;
         text-shadow: 2px 4px lightgreen;
     }
     .btnClose {
@@ -178,7 +177,7 @@ const WalletWrapper = styled.div`
         justify-content: space-between;
     }
     .container h3 {
-        margin-bottom: 3rem;
+        margin-bottom: 2rem;
     }
     .container input {
         width: 100%;
@@ -263,6 +262,9 @@ const WalletWrapper = styled.div`
             padding: 0;
             height: 35px;
             margin-bottom: 12px;
+        }
+        .wallet {
+            font-size: 4rem;
         }
     }
     @media(max-width: 400px) {

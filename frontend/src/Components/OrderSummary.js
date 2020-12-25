@@ -3,25 +3,25 @@ import { Nav, NavItem } from 'react-bootstrap'
 import styled from 'styled-components'
 import { FiPackage, FiPocket, FiShoppingBag } from 'react-icons/fi'
 
-const OrderSummary = ({ placed, paid, delivered, mb }) => {
+const OrderSummary = ({ placed, cancelled, paid, delivered, mb }) => {
     return (
         <OrderSummaryWrapper style={{ marginBottom: `${mb || '3rem'}` }}>
             <Nav className='justify-content-center'>
                 <NavItem>
-                    <div className='status' style={placed ? { background: 'lightgreen' } : { background: 'grey' }}>
-                        {placed ? <FiShoppingBag style={{ color: 'black' }} /> : <FiShoppingBag style={{ color: 'white' }} />}
+                    <div className='status' style={cancelled ? { background: 'red' } : placed ? { background: 'lightgreen' } : { background: 'grey' }}>
+                        {cancelled || placed ? <FiShoppingBag style={{ color: 'black' }} /> : <FiShoppingBag style={{ color: 'white' }} />}
                     </div>
                 </NavItem>
-                <div className='line mt-1' style={paid ? { background: 'green' } : { background: 'grey' }}></div>
+                <div className='line mt-1' style={cancelled ? { background: 'black' } : paid ? { background: 'green' } : { background: 'grey' }}></div>
                 <NavItem>
-                    <div className='status' style={paid ? { background: 'lightgreen' } : { background: 'grey' }}>
-                        {paid ? <FiPocket style={{ color: 'black' }} /> : <FiPocket style={{ color: 'white' }} />}
+                    <div className='status' style={cancelled ? { background: 'red' } : paid ? { background: 'lightgreen' } : { background: 'grey' }}>
+                        {cancelled || paid ? <FiPocket style={{ color: 'black' }} /> : <FiPocket style={{ color: 'white' }} />}
                     </div>
                 </NavItem>
-                <div className='line mt-1' style={delivered ? { background: 'green' } : { background: 'grey' }}></div>
+                <div className='line mt-1' style={cancelled ? { background: 'black' } : delivered ? { background: 'green' } : { background: 'grey' }}></div>
                 <NavItem>
-                    <div className='status' style={delivered ? { background: 'lightgreen' } : { background: 'grey' }}>
-                        {delivered ? <FiPackage style={{ color: 'black' }} /> : <FiPackage style={{ color: 'white' }} />}
+                    <div className='status' style={cancelled ? { background: 'red' } : delivered ? { background: 'lightgreen' } : { background: 'grey' }}>
+                        {cancelled || delivered ? <FiPackage style={{ color: 'black' }} /> : <FiPackage style={{ color: 'white' }} />}
                     </div>
                 </NavItem>
             </Nav>

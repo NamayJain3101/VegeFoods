@@ -73,8 +73,8 @@ const OrderListScreen = ({ history }) => {
                                                             <h5 >{item.createdAt.substring(0, 10)}</h5>
                                                         </div>
                                                         <div className='status text-center' onClick={() => history.push(`/orders/${item._id}`)}>
-                                                            <OrderStatus placed paid={item.isPaid} delivered={item.isDelivered} mb='1rem' />
-                                                        Status: {item.isDelivered ? 'DELIVERED' : item.isPaid ? 'PAID' : 'CONFIRMED'}
+                                                            <OrderStatus placed cancelled={item.isCancelled} paid={item.isPaid} delivered={item.isDelivered} mb='1rem' />
+                                                            Status: {item.isCancelled ? 'CANCELLED' : item.isDelivered ? 'DELIVERED' : item.isPaid ? 'PAID' : 'CONFIRMED'}
                                                         </div>
                                                     </div>
                                                 </Col>

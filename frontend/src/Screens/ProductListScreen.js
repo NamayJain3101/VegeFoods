@@ -12,6 +12,8 @@ import { FaRegEdit } from 'react-icons/fa'
 import { GrClose } from 'react-icons/gr'
 import Pagination from 'react-js-pagination'
 import { PRODUCT_CREATE_RESET, PRODUCT_DETAILS_RESET } from '../Constants/productConstants'
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css'
 
 const ProductListScreen = ({ history }) => {
     const userLogin = useSelector(state => state.userLogin)
@@ -52,8 +54,23 @@ const ProductListScreen = ({ history }) => {
     }, [dispatch, history, userInfo, successDelete, successCreate, createdProduct, pageNumber])
 
     const removeProduct = (id, name) => {
-        dispatch(deleteProduct(id))
-        toast(`Successfully removed '${name.toUpperCase()}'`)
+        confirmAlert({
+            title: `Delete ${name}`,
+            message: 'Are you sure??',
+            buttons: [
+                {
+                    label: 'Confirm',
+                    onClick: () => {
+                        dispatch(deleteProduct(id))
+                        toast(`Successfully removed '${name.toUpperCase()}'`)
+                    }
+                },
+                {
+                    label: 'Cancel',
+                    onClick: () => { }
+                },
+            ],
+        })
     }
 
     const createProductHandler = () => {

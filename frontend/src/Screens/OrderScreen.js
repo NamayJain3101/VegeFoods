@@ -2,13 +2,17 @@ import React, { useEffect } from 'react'
 import { Button, Col, ListGroupItem, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { deliverOrder, getOrderDetails } from '../Actions/orderActions'
+import { cancelOrder, deliverOrder, getOrderDetails } from '../Actions/orderActions'
 import Loader from '../Components/Loader'
 import Message from '../Components/Message'
 import OrderSummary from '../Components/OrderSummary'
 import * as Scroll from 'react-scroll'
-import { ORDER_DELIVER_RESET } from '../Constants/orderConstants'
+import { ORDER_CANCEL_RESET, ORDER_DELIVER_RESET } from '../Constants/orderConstants'
 import { IoMdClose } from 'react-icons/io'
+import { getUserDetails, updateUserProfile } from '../Actions/userActions'
+import { USER_DETAILS_RESET } from '../Constants/usersConstants'
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css'
 
 const OrderScreen = ({ match, history }) => {
 
@@ -25,8 +29,44 @@ const OrderScreen = ({ match, history }) => {
     const orderDeliver = useSelector(state => state.orderDeliver)
     const { loading: loadingDeliver, success: successDeliver } = orderDeliver
 
+    const orderCancel = useSelector(state => state.orderCancel)
+    const { loading: loadingCancel, success: successCancel } = orderCancel
+
+    const userDetails = useSelector(state => state.userDetails)
+    const { user, error: errorUser } = userDetails
+
+    const userUpdateProfile = useSelector(state => state.userUpdateProfile)
+    const { success } = userUpdateProfile
+
     const deliverHandler = () => {
         dispatch(deliverOrder(order))
+    }
+
+    const cancelOrderHandler = () => {
+        confirmAlert({
+            title: `Cancel Order`,
+            message: 'Are you sure??',
+            buttons: [
+                {
+                    label: 'Confirm',
+                    onClick: () => {
+                        dispatch(cancelOrder(order))
+                        if (order.isPaid) {
+                            const amount = Number(user.wallet) + Number(order.totalPrice)
+                            dispatch(updateUserProfile({
+                                id: user._id,
+                                wallet: amount.toFixed(2),
+                                rechargeTime: Date.now()
+                            }))
+                        }
+                    }
+                },
+                {
+                    label: 'Cancel',
+                    onClick: () => { }
+                },
+            ],
+        })
     }
 
     useEffect(() => {
@@ -38,31 +78,43 @@ const OrderScreen = ({ match, history }) => {
             history.push('/')
         } else {
             dispatch(getOrderDetails(orderId))
+            dispatch(getUserDetails('profile'))
         }
         if (successDeliver) {
             dispatch({
                 type: ORDER_DELIVER_RESET
             })
         }
-    }, [dispatch, history, orderId, successDeliver, userInfo])
+        if (successCancel || success) {
+            dispatch({
+                type: ORDER_CANCEL_RESET
+            })
+            dispatch({
+                type: USER_DETAILS_RESET
+            })
+        }
+    }, [dispatch, history, orderId, success, successCancel, successDeliver, userInfo])
+
+    console.log(new Date())
+    console.log(new Date(order && order.isDelivered && order.deliveredAt))
 
     return (
         <div>
             <OrderScreenWrapper>
                 <div className='order-details w-100'>
-                    {loading ? <Loader /> : error ? <Message variant='danger'>{error}</Message> : (
+                    {loading ? <Loader /> : error ? <Message variant='danger'>{error}</Message> : errorUser ? <Message variant='danger'>{errorUser}</Message> : (
                         <React.Fragment>
                             <Button variant='danger' className='closeButton btn btn-danger' onClick={() => history.push('/my-account/myOrders')}><IoMdClose /></Button>
                             <h5 className='text-center text-uppercase text-success mt-3' style={{ letterSpacing: '2px' }}>Thanks for shopping!!</h5>
                             {
                                 order.isDelivered ? (
-                                    <p className='text-center w-75 mx-auto font-italic'>Hey {order.user.name.split(' ')[0]}, we have delivered your order.</p>
+                                    <p className='text-center w-75 mx-auto font-italic'>Hey {order.user && order.user.name.split(' ')[0]}, we have delivered your order.</p>
                                 ) : order.isPaid ? (
-                                    <p className='text-center w-75 mx-auto font-italic'>Hey {order.user.name.split(' ')[0]}, we have recieved your order and are getting it ready to be delivered.</p>
-                                ) : <p className='text-center w-75 mx-auto font-italic'>Hey {order.user.name.split(' ')[0]}, we have recieved your order and are getting it ready to be delivered.</p>
+                                    <p className='text-center w-75 mx-auto font-italic'>Hey {order.user && order.user.name.split(' ')[0]}, we have recieved your order and are getting it ready to be delivered.</p>
+                                ) : <p className='text-center w-75 mx-auto font-italic'>Hey {order.user && order.user.name.split(' ')[0]}, we have recieved your order and are getting it ready to be delivered.</p>
                             }
                             <hr style={{ border: '1px solid white' }}></hr>
-                            <OrderSummary placed paid={order.isPaid} delivered={order.isDelivered} />
+                            <OrderSummary placed cancelled={order.isCancelled} paid={order.isPaid} delivered={order.isDelivered} />
                             <ListGroupItem className='px-2 px-md-3 py-2' style={{ border: 'none' }}>
                                 <div className='overflow w-100'>
                                     <strong>Order ID:</strong> {order._id}
@@ -113,11 +165,16 @@ const OrderScreen = ({ match, history }) => {
                                         </div>
                                         <div className='py-2'>
                                             <b>Status: </b>
-                                            <i className='text-uppercase'>{order.isDelivered ? 'Delivered' : order.isPaid ? 'Paid' : 'Confirmed'}</i>
+                                            <i className='text-uppercase'>{order.isCancelled ? 'Cancelled' : order.isDelivered ? 'Delivered' : order.isPaid ? 'Paid' : 'Confirmed'}</i>
                                         </div>
-                                        {userInfo && userInfo.isAdmin && !order.isDelivered && (
+                                        {userInfo && userInfo.isAdmin && !order.isCancelled && !order.isDelivered && (
                                             loadingDeliver ? <Loader /> : (
                                                 <Button variant='warning' type='button' className='my-2 text-capitalize px-3 py-2' onClick={deliverHandler}>Mark Order As Delivered</Button>
+                                            )
+                                        )}
+                                        {userInfo && order && order.user && (userInfo._id === order.user._id) && !order.isCancelled && !order.isDelivered && (
+                                            loadingCancel ? <Loader /> : (
+                                                <Button variant='danger' type='button' className='my-2 text-capitalize px-3 py-2' onClick={cancelOrderHandler}>Cancel Order</Button>
                                             )
                                         )}
                                     </Col>

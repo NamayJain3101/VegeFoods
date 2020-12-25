@@ -81,10 +81,10 @@ const PlaceOrderScreen = ({ history }) => {
                 update_time: Date.now()
             }
         }))
-        const wallet = Number(user.wallet) - Number(cart.totalPrice)
+        const amount = Number(user.wallet) - Number(cart.totalPrice)
         dispatch(updateUserProfile({
             id: user._id,
-            wallet: wallet.toFixed(2)
+            wallet: amount.toFixed(2)
         }))
         dispatch(clearCart())
     }

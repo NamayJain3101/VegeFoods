@@ -11,6 +11,8 @@ import { TiTick, TiTimes } from 'react-icons/ti'
 import * as Scroll from 'react-scroll'
 import { Link } from 'react-router-dom'
 import Pagination from 'react-js-pagination'
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css'
 
 const UserListScreen = ({ history }) => {
 
@@ -41,9 +43,20 @@ const UserListScreen = ({ history }) => {
     }, [dispatch, history, userInfo, successDelete])
 
     const deleteUserHandler = (id, name) => {
-        if (window.confirm(`Delete user: ${name.toUpperCase()}`)) {
-            dispatch(deleteUser(id))
-        }
+        confirmAlert({
+            title: `Delete user: ${name.split(' ')[0].toUpperCase()}`,
+            message: 'Are you sure??',
+            buttons: [
+                {
+                    label: 'Confirm',
+                    onClick: () => dispatch(deleteUser(id))
+                },
+                {
+                    label: 'Cancel',
+                    onClick: () => { }
+                },
+            ],
+        })
     }
 
     return (
