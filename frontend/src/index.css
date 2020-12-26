@@ -92,6 +92,13 @@ body {
 
 .react-confirm-alert-body h1 {
     font-size: 1.5rem !important;
+    margin-bottom: 1rem;
+}
+
+.react-confirm-alert-body input {
+    border: 1px solid green;
+    margin-top: 0.5rem;
+    margin-bottom: 0.2rem;
 }
 
 .react-confirm-alert-button-group button {

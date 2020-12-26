@@ -28,6 +28,7 @@ import ProductListScreen from './Screens/ProductListScreen'
 import UserEditScreen from './Screens/UserEditScreen'
 import ProductEditScreen from './Screens/ProductEditScreen'
 import WalletScreen from './Screens/WalletScreen'
+import PrintInvoiceScreen from './Screens/PrintInvoiceScreen'
 
 const App = () => {
 	return (
@@ -58,6 +59,7 @@ const App = () => {
 				<Route path='/payment' exact component={PaymentScreen} />
 				<Route path='/place-order' exact component={PlaceOrderScreen} />
 				<Route path='/orders/:id' exact component={OrderScreen} />
+				<Route path='/orders/:id/print' exact component={PrintInvoiceScreen} />
 			</Switch>
 			<Footer />
 		</BrowserRouter>

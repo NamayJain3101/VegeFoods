@@ -12,7 +12,8 @@ const addOrderItems = asyncHandler(async(req, res) => {
         itemsPrice,
         taxPrice,
         shippingPrice,
-        totalPrice
+        totalPrice,
+        deliveryCode
     } = req.body
     if (orderItems && orderItems.length === 0) {
         res.status(400)
@@ -27,6 +28,7 @@ const addOrderItems = asyncHandler(async(req, res) => {
             taxPrice,
             shippingPrice,
             totalPrice,
+            deliveryCode,
             isPaid: paymentMethod === "Cash" ? false : true,
             paidAt: paymentMethod !== "Cash" ? Date.now() : "",
             paymentResult: {

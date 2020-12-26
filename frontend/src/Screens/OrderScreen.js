@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Col, ListGroupItem, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
@@ -13,10 +13,13 @@ import { getUserDetails, updateUserProfile } from '../Actions/userActions'
 import { USER_DETAILS_RESET } from '../Constants/usersConstants'
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css'
+import { Link } from 'react-router-dom'
 
 const OrderScreen = ({ match, history }) => {
 
     const orderId = match.params.id
+
+    const [message, setMessage] = useState('')
 
     const dispatch = useDispatch()
 
@@ -38,8 +41,29 @@ const OrderScreen = ({ match, history }) => {
     const userUpdateProfile = useSelector(state => state.userUpdateProfile)
     const { success } = userUpdateProfile
 
-    const deliverHandler = () => {
-        dispatch(deliverOrder(order))
+    const deliverHandler = (code) => {
+        confirmAlert({
+            title: `DELIVER ORDER`,
+            message: 'Enter Code',
+            childrenElement: () => <input type='number' name='delivery-code' id='delivery-code' />,
+            buttons: [
+                {
+                    label: 'Confirm',
+                    onClick: () => {
+                        if (document.getElementById('delivery-code').value.toString() === code.toString()) {
+                            dispatch(deliverOrder(order))
+                            setMessage('')
+                        } else {
+                            setMessage('Incorrect code')
+                        }
+                    }
+                },
+                {
+                    label: 'Cancel',
+                    onClick: () => { }
+                },
+            ],
+        })
     }
 
     const cancelOrderHandler = () => {
@@ -95,9 +119,6 @@ const OrderScreen = ({ match, history }) => {
         }
     }, [dispatch, history, orderId, success, successCancel, successDeliver, userInfo])
 
-    console.log(new Date())
-    console.log(new Date(order && order.isDelivered && order.deliveredAt))
-
     return (
         <div>
             <OrderScreenWrapper>
@@ -113,6 +134,11 @@ const OrderScreen = ({ match, history }) => {
                                     <p className='text-center w-75 mx-auto font-italic'>Hey {order.user && order.user.name.split(' ')[0]}, we have recieved your order and are getting it ready to be delivered.</p>
                                 ) : <p className='text-center w-75 mx-auto font-italic'>Hey {order.user && order.user.name.split(' ')[0]}, we have recieved your order and are getting it ready to be delivered.</p>
                             }
+                            {userInfo && order && order.user && (userInfo._id === order.user._id) && !order.isCancelled && !order.isDelivered && (
+                                <div className='code my-5'>
+                                    <h5 className='my-2 text-center mx-auto font-weight-bold'>Delivery Code: {order.deliveryCode}</h5>
+                                </div>
+                            )}
                             <hr style={{ border: '1px solid white' }}></hr>
                             <OrderSummary placed cancelled={order.isCancelled} paid={order.isPaid} delivered={order.isDelivered} />
                             <ListGroupItem className='px-2 px-md-3 py-2' style={{ border: 'none' }}>
@@ -169,13 +195,17 @@ const OrderScreen = ({ match, history }) => {
                                         </div>
                                         {userInfo && userInfo.isAdmin && !order.isCancelled && !order.isDelivered && (
                                             loadingDeliver ? <Loader /> : (
-                                                <Button variant='warning' type='button' className='my-2 text-capitalize px-3 py-2' onClick={deliverHandler}>Mark Order As Delivered</Button>
+                                                <Button variant='warning' type='button' className='my-2 text-capitalize px-3 py-2' onClick={(code) => deliverHandler(order.deliveryCode)}>Mark Order As Delivered</Button>
                                             )
                                         )}
+                                        {message && <p className='text-danger'>{message}</p>}
                                         {userInfo && order && order.user && (userInfo._id === order.user._id) && !order.isCancelled && !order.isDelivered && (
                                             loadingCancel ? <Loader /> : (
                                                 <Button variant='danger' type='button' className='my-2 text-capitalize px-3 py-2' onClick={cancelOrderHandler}>Cancel Order</Button>
                                             )
+                                        )}
+                                        {userInfo && order && order.user && (userInfo._id === order.user._id) && (
+                                            <Link to={`/orders/${order._id}/print`} className='m-0 mt-3 btn btn-success'>Print invoice</Link>
                                         )}
                                     </Col>
                                     <Col md={4} className='summary mt-3 my-md-0'>
@@ -201,7 +231,6 @@ const OrderScreen = ({ match, history }) => {
                             <hr style={{ border: '1px solid white' }}></hr>
                         </React.Fragment>
                     )}
-
                 </div>
             </OrderScreenWrapper>
         </div>
@@ -229,6 +258,14 @@ const OrderScreenWrapper = styled.div`
         border-bottom-left-radius: 2rem;
         z-index: 2;
         background: #bd2130;
+    }
+    .code {
+        padding: 0.2rem 1rem;
+        background: rgba(0, 255, 242, 0.6);
+        width: 350px;
+        margin: auto;
+        border-radius: 3rem;
+        letter-spacing: 1px;
     }
     .overflow {
         overflow: auto;
@@ -290,6 +327,9 @@ const OrderScreenWrapper = styled.div`
     }
     @media(max-width: 700px) {
         padding: 2rem;
+        .code {
+            width: 240px;
+        }
     }
 `
 

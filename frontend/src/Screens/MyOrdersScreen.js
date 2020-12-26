@@ -12,6 +12,7 @@ import OrderStatus from '../Components/OrderStatus'
 import Subscribe from '../Components/Subscribe'
 import * as Scroll from 'react-scroll'
 import Pagination from 'react-js-pagination'
+import { ORDER_DETAILS_RESET } from '../Constants/orderConstants'
 
 const MyOrdersScreen = ({ history }) => {
 

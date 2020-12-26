@@ -14,6 +14,7 @@ import { PayPalButton } from 'react-paypal-button-v2'
 import uuid from 'react-uuid'
 import { clearCart } from '../Actions/cartActions'
 import { getUserDetails, updateUserProfile } from '../Actions/userActions'
+import randtoken from 'rand-token'
 
 const PlaceOrderScreen = ({ history }) => {
 
@@ -51,6 +52,7 @@ const PlaceOrderScreen = ({ history }) => {
             shippingPrice: cart.shippingPrice,
             taxPrice: cart.taxPrice,
             totalPrice: cart.totalPrice,
+            deliveryCode: randtoken.generator({ chars: '0-9' }).generate(6),
             paymentResult: {
                 id: uuid(),
                 status: "PAY-ON-DELIVERY",
@@ -72,6 +74,7 @@ const PlaceOrderScreen = ({ history }) => {
             shippingPrice: cart.shippingPrice,
             taxPrice: cart.taxPrice,
             totalPrice: cart.totalPrice,
+            deliveryCode: randtoken.generator({ chars: '0-9' }).generate(6),
             paymentResult: {
                 id: uuid(),
                 status: "COMPLETED",
@@ -99,6 +102,7 @@ const PlaceOrderScreen = ({ history }) => {
                 shippingPrice: cart.shippingPrice,
                 taxPrice: cart.taxPrice,
                 totalPrice: cart.totalPrice,
+                deliveryCode: randtoken.generator({ chars: '0-9' }).generate(6),
                 paymentResult: paymentResult
             }))
             dispatch(clearCart())
