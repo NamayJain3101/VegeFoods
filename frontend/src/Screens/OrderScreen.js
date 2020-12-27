@@ -166,7 +166,7 @@ const OrderScreen = ({ match, history }) => {
                                                 </Col>
                                                 <Col md={4}>
                                                     <div>
-                                                        <h5>Quantity: {item.qty}</h5>
+                                                        <h5>Quantity: {item.qty}Kg</h5>
                                                         <h5 className='price'>Subtotal: &#8377;{item.price * item.qty}</h5>
                                                     </div>
                                                 </Col>
