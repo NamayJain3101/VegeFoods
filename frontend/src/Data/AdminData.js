@@ -2,6 +2,7 @@ import React from 'react'
 import { CgUserList } from 'react-icons/cg'
 import { ImList } from 'react-icons/im'
 import { IoFastFoodOutline } from 'react-icons/io5'
+import { RiCoupon2Line } from 'react-icons/ri'
 
 export const AdminData = [{
     id: 1,
@@ -23,5 +24,12 @@ export const AdminData = [{
     path: '/admin/orderlist',
     icon: <ImList className='link-icon' />,
     background: 'linear-gradient(to bottom right, lightgreen, lime, lightgreen)'
+},
+{
+    id: 4,
+    text: 'View Coupons',
+    path: '/admin/couponlist',
+    icon: <RiCoupon2Line className='link-icon' />,
+    background: 'linear-gradient(to bottom right, yellow, orange, yellow)'
 }
 ]
