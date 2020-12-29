@@ -29,11 +29,9 @@ const PrintInvoiceScreen = ({ history, match }) => {
             window.print()
             if (isMobile) {
                 setTimeout(() => {
-                    console.log('mobile')
                     history.push('/my-account/myOrders')
                 }, 1000)
             } else {
-                console.log('window')
                 history.push('/my-account/myOrders')
             }
         } else {
