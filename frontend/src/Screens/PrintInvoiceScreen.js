@@ -6,6 +6,7 @@ import * as Scroll from 'react-scroll'
 import Loader from '../Components/Loader'
 import Message from '../Components/Message'
 import { Col, ListGroupItem, Row, Table } from 'react-bootstrap'
+import { isMobile } from "react-device-detect";
 
 const PrintInvoiceScreen = ({ history, match }) => {
 
@@ -26,9 +27,15 @@ const PrintInvoiceScreen = ({ history, match }) => {
         })
         if (order) {
             window.print()
-            setTimeout(() => {
+            if (isMobile) {
+                setTimeout(() => {
+                    console.log('mobile')
+                    history.push('/my-account/myOrders')
+                }, 1000)
+            } else {
+                console.log('window')
                 history.push('/my-account/myOrders')
-            }, 1000)
+            }
         } else {
             if (!userInfo) {
                 history.push('/')
