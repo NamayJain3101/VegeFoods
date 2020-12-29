@@ -221,9 +221,17 @@ const OrderScreen = ({ match, history }) => {
                                             <b>Tax: </b>
                                             &#8377;{order.taxPrice}
                                         </div>
+                                        {order.couponDiscount > 0 && <div className='py-2 price'>
+                                            <b>Coupon Discount: </b>
+                                            &#8377;{order.couponDiscount}
+                                        </div>}
                                         <div className='py-2 price'>
                                             <b>Total: </b>
                                             &#8377;{order.totalPrice}
+                                        </div>
+                                        <div className='py-2 price'>
+                                            <b>Pay Amount: </b>
+                                            &#8377;{order.payAmount || order.totalPrice}
                                         </div>
                                     </Col>
                                 </Row>

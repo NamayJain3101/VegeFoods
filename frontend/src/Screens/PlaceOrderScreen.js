@@ -15,6 +15,8 @@ import uuid from 'react-uuid'
 import { clearCart } from '../Actions/cartActions'
 import { getUserDetails, updateUserProfile } from '../Actions/userActions'
 import randtoken from 'rand-token'
+import { getCoupon, updateCoupon } from '../Actions/couponActions'
+import { COUPON_GET_RESET, COUPON_UPDATE_RESET } from '../Constants/couponConstants'
 
 const PlaceOrderScreen = ({ history }) => {
 
@@ -41,73 +43,18 @@ const PlaceOrderScreen = ({ history }) => {
     const userDetails = useSelector((state) => state.userDetails)
     const { loading: loadingUser, error: errorUser, user } = userDetails
 
+    const couponGet = useSelector((state) => state.couponGet)
+    const { success: successCoupon, loading: loadingCoupon, error: errorCoupon, coupon } = couponGet
+
+    const couponUpdate = useSelector((state) => state.couponUpdate)
+    const { success: successCouponUpdate } = couponUpdate
+
     const [sdkReady, setSdkReady] = useState(false)
 
-    const codPaymentHandler = () => {
-        dispatch(createOrder({
-            orderItems: cartItems,
-            shippingAddress: shippingAddress,
-            paymentMethod: paymentMethod,
-            itemsPrice: cart.itemsPrice,
-            shippingPrice: cart.shippingPrice,
-            taxPrice: cart.taxPrice,
-            totalPrice: cart.totalPrice,
-            deliveryCode: randtoken.generator({ chars: '0-9' }).generate(6),
-            paymentResult: {
-                id: uuid(),
-                status: "PAY-ON-DELIVERY",
-                payer: {
-                    email_address: userInfo.email
-                },
-                update_time: Date.now()
-            }
-        }))
-        dispatch(clearCart())
-    }
+    const [couponCode, setCouponCode] = useState('')
 
-    const walletPaymentHandler = () => {
-        dispatch(createOrder({
-            orderItems: cartItems,
-            shippingAddress: shippingAddress,
-            paymentMethod: paymentMethod,
-            itemsPrice: cart.itemsPrice,
-            shippingPrice: cart.shippingPrice,
-            taxPrice: cart.taxPrice,
-            totalPrice: cart.totalPrice,
-            deliveryCode: randtoken.generator({ chars: '0-9' }).generate(6),
-            paymentResult: {
-                id: uuid(),
-                status: "COMPLETED",
-                payer: {
-                    email_address: userInfo.email
-                },
-                update_time: Date.now()
-            }
-        }))
-        const amount = Number(user.wallet) - Number(cart.totalPrice)
-        dispatch(updateUserProfile({
-            id: user._id,
-            wallet: amount.toFixed(2)
-        }))
-        dispatch(clearCart())
-    }
-
-    const successPaymentHandler = (paymentResult) => {
-        if (paymentResult.status === "COMPLETED") {
-            dispatch(createOrder({
-                orderItems: cartItems,
-                shippingAddress: shippingAddress,
-                paymentMethod: paymentMethod,
-                itemsPrice: cart.itemsPrice,
-                shippingPrice: cart.shippingPrice,
-                taxPrice: cart.taxPrice,
-                totalPrice: cart.totalPrice,
-                deliveryCode: randtoken.generator({ chars: '0-9' }).generate(6),
-                paymentResult: paymentResult
-            }))
-            dispatch(clearCart())
-        }
-    }
+    const [discount, setDiscount] = useState(0)
+    const [payAmount, setPayAmount] = useState(cart.totalPrice)
 
     useEffect(() => {
         Scroll.animateScroll.scrollToTop({
@@ -115,7 +62,6 @@ const PlaceOrderScreen = ({ history }) => {
             smooth: 'easeInOutQuint',
             delay: 500
         })
-
         if (userInfo) {
             const addPaypalScript = async () => {
                 const { data: clientId } = await Axios.get('/api/config/paypal')
@@ -139,14 +85,121 @@ const PlaceOrderScreen = ({ history }) => {
         } else {
             history.push('/login')
         }
-
+        if (!couponCode) {
+            dispatch({
+                type: COUPON_GET_RESET
+            })
+        }
         if (success) {
             history.push(`/orders/${order._id}`)
             dispatch({ type: USER_DETAILS_RESET })
             dispatch({ type: ORDER_CREATE_RESET })
         }
+        if (successCoupon) {
+            if (coupon.discountType === 'flat') {
+                setDiscount(Number(coupon.discountAmount).toFixed(2))
+                setPayAmount(Number(cart.totalPrice - coupon.discountAmount).toFixed(2))
+            } else {
+                const discount = (addDecimals(Number(((coupon.discountAmount / 100) * cart.itemsPrice).toFixed(2)))) > coupon.discountUpto ? coupon.discountUpto : (addDecimals(Number(((coupon.discountAmount / 100) * cart.itemsPrice).toFixed(2))))
+                setDiscount(Number(discount).toFixed(2))
+                setPayAmount(Number(cart.totalPrice - discount).toFixed(2))
+            }
+        }
+        if (successCouponUpdate) {
+            dispatch({
+                type: COUPON_UPDATE_RESET
+            })
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [history, success])
+    }, [history, success, successCoupon])
+
+    const applyCouponHandler = () => {
+        dispatch({
+            type: COUPON_GET_RESET
+        })
+        dispatch(getCoupon(couponCode, cart.totalPrice))
+    }
+
+    const codPaymentHandler = () => {
+        dispatch(createOrder({
+            orderItems: cartItems,
+            shippingAddress: shippingAddress,
+            paymentMethod: paymentMethod,
+            itemsPrice: cart.itemsPrice,
+            shippingPrice: cart.shippingPrice,
+            taxPrice: cart.taxPrice,
+            totalPrice: cart.totalPrice,
+            couponDiscount: discount,
+            payAmount: payAmount,
+            deliveryCode: randtoken.generator({ chars: '0-9' }).generate(6),
+            paymentResult: {
+                id: uuid(),
+                status: "PAY-ON-DELIVERY",
+                payer: {
+                    email_address: userInfo.email
+                },
+                update_time: Date.now()
+            }
+        }))
+        if (coupon && coupon.code) {
+            dispatch(updateCoupon(coupon.code))
+        }
+        dispatch(clearCart())
+    }
+
+    const walletPaymentHandler = () => {
+        dispatch(createOrder({
+            orderItems: cartItems,
+            shippingAddress: shippingAddress,
+            paymentMethod: paymentMethod,
+            itemsPrice: cart.itemsPrice,
+            shippingPrice: cart.shippingPrice,
+            taxPrice: cart.taxPrice,
+            couponDiscount: discount,
+            payAmount: payAmount,
+            totalPrice: cart.totalPrice,
+            deliveryCode: randtoken.generator({ chars: '0-9' }).generate(6),
+            paymentResult: {
+                id: uuid(),
+                status: "COMPLETED",
+                payer: {
+                    email_address: userInfo.email
+                },
+                update_time: Date.now()
+            }
+        }))
+        const amount = Number(user.wallet) - Number(payAmount)
+        dispatch(updateUserProfile({
+            id: user._id,
+            wallet: amount.toFixed(2)
+        }))
+        if (coupon && coupon.code) {
+            dispatch(updateCoupon(coupon.code))
+        }
+        dispatch(clearCart())
+    }
+
+    const successPaymentHandler = (paymentResult) => {
+        if (paymentResult.status === "COMPLETED") {
+            dispatch(createOrder({
+                orderItems: cartItems,
+                shippingAddress: shippingAddress,
+                paymentMethod: paymentMethod,
+                itemsPrice: cart.itemsPrice,
+                shippingPrice: cart.shippingPrice,
+                taxPrice: cart.taxPrice,
+                couponDiscount: discount,
+                payAmount: payAmount,
+                totalPrice: cart.totalPrice,
+                deliveryCode: randtoken.generator({ chars: '0-9' }).generate(6),
+                paymentResult: paymentResult
+            }))
+            if (coupon && coupon.code) {
+                dispatch(updateCoupon(coupon.code))
+            }
+            dispatch(clearCart())
+        }
+    }
 
     return (
         <div>
@@ -193,16 +246,32 @@ const PlaceOrderScreen = ({ history }) => {
                                 </Col>
                             </Col>
                             <Col lg={4} className='p-0'>
+                                <div className="card-view coupon-details px-2 py-4 px-lg-3 px-xl-4 mt-4">
+                                    {loadingCoupon ? <Loader margin='2rem' /> : (
+                                        <React.Fragment>
+                                            <div className='title mt-2 mb-3'>
+                                                <h5 className='font-weight-bold text-capitalize'>
+                                                    {'Apply Coupon'.toUpperCase()}
+                                                </h5>
+                                            </div>
+                                            <div className='couponInput mb-2'>
+                                                <input type="text" name="coupon" id="coupon" value={couponCode} onChange={(e) => setCouponCode(e.target.value.toUpperCase())} />
+                                                <Button variant='warning' disabled={couponCode.length === 0} onClick={applyCouponHandler}>APPLY</Button>
+                                            </div>
+                                            {errorCoupon && <p className='text-danger mt-2 text-center text-capitalize error'>{errorCoupon}</p>}
+                                        </React.Fragment>
+                                    )}
+                                </div>
                                 <div className="card-view order-details px-2 py-4 px-lg-3 px-xl-4 mt-4">
                                     <ListGroupItem className='title'>
                                         <h5 className='font-weight-bold text-capitalize'>
                                             Order Summary
-                            </h5>
+                                        </h5>
                                     </ListGroupItem>
                                     <ListGroupItem>
                                         <h5>
                                             Subtotal :
-                            </h5>
+                                        </h5>
                                         <h5 className='price'>
                                             &#8377;{cart.itemsPrice}
                                         </h5>
@@ -210,7 +279,7 @@ const PlaceOrderScreen = ({ history }) => {
                                     <ListGroupItem>
                                         <h5>
                                             Shipping Price:
-                            </h5>
+                                        </h5>
                                         <h5 className='price'>
                                             &#8377;{cart.shippingPrice}
                                         </h5>
@@ -218,17 +287,35 @@ const PlaceOrderScreen = ({ history }) => {
                                     <ListGroupItem>
                                         <h5>
                                             Tax Price:
-                            </h5>
+                                        </h5>
                                         <h5 className='price'>
                                             &#8377;{cart.taxPrice}
                                         </h5>
                                     </ListGroupItem>
+                                    {discount > 0 && (
+                                        <ListGroupItem>
+                                            <h5>
+                                                Coupon Discount:
+                                            </h5>
+                                            <h5 className='price'>
+                                                &#8377;{discount}
+                                            </h5>
+                                        </ListGroupItem>
+                                    )}
                                     <ListGroupItem>
                                         <h5>
                                             Total Price:
-                            </h5>
+                                        </h5>
                                         <h5 className='price'>
                                             &#8377;{cart.totalPrice}
+                                        </h5>
+                                    </ListGroupItem>
+                                    <ListGroupItem>
+                                        <h5>
+                                            Payable Amount:
+                                        </h5>
+                                        <h5 className='price'>
+                                            &#8377;{payAmount}
                                         </h5>
                                     </ListGroupItem>
                                     <ListGroupItem>
@@ -249,7 +336,7 @@ const PlaceOrderScreen = ({ history }) => {
                                         {paymentMethod === 'PayPal' && (
                                             <div className='mx-auto paypal'>
                                                 {!sdkReady ? <Loader /> : (
-                                                    <PayPalButton amount={cart.totalPrice} currency='INR' onSuccess={successPaymentHandler} />
+                                                    <PayPalButton amount={payAmount} currency='INR' onSuccess={successPaymentHandler} />
                                                 )}
                                             </div>
                                         )}
@@ -332,6 +419,26 @@ const PlaceOrderWrapper = styled.div`
     }
     .paypal {
         width: 100%;
+    }
+    .coupon-details {
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .couponInput {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .couponInput * {
+        border-radius: 0;
+        outline: none;
+        height: 40px !important;
+    }
+    .couponInput input {
+        padding: 3px 6px;
+        border: 1px solid orange;
     }
     @media(max-width: 700px) {
         padding: 3rem 1rem;

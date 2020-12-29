@@ -50,7 +50,6 @@ const CheckoutSteps = ({ step1, step2, step3, step4, mb }) => {
 const CheckoutStepsWrapper = styled.div`
     max-width: 400px;
     margin: auto;
-    /* margin-bottom: ${props => props.mb || '3rem'}; */
     .nav {
         display: flex;
         align-items: center;
@@ -82,7 +81,7 @@ const CheckoutStepsWrapper = styled.div`
         }
         .nav-item > a {
             margin: 0;
-            padding: 0.5rem !important;
+            padding: 0.5rem 0 !important;
         }
     }
 `

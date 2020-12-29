@@ -68,34 +68,38 @@ const CouponListScreen = ({ history }) => {
                     <Row className='w-100 m-0'>
                         {loading || loadingDelete ? <Loader /> : error ? <Message variant='danger'>{error}</Message> : errorDelete ? <Message variant='danger'>{errorDelete}</Message> : (
                             <React.Fragment>
-                                {coupons.map(coupon => {
-                                    return (
-                                        <Col md={6} lg={4} className='my-4 px-0' key={coupon._id}>
-                                            <div className='mx-md-4 couponItem'>
-                                                <div className="img-wrapper my-3" style={{ background: colors[Math.floor(Math.random() * colors.length)] }}>
-                                                    <RiCoupon2Line />
-                                                </div>
-                                                <div className="desc w-100">
-                                                    <div>
-                                                        {coupon.discountType.toLowerCase() === 'flat' && (
-                                                            <h5 className='m-0'>
-                                                                Use code <span className='price'>{coupon.code}</span> to get <span className='price'>{coupon.discountType} &#8377;{coupon.discountAmount} Off</span> on min transaction of <span style={{ fontFamily: 'sans-serif' }}>&#8377;{coupon.minAmountRequired}</span>
-                                                            </h5>
-                                                        )}
-                                                        {coupon.discountType.toLowerCase() === 'upto' && (
-                                                            <h5 className='m-0'>
-                                                                Use code <span className='price'>{coupon.code}</span> to get <span className='price'>{coupon.discountAmount}% Off {coupon.discountType} &#8377;{coupon.discountUpto}</span> on min transaction of <span style={{ fontFamily: 'sans-serif' }}>&#8377;{coupon.minAmountRequired}</span>
-                                                            </h5>
-                                                        )}
+                                {coupons && coupons.length === 0 ? (
+                                    <Message variant='warning'>No Coupons Found</Message>
+                                ) : (
+                                        coupons.map(coupon => {
+                                            return (
+                                                <Col md={6} lg={4} className='my-4 px-0' key={coupon._id}>
+                                                    <div className='mx-md-4 couponItem'>
+                                                        <div className="img-wrapper my-3" style={{ background: colors[Math.floor(Math.random() * colors.length)] }}>
+                                                            <RiCoupon2Line />
+                                                        </div>
+                                                        <div className="desc w-100">
+                                                            <div>
+                                                                {coupon.discountType.toLowerCase() === 'flat' && (
+                                                                    <h5 className='m-0'>
+                                                                        Use code <span className='price'>{coupon.code}</span> to get <span className='price'>{coupon.discountType} &#8377;{coupon.discountAmount} Off</span> on min transaction of <span style={{ fontFamily: 'sans-serif' }}>&#8377;{coupon.minAmountRequired}</span>
+                                                                    </h5>
+                                                                )}
+                                                                {coupon.discountType.toLowerCase() === 'upto' && (
+                                                                    <h5 className='m-0'>
+                                                                        Use code <span className='price'>{coupon.code}</span> to get <span className='price'>{coupon.discountAmount}% Off {coupon.discountType} &#8377;{coupon.discountUpto}</span> on min transaction of <span style={{ fontFamily: 'sans-serif' }}>&#8377;{coupon.minAmountRequired}</span>
+                                                                    </h5>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                        <div className="coupon-buttons">
+                                                            <Button variant='danger' onClick={(id, code) => deleteCouponHandler(coupon._id, coupon.code)}><IoCloseSharp /></Button>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div className="coupon-buttons">
-                                                    <Button variant='danger' onClick={(id, code) => deleteCouponHandler(coupon._id, coupon.code)}><IoCloseSharp /></Button>
-                                                </div>
-                                            </div>
-                                        </Col>
-                                    )
-                                })}
+                                                </Col>
+                                            )
+                                        })
+                                    )}
                             </React.Fragment>
                         )}
                     </Row>

@@ -15,6 +15,7 @@ import { buildStyles, CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { Link } from 'react-router-dom'
 import { PRODUCT_CREATE_REVIEW_RESET } from '../Constants/productConstants'
+import { listCoupons } from '../Actions/couponActions'
 
 const ProductScreen = ({ match, history }) => {
     const [rating, setRating] = useState(0)
@@ -35,6 +36,9 @@ const ProductScreen = ({ match, history }) => {
     const userLogin = useSelector(state => state.userLogin)
     const { userInfo } = userLogin
 
+    const couponList = useSelector(state => state.couponList)
+    const { coupons, loading: loadingCoupons, error: errorCoupons } = couponList
+
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -48,6 +52,7 @@ const ProductScreen = ({ match, history }) => {
         dispatch(listProductDetails(match.params.id))
         dispatch(listProducts(product.category, ''))
         dispatch(getProductReviews(match.params.id))
+        dispatch(listCoupons())
         Scroll.animateScroll.scrollToTop({
             duration: 1500,
             smooth: 'easeInOutQuint'
@@ -163,6 +168,36 @@ const ProductScreen = ({ match, history }) => {
                     </Container>
                 )}
             </ProductScreenWrapper>
+            <OffersWrapper>
+                <Container>
+                    <h5 className='text-success text-center'>Offers</h5>
+                    <h2 className='text-center'>Coupons Available</h2>
+                    {loadingCoupons ? <Loader /> : errorCoupons ? <Message variant='danger'>{errorCoupons}</Message> : (
+                        coupons && coupons.length === 0 ? (
+                            <Message variant='warning'>No Coupons Available</Message>
+                        ) : (
+                                <ul>
+                                    {coupons.map(coupon => {
+                                        return (
+                                            <li key={coupon._id}>
+                                                {coupon.discountType.toLowerCase() === 'flat' && (
+                                                    <h6>
+                                                        Use code <span className='price'>{coupon.code}</span> to get <span className='price'>{coupon.discountType} &#8377;{coupon.discountAmount} Off</span> on min transaction of <span style={{ fontFamily: 'sans-serif' }}>&#8377;{coupon.minAmountRequired}</span>
+                                                    </h6>
+                                                )}
+                                                {coupon.discountType.toLowerCase() === 'upto' && (
+                                                    <h6>
+                                                        Use code <span className='price'>{coupon.code}</span> to get <span className='price'>{coupon.discountAmount}% Off {coupon.discountType} &#8377;{coupon.discountUpto}</span> on min transaction of <span style={{ fontFamily: 'sans-serif' }}>&#8377;{coupon.minAmountRequired}</span>
+                                                    </h6>
+                                                )}
+                                            </li>
+                                        )
+                                    })}
+                                </ul>
+                            )
+                    )}
+                </Container>
+            </OffersWrapper>
             <ReviewsWrapper rating={rating === 0 ? 6 : (6 - rating)}>
                 <Container>
                     <h5 className='text-success text-center'>Reviews</h5>
@@ -393,6 +428,51 @@ const ProductScreenWrapper = styled.div`
         .wishlistButton {
             width: 100%;
         }
+    }
+`
+
+const OffersWrapper = styled.div`
+    background: white;
+    padding-bottom: 5rem;
+    h5 {
+        font-style: italic;
+        margin-bottom: 1rem;
+    }
+    h2 {
+        font-weight: bold;
+        margin-bottom: 3rem;
+    }
+    .price {
+        font-family: sans-serif;
+        font-weight: bold;
+    }
+    ul {
+        list-style-type: none;
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        justify-content: center;
+        color: purple;
+    }
+    li::before {
+        content: "★";
+        padding-right: 8px;
+    }
+    li::after {
+        content: "★";
+        padding-left: 8px;
+    }
+    li {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+        letter-spacing: 1px;
+        font-size: 1.2rem;
+    }
+    li > h6 {
+        margin: 0;
+        font-size: 1.2rem;
     }
 `
 
