@@ -35,7 +35,7 @@ const CouponCreateScreen = ({ history }) => {
     const { userInfo } = userLogin
 
     const couponCreate = useSelector(state => state.couponCreate)
-    const { loading, success, error, coupon } = couponCreate
+    const { loading, success, error } = couponCreate
 
     const dispatch = useDispatch()
 
