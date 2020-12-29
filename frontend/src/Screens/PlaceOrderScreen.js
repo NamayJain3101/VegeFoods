@@ -439,6 +439,11 @@ const PlaceOrderWrapper = styled.div`
     .couponInput input {
         padding: 3px 6px;
         border: 1px solid orange;
+        max-width: 215px;
+    }
+    .couponInput button {
+        max-width: 70px;
+        padding: 5px 10px;
     }
     @media(max-width: 700px) {
         padding: 3rem 1rem;

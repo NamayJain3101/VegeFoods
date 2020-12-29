@@ -49,6 +49,15 @@ const ProductScreen = ({ match, history }) => {
                 type: PRODUCT_CREATE_REVIEW_RESET
             })
         }
+        if (product.description) {
+            let desc = product.description.replaceAll(" ", "").split(',')
+            let existItem = desc.find(x => {
+                return x === description
+            })
+            if (desc && desc.length !== 0 && !existItem) {
+                setDescription(desc[0])
+            }
+        }
         dispatch(listProductDetails(match.params.id))
         dispatch(listProducts(product.category, ''))
         dispatch(getProductReviews(match.params.id))
@@ -57,6 +66,7 @@ const ProductScreen = ({ match, history }) => {
             duration: 1500,
             smooth: 'easeInOutQuint'
         })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, match, product.category, successProductReview])
 
     let desc;
@@ -453,6 +463,7 @@ const OffersWrapper = styled.div`
         align-items: center;
         justify-content: center;
         color: purple;
+        padding: 0;
     }
     li::before {
         content: "★";
@@ -469,6 +480,7 @@ const OffersWrapper = styled.div`
         margin-bottom: 1rem;
         letter-spacing: 1px;
         font-size: 1.2rem;
+        text-align: center;
     }
     li > h6 {
         margin: 0;

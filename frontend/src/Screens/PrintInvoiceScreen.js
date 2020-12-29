@@ -19,6 +19,10 @@ const PrintInvoiceScreen = ({ history, match }) => {
     const userLogin = useSelector(state => state.userLogin)
     const { userInfo } = userLogin
 
+    window.onafterprint = function (event) {
+        history.push('/my-account/myOrders')
+    }
+
     useEffect(() => {
         Scroll.animateScroll.scrollToTop({
             duration: 1500,
@@ -26,7 +30,6 @@ const PrintInvoiceScreen = ({ history, match }) => {
         })
         if (order) {
             window.print()
-            history.push('/my-account/myOrders')
         } else {
             if (!userInfo) {
                 history.push('/')
