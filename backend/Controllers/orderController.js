@@ -15,7 +15,8 @@ const addOrderItems = asyncHandler(async(req, res) => {
         totalPrice,
         deliveryCode,
         couponDiscount,
-        payAmount
+        payAmount,
+        userName
     } = req.body
     if (orderItems && orderItems.length === 0) {
         res.status(400)
@@ -33,6 +34,7 @@ const addOrderItems = asyncHandler(async(req, res) => {
             deliveryCode,
             couponDiscount,
             payAmount,
+            userName: userName.toLowerCase(),
             isPaid: paymentMethod === "Cash" ? false : true,
             paidAt: paymentMethod !== "Cash" ? Date.now() : "",
             paymentResult: {
@@ -100,9 +102,16 @@ const getOrders = asyncHandler(async(req, res) => {
     const pageSize = 9
     const page = Number(req.query.pageNumber) || 1
 
+    const name = req.query.name ? {
+        userName: {
+            $regex: req.query.name,
+            $options: 'i'
+        }
+    } : {}
+
     const count = await Order.countDocuments()
 
-    const orders = await Order.find({}).sort({ createdAt: -1 }).populate('user', 'id name').limit(pageSize).skip(pageSize * (page - 1))
+    const orders = await Order.find({...name }).sort({ createdAt: -1 }).populate('user', 'id name').limit(pageSize).skip(pageSize * (page - 1))
     res.json({ orders, page, pages: Math.ceil(count / pageSize), orderCount: count })
 })
 

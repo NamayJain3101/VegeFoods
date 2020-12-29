@@ -212,9 +212,16 @@ const getUsers = asyncHandler(async(req, res) => {
     const pageSize = 12
     const page = Number(req.query.pageNumber) || 1
 
+    const name = req.query.name ? {
+        name: {
+            $regex: req.query.name,
+            $options: 'i'
+        }
+    } : {}
+
     const count = await User.countDocuments()
 
-    const users = await User.find({}).select('-password').sort({ name: 1 }).limit(pageSize).skip(pageSize * (page - 1))
+    const users = await User.find({...name }).select('-password').sort({ name: 1 }).limit(pageSize).skip(pageSize * (page - 1))
     res.json({ users, page, pages: Math.ceil(count / pageSize), userCount: count })
 })
 

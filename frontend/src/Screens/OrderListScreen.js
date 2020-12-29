@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Col, Row } from 'react-bootstrap'
+import { Button, Col, Row } from 'react-bootstrap'
 import { FaPlus } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -10,6 +10,7 @@ import Loader from '../Components/Loader'
 import Message from '../Components/Message'
 import OrderStatus from '../Components/OrderStatus'
 import Pagination from 'react-js-pagination'
+import { BiSearchAlt2 } from 'react-icons/bi'
 
 const OrderListScreen = ({ history }) => {
     const userLogin = useSelector(state => state.userLogin)
@@ -21,6 +22,8 @@ const OrderListScreen = ({ history }) => {
     const dispatch = useDispatch()
 
     const [pageNumber, setPageNumber] = useState(1)
+
+    const [search, setSearch] = useState('')
 
     useEffect(() => {
         Scroll.animateScroll.scrollToTop({
@@ -34,6 +37,11 @@ const OrderListScreen = ({ history }) => {
         }
     }, [dispatch, history, pageNumber, userInfo])
 
+    const searchOrders = (e) => {
+        e.preventDefault()
+        dispatch(listOrders(1, search))
+    }
+
     return (
         <div>
             <OrdersWrapper>
@@ -42,7 +50,13 @@ const OrderListScreen = ({ history }) => {
                         <React.Fragment>
                             {orders && orders.length > 0 ? (
                                 <React.Fragment>
-                                    <Link to='/admin' className='btn btn-danger mb-5'>Go To Admin Panel</Link>
+                                    <div className='searchOptions mb-5'>
+                                        <Link to='/admin' className='btn btn-danger'>Go To Admin Panel</Link>
+                                        <form className='filter' onSubmit={searchOrders}>
+                                            <input type="text" name="search" id="search" value={search} onChange={(e) => setSearch(e.target.value)} />
+                                            <Button type='submit' variant='success'><BiSearchAlt2 /></Button>
+                                        </form>
+                                    </div>
                                     <Row className='orders mb-5'>
                                         {orders.map(item => {
                                             return (
@@ -121,6 +135,32 @@ const OrdersWrapper = styled.div`
         display: flex;
         align-items: center;
         justify-content: space-evenly;
+    }
+    .searchOptions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .filter {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .filter input {
+        max-width: 250px;
+        height: 40px;
+        padding: 4px 8px;
+        outline: none;
+        border-radius: 0;
+        border: 2px solid green;
+    }
+    .filter button {
+        max-width: 50px;
+        height: 40px;
+        outline: none;
+        border-radius: 0;
+        font-size: 1.3rem;
+        padding: 2px 6px;
     }
     .row > div > div {
         background: white;
@@ -239,6 +279,15 @@ const OrdersWrapper = styled.div`
         }
         .row > div {
             padding: 1rem 0;
+        }
+        .searchOptions {
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .filter {
+            margin-top: 2rem;
         }
     }
     @media(max-width: 501px) {

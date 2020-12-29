@@ -131,6 +131,7 @@ const PlaceOrderScreen = ({ history }) => {
             totalPrice: cart.totalPrice,
             couponDiscount: discount,
             payAmount: payAmount,
+            userName: userInfo.name,
             deliveryCode: randtoken.generator({ chars: '0-9' }).generate(6),
             paymentResult: {
                 id: uuid(),
@@ -158,6 +159,7 @@ const PlaceOrderScreen = ({ history }) => {
             couponDiscount: discount,
             payAmount: payAmount,
             totalPrice: cart.totalPrice,
+            userName: userInfo.name,
             deliveryCode: randtoken.generator({ chars: '0-9' }).generate(6),
             paymentResult: {
                 id: uuid(),
@@ -191,6 +193,7 @@ const PlaceOrderScreen = ({ history }) => {
                 couponDiscount: discount,
                 payAmount: payAmount,
                 totalPrice: cart.totalPrice,
+                userName: userInfo.name,
                 deliveryCode: randtoken.generator({ chars: '0-9' }).generate(6),
                 paymentResult: paymentResult
             }))

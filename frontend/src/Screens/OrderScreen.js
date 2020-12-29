@@ -148,6 +148,9 @@ const OrderScreen = ({ match, history }) => {
                                 <div className='overflow mt-2 w-100'>
                                     <strong>Order Date:</strong> {order.createdAt.substring(0, 10)}
                                 </div>
+                                <div className='overflow mt-2 w-100 text-capitalize'>
+                                    <strong>Order By:</strong> {order.userName}
+                                </div>
                             </ListGroupItem>
                             <hr style={{ border: '1px solid white' }}></hr>
                             <div className='orderItems'>

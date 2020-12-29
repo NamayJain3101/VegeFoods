@@ -69,7 +69,7 @@ const AdminWrapper = styled.div`
         padding: 2rem 1rem;
         cursor: pointer;
         height: 200px;
-        width: max(290px, 80%);
+        width: max(250px, 80%);
         display: flex;
         flex-flow: column;
         align-items: center;

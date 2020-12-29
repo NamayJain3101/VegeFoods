@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom'
 import Pagination from 'react-js-pagination'
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css'
+import { BiSearchAlt2 } from 'react-icons/bi'
 
 const UserListScreen = ({ history }) => {
 
@@ -30,6 +31,8 @@ const UserListScreen = ({ history }) => {
 
     const dispatch = useDispatch()
 
+    const [search, setSearch] = useState('')
+
     useEffect(() => {
         Scroll.animateScroll.scrollToTop({
             duration: 1500,
@@ -38,9 +41,9 @@ const UserListScreen = ({ history }) => {
         if (!userInfo || !userInfo.isAdmin) {
             history.push('/')
         } else {
-            dispatch(listUsers())
+            dispatch(listUsers(pageNumber))
         }
-    }, [dispatch, history, userInfo, successDelete])
+    }, [dispatch, history, userInfo, successDelete, pageNumber])
 
     const deleteUserHandler = (id, name) => {
         confirmAlert({
@@ -59,11 +62,22 @@ const UserListScreen = ({ history }) => {
         })
     }
 
+    const searchUsers = (e) => {
+        e.preventDefault()
+        dispatch(listUsers(1, search))
+    }
+
     return (
         <div>
             <UserListWrapper>
                 <div className='users-container w-100'>
-                    <Link to='/admin' className='btn btn-danger mb-5'>Go To Admin Panel</Link>
+                    <div className='searchOptions mb-5'>
+                        <Link to='/admin' className='btn btn-danger'>Go To Admin Panel</Link>
+                        <form className='filter' onSubmit={searchUsers}>
+                            <input type="text" name="search" id="search" value={search} onChange={(e) => setSearch(e.target.value)} />
+                            <Button type='submit' variant='success'><BiSearchAlt2 /></Button>
+                        </form>
+                    </div>
                     <Row className='w-100 m-0'>
                         {loading ? <Loader /> : error ? <Message variant='danger'>{error}</Message> : errorDelete ? <Message variant='danger'>{errorDelete}</Message> : (
                             <React.Fragment>
@@ -93,28 +107,27 @@ const UserListScreen = ({ history }) => {
                                         </Col>
                                     )
                                 })}
-                                {pages > 1 && (
-                                    <Pagination
-                                        hideDisabled
-                                        hideFirstLastPages
-                                        pageRangeDisplayed={4}
-                                        activePage={pageNumber}
-                                        itemsCountPerPage={12}
-                                        totalItemsCount={userCount}
-                                        onChange={(page) => setPageNumber(page)}
-                                        itemClass='page-item'
-                                        linkClass='page-link'
-                                        prevPageText='<'
-                                        nextPageText='>'
-                                        firstPageText='<<'
-                                        lastPageText='>>'
-                                    />
-                                )}
                             </React.Fragment>
                         )}
                     </Row>
+                    {pages > 1 && (
+                        <Pagination
+                            hideDisabled
+                            hideFirstLastPages
+                            pageRangeDisplayed={4}
+                            activePage={pageNumber}
+                            itemsCountPerPage={12}
+                            totalItemsCount={userCount}
+                            onChange={(page) => setPageNumber(page)}
+                            itemClass='page-item'
+                            linkClass='page-link'
+                            prevPageText='<'
+                            nextPageText='>'
+                            firstPageText='<<'
+                            lastPageText='>>'
+                        />
+                    )}
                 </div>
-
             </UserListWrapper>
         </div>
     )
@@ -126,6 +139,34 @@ const UserListWrapper = styled.div`
     .users-container {
         max-width: 1200px;
         margin: auto;
+    }
+    .searchOptions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .filter {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .filter input {
+        max-width: 250px;
+        height: 40px;
+        padding: 4px 8px;
+        outline: none;
+        border-radius: 0;
+        border: 2px solid green;
+    }
+    .filter button {
+        max-width: 50px;
+        height: 40px;
+        outline: none;
+        border-radius: 0;
+        font-size: 1.3rem;
+        padding: 2px 6px;
+        background: green;
+        border: 0;
     }
     .userItem {
         background: white;
@@ -220,6 +261,15 @@ const UserListWrapper = styled.div`
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+        .searchOptions {
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .filter {
+            margin-top: 2rem;
         }
     }
     @media(max-width: 400px) {
