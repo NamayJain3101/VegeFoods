@@ -6,6 +6,8 @@ import * as Scroll from 'react-scroll'
 import Loader from '../Components/Loader'
 import Message from '../Components/Message'
 import { Col, ListGroupItem, Row, Table } from 'react-bootstrap'
+import { isMobile } from 'react-device-detect'
+import { confirmAlert } from 'react-confirm-alert'
 
 const PrintInvoiceScreen = ({ history, match }) => {
 
@@ -19,17 +21,31 @@ const PrintInvoiceScreen = ({ history, match }) => {
     const userLogin = useSelector(state => state.userLogin)
     const { userInfo } = userLogin
 
-    window.onafterprint = (event) => {
-        history.push('/my-account/myOrders')
-    }
-
     useEffect(() => {
         Scroll.animateScroll.scrollToTop({
             duration: 1500,
             smooth: 'easeInOutQuint'
         })
         if (order) {
-            window.print()
+            if (!isMobile) {
+                window.print()
+                history.push('/my-account/myOrders')
+            } else {
+                confirmAlert({
+                    title: `Unable to download on mobile`,
+                    message: '(Use PC/Laptop to download invoice)',
+                    buttons: [
+                        {
+                            label: 'OK',
+                            onClick: () => history.push(`/orders/${orderId}`)
+                        },
+                        {
+                            label: 'Cancel',
+                            onClick: () => history.push(`/orders/${orderId}`)
+                        },
+                    ],
+                })
+            }
         } else {
             if (!userInfo) {
                 history.push('/')
