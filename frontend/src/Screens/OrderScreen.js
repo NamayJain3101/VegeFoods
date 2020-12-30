@@ -337,7 +337,7 @@ const OrderScreenWrapper = styled.div`
         justify-content: center;
     }
     @media(max-width: 700px) {
-        padding: 2rem;
+        padding: 2rem 1rem;
         .code {
             width: 240px;
         }

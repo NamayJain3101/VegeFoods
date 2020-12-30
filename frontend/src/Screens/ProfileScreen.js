@@ -66,7 +66,7 @@ const RegisterScreen = ({ location, history }) => {
     return (
         <div>
             <LoginWrapper>
-                <Animated animationIn="flipInX" animationOut="zoomOutDown" isVisible={true}>
+                <Animated animationIn="bounceIn" animationOut="zoomOutDown" isVisible={true}>
                     <Container>
                         <Button variant='danger' className='closeButton m-0 btn btn-danger' onClick={() => history.go(-1)}><IoMdClose /></Button>
                         <Row>

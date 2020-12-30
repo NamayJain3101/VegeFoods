@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom'
 import { getUserDetails, updateUser } from '../Actions/userActions'
 import { USER_UPDATE_RESET } from '../Constants/usersConstants'
 import { GrClose } from 'react-icons/gr'
+import Toggle from 'react-toggle'
 
 const UserEditScreen = ({ history, match }) => {
     const userId = match.params.id
@@ -70,7 +71,7 @@ const UserEditScreen = ({ history, match }) => {
     return (
         <div>
             <UserEditWrapper>
-                <Animated animationIn="flipInX" animationOut="zoomOutDown" isVisible={true}>
+                <Animated animationIn="bounceIn" animationOut="zoomOutDown" isVisible={true}>
                     <Container>
                         <Link to='/admin/userlist' className='btn mt-0 btn-danger btnClose'><GrClose /></Link>
                         <Row>
@@ -95,8 +96,15 @@ const UserEditScreen = ({ history, match }) => {
                                         <input type="text" value={name} onChange={(e) => setName(e.target.value)} name="name" id="name" placeholder='Name' />
                                         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} name="email" id="email" placeholder='Email' />
                                         <input type="number" value={wallet} onChange={(e) => setWallet(e.target.value)} name="wallet" id="wallet" placeholder='Wallet' />
-                                        <div className='isAdmin'>
-                                            Is Admin: <input type="checkbox" name="admin" id="admin" checked={isAdmin} onChange={(e) => setIsAdmin(e.target.checked)} />
+                                        <div className='mb-3 d-flex align-items-center justify-content-between'>
+                                            <label htmlFor='toggleDiscountType' className='m-0 mx-3'>{'admin'.toUpperCase()}</label>
+                                            <Toggle
+                                                id='toggleDiscountType'
+                                                className='toggle-custom'
+                                                checked={isAdmin}
+                                                icons={false}
+                                                onChange={(e) => setIsAdmin(e.target.checked)}
+                                            />
                                         </div>
                                         {successUpdate && <p className='text-success text-capitalize error'>User Updated</p>}
                                         {error && <p className='text-danger text-capitalize error'>{error}</p>}

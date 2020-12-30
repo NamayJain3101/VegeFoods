@@ -52,7 +52,7 @@ const RegisterScreen = ({ location, history }) => {
     return (
         <div>
             <RegisterWrapper>
-                <Animated animationIn="flipInX" animationOut="zoomOutDown" isVisible={true}>
+                <Animated animationIn="bounceIn" animationOut="zoomOutDown" isVisible={true}>
                     <Container>
                         <Row>
                             <Col lg={6} className='d-none d-lg-flex pr-lg-5'>

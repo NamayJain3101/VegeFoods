@@ -63,7 +63,7 @@ const ShippingScreen = ({ history }) => {
     return (
         <div>
             <ShippingWrapper>
-                <Animated animationIn="flipInX" animationOut="zoomOutDown" isVisible={true}>
+                <Animated animationIn="bounceIn" animationOut="zoomOutDown" isVisible={true}>
                     <Container>
                         <CheckoutSteps step1 step2 />
                         <h3 className='text-center text-uppercase font-weight-bold'>Shipping</h3>

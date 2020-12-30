@@ -41,7 +41,7 @@ const LoginScreen = ({ location, history }) => {
     return (
         <div>
             <LoginWrapper>
-                <Animated animationIn="flipInX" animationOut="zoomOutDown" isVisible={true}>
+                <Animated animationIn="bounceIn" animationOut="zoomOutDown" isVisible={true}>
                     <Container>
                         <Row>
                             <Col lg={6} className='d-none d-lg-flex pr-lg-5'>
@@ -152,9 +152,9 @@ const LoginWrapper = styled.div`
         box-shadow: 1px 1px 5px 1px red;
     }
     @media(max-width: 600px) {
-        padding: 3rem;
+        padding: 2rem;
         .container {
-            padding: 3rem;
+            padding: 2rem;
             box-shadow: 5px 5px 20px 5px green;
         }
     }

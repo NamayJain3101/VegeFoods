@@ -68,7 +68,7 @@ const CouponCreateScreen = ({ history }) => {
     return (
         <div>
             <CouponCreateWrapper>
-                <Animated animationIn="flipInX" animationOut="zoomOutDown" isVisible={true}>
+                <Animated animationIn="bounceIn" animationOut="zoomOutDown" isVisible={true}>
                     <Container>
                         <Link to='/admin/couponlist' className='btn mt-0 btn-danger btnClose'><GrClose /></Link>
                         {loading ? <Loader /> : (

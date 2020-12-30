@@ -83,7 +83,7 @@ const WalletScreen = ({ history }) => {
     return (
         <div>
             <WalletWrapper>
-                <Animated animationIn="flipInX" animationOut="zoomOutDown" isVisible={true}>
+                <Animated animationIn="bounceIn" animationOut="zoomOutDown" isVisible={true}>
                     <Container>
                         <h3 className='mb-3 mb-lg-5 w-100 text-center text-uppercase font-weight-bold'>Recharge</h3>
                         <Button variant='danger' className='closeButton m-0 btn btn-danger' onClick={() => history.go(-1)}><IoMdClose /></Button>

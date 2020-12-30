@@ -103,7 +103,7 @@ const ProductEditScreen = ({ history, match }) => {
     return (
         <div>
             <ProductEditWrapper>
-                <Animated animationIn="flipInX" animationOut="zoomOutDown" isVisible={true}>
+                <Animated animationIn="bounceIn" animationOut="zoomOutDown" isVisible={true}>
                     <Container>
                         <Link to='/admin/productlist' className='btn mt-0 btn-danger btnClose'><GrClose /></Link>
                         <h3 className='d-block text-center text-uppercase font-weight-bold'>Edit Product</h3>
