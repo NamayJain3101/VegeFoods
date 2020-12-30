@@ -30,7 +30,7 @@ const PrintInvoiceScreen = ({ history, match }) => {
             if (isMobile) {
                 setTimeout(() => {
                     history.push('/my-account/myOrders')
-                }, 1000)
+                }, 10000)
             } else {
                 history.push('/my-account/myOrders')
             }
