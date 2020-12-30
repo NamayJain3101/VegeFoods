@@ -6,7 +6,6 @@ import * as Scroll from 'react-scroll'
 import Loader from '../Components/Loader'
 import Message from '../Components/Message'
 import { Col, ListGroupItem, Row, Table } from 'react-bootstrap'
-import { isMobile } from "react-device-detect";
 
 const PrintInvoiceScreen = ({ history, match }) => {
 

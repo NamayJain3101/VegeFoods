@@ -91,7 +91,8 @@ const CouponListWrapper = styled.div`
         left: 50%;
         transform: translateX(-50%);
         top: 0;
-        border-radius: 50%;
+        border-bottom-left-radius: 50%;
+        border-bottom-right-radius: 50%;
     }
     .back > a {
         border-radius: 0;

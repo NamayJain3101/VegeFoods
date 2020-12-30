@@ -112,7 +112,8 @@ const WishlistWrapper = styled.div`
         left: 50%;
         transform: translateX(-50%);
         top: 0;
-        border-radius: 50%;
+        border-bottom-left-radius: 50%;
+        border-bottom-right-radius: 50%;
         box-shadow: 2px 2px 15px 1px green;
     }
     .back > a {
