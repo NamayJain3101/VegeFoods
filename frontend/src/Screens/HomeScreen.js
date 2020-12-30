@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom'
 import Tilt from 'react-tilt'
 import { Animated } from "react-animated-css";
 import * as Scroll from 'react-scroll'
+import TrackVisibility from 'react-on-screen';
 
 const HomeScreen = () => {
 
@@ -42,56 +43,64 @@ const HomeScreen = () => {
                 <Container>
                     <h5 className='text-success text-center'>Products</h5>
                     <h2 className='text-center'>Featured Products</h2>
-                    {loading ? <Loader /> : error ? <Message variant='danger'>{error}</Message> : (
-                        <Animated animationIn="zoomInUp" animationOut="zoomOutDown" isVisible={true}>
-                            <Row>
-                                {
-                                    products.map(product => {
-                                        return (
-                                            <Col key={product.name} md={6} lg={3}>
-                                                <Product product={product} />
-                                            </Col>
-                                        )
-                                    })
-                                }
-                            </Row>
-                        </Animated>
-                    )}
+                    <TrackVisibility once partialVisibility>
+                        {({ isVisible }) => isVisible && (
+                            loading ? <Loader /> : error ? <Message variant='danger'>{error}</Message> : (
+                                <Animated animationIn="zoomInUp" animationOut="zoomOutDown" isVisible={true}>
+                                    <Row>
+                                        {
+                                            products.map(product => {
+                                                return (
+                                                    <Col key={product.name} md={6} lg={3}>
+                                                        <Product product={product} />
+                                                    </Col>
+                                                )
+                                            })
+                                        }
+                                    </Row>
+                                </Animated>
+                            )
+                        )}
+                    </TrackVisibility>
                 </Container>
             </TopProductsWrapper>
             <BestDealWrapper>
                 <Container>
                     <h5 className='text-success text-center'>Best Price For You</h5>
                     <h2 className='text-center'>Deal of The Day</h2>
-                    {loadingBestProduct ? <Loader /> : errorBestProduct ? <Message variant='danger'>{errorBestProduct}</Message> : (
-                        <Animated animationIn="flipInX" animationOut="zoomOutDown" isVisible={true}>
-                            <Row>
-                                <Col md={6}>
-                                    <div className='img-container'>
-                                        <Tilt className="Tilt"
-                                            options={{
-                                                max: 35,
-                                                perspective: 700,
-                                                scale: 1.1,
-                                                speed: 900,
-                                                transition: true,
-                                                easing: "cubic-bezier(.03,.98,.52,.99)"
-                                            }}
-                                        >
-                                            <img src={productBestProduct.image} alt='best Deal' className='img-fluid' />
-                                        </Tilt>
-                                    </div>
-                                </Col>
-                                <Col md={5}>
-                                    <Link to={`/shop/${productBestProduct._id}`}>
-                                        <h1 className='text-success font-italic'>{productBestProduct.name}</h1>
-                                    </Link>
-                                    <h3 className='price'><span>&#8377;{productBestProduct.discountPrice}</span> Now at &#8377;{productBestProduct.price}</h3>
-                                    <p>Hurry! Offer valid for limited time only...</p>
-                                </Col>
-                            </Row>
-                        </Animated>
-                    )}
+                    <TrackVisibility once partialVisibility>
+                        {({ isVisible }) => isVisible && (
+                            loadingBestProduct ? <Loader /> : errorBestProduct ? <Message variant='danger'>{errorBestProduct}</Message> : (
+                                <Animated animationIn="rubberBand" animationOut="zoomOutDown" isVisible={true}>
+                                    <Row>
+                                        <Col md={6}>
+                                            <div className='img-container'>
+                                                <Tilt className="Tilt"
+                                                    options={{
+                                                        max: 35,
+                                                        perspective: 700,
+                                                        scale: 1.1,
+                                                        speed: 900,
+                                                        transition: true,
+                                                        easing: "cubic-bezier(.03,.98,.52,.99)"
+                                                    }}
+                                                >
+                                                    <img src={productBestProduct.image} alt='best Deal' className='img-fluid' />
+                                                </Tilt>
+                                            </div>
+                                        </Col>
+                                        <Col md={5}>
+                                            <Link to={`/shop/${productBestProduct._id}`}>
+                                                <h1 className='text-success font-italic'>{productBestProduct.name}</h1>
+                                            </Link>
+                                            <h3 className='price'><span>&#8377;{productBestProduct.discountPrice}</span> Now at &#8377;{productBestProduct.price}</h3>
+                                            <p>Hurry! Offer valid for limited time only...</p>
+                                        </Col>
+                                    </Row>
+                                </Animated>
+                            )
+                        )}
+                    </TrackVisibility>
                 </Container>
             </BestDealWrapper>
             <Subscribe />
@@ -127,6 +136,9 @@ const BestDealWrapper = styled.div`
     h2 {
         font-weight: bold;
         margin-bottom: 3rem;
+    }
+    .Tilt {
+        overflow: hidden;
     }
     .row {
         max-width: 900px;

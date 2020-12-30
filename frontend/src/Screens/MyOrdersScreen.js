@@ -12,6 +12,7 @@ import OrderStatus from '../Components/OrderStatus'
 import Subscribe from '../Components/Subscribe'
 import * as Scroll from 'react-scroll'
 import Pagination from 'react-js-pagination'
+import { CgClose } from 'react-icons/cg'
 
 const MyOrdersScreen = ({ history }) => {
 
@@ -41,6 +42,9 @@ const MyOrdersScreen = ({ history }) => {
         <div>
             <MyOrdersWrapper>
                 <div className='mx-auto' style={{ maxWidth: '1200px' }}>
+                    <div className="back mb-4 mb-md-5">
+                        <Link to='/my-account' className='btn btn-danger mb-0'><CgClose /></Link>
+                    </div>
                     {loading ? <Loader /> : error ? <Message variant='danger'>{error}</Message> : (
                         <React.Fragment>
                             {orders && orders.length > 0 ? (
@@ -114,10 +118,24 @@ const MyOrdersScreen = ({ history }) => {
 const MyOrdersWrapper = styled.div`
     background: linear-gradient(170deg, greenyellow, lightgreen, greenyellow);
     padding: 5rem 2rem;
+    position: relative;
     .orders {
         display: flex;
         align-items: center;
         justify-content: space-evenly;
+    }
+    .back {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 0;
+        border-radius: 50%;
+    }
+    .back > a {
+        border-radius: 0;
+        border-bottom-left-radius: 50%;
+        border-bottom-right-radius: 50%;
+        font-size: 1.3rem;
     }
     .row > div > div {
         background: white;
@@ -231,6 +249,7 @@ const MyOrdersWrapper = styled.div`
     }
     @media(max-width: 701px) {
         padding: 2rem;
+        padding-top: 4rem;
         .row > div > div {
             margin: 1rem;
         }
@@ -240,6 +259,7 @@ const MyOrdersWrapper = styled.div`
     }
     @media(max-width: 501px) {
         padding: 2rem;
+        padding-top: 4rem;
         .row > div > div {
             margin: 1rem;
         }

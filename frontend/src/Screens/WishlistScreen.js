@@ -11,6 +11,8 @@ import Veg1 from '../Assets/veg1.jpg'
 import Subscribe from '../Components/Subscribe'
 import { GrFormClose } from 'react-icons/gr'
 import { toast, ToastContainer } from 'react-toastify'
+import { Link } from 'react-router-dom'
+import { CgClose } from 'react-icons/cg'
 
 const WishlistScreen = ({ history }) => {
 
@@ -51,6 +53,9 @@ const WishlistScreen = ({ history }) => {
             <Hero img={Veg1} title='Wishlist' />
             <WishlistWrapper>
                 <Container>
+                    <div className="back mb-4 mb-md-5">
+                        <Link to='/my-account' className='btn btn-danger mb-0'><CgClose /></Link>
+                    </div>
                     {loading || loadingRemove ? <Loader /> : error ? <Message variant='danger'>{error}</Message> : errorRemove ? <Message variant='danger'>{errorRemove}</Message> : (
                         wishlist && wishlist.wishlistItems && wishlist.wishlistItems.length > 0 ? (
                             <Row>
@@ -101,6 +106,21 @@ const WishlistWrapper = styled.div`
     background: linear-gradient(170deg, greenyellow, lightgreen, greenyellow);
     padding: 5rem 2rem;
     padding-bottom: 4rem;
+    position: relative;
+    .back {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 0;
+        border-radius: 50%;
+        box-shadow: 2px 2px 15px 1px green;
+    }
+    .back > a {
+        border-radius: 0;
+        border-bottom-left-radius: 50%;
+        border-bottom-right-radius: 50%;
+        font-size: 1.3rem;
+    }
     .row > div > div {
         display: flex;
         flex-flow: column;
@@ -154,6 +174,7 @@ const WishlistWrapper = styled.div`
     }
     @media(max-width: 800px) {
         padding: 2rem;
+        padding-top: 4rem;
         .row > div > div {
             margin: 1rem;
         }

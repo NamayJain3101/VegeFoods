@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { COUPON_CREATE_FAIL, COUPON_CREATE_REQUEST, COUPON_CREATE_SUCCESS, COUPON_DELETE_FAIL, COUPON_DELETE_REQUEST, COUPON_DELETE_SUCCESS, COUPON_GET_FAIL, COUPON_GET_REQUEST, COUPON_GET_SUCCESS, COUPON_LIST_FAIL, COUPON_LIST_REQUEST, COUPON_LIST_SUCCESS, COUPON_UPDATE_FAIL, COUPON_UPDATE_REQUEST, COUPON_UPDATE_SUCCESS } from "../Constants/couponConstants"
+import { COUPON_CREATE_FAIL, COUPON_CREATE_REQUEST, COUPON_CREATE_SUCCESS, COUPON_DELETE_FAIL, COUPON_DELETE_REQUEST, COUPON_DELETE_SUCCESS, COUPON_GET_FAIL, COUPON_GET_REQUEST, COUPON_GET_SUCCESS, COUPON_LIST_FAIL, COUPON_LIST_MY_FAIL, COUPON_LIST_MY_REQUEST, COUPON_LIST_MY_SUCCESS, COUPON_LIST_REQUEST, COUPON_LIST_SUCCESS, COUPON_UPDATE_FAIL, COUPON_UPDATE_REQUEST, COUPON_UPDATE_SUCCESS } from "../Constants/couponConstants"
 
 export const createCoupon = (coupon) => async(dispatch, getState) => {
     try {
@@ -119,6 +119,31 @@ export const updateCoupon = (couponCode, amount) => async(dispatch, getState) =>
     } catch (error) {
         dispatch({
             type: COUPON_UPDATE_FAIL,
+            payload: error.response && error.response.data.message ? error.response.data.message : error.message
+        })
+    }
+}
+
+export const listMyCoupons = () => async(dispatch, getState) => {
+    try {
+        dispatch({
+            type: COUPON_LIST_MY_REQUEST
+        })
+        const { userLogin: { userInfo } } = getState()
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+        const { data } = await axios.get('/api/coupons/myCoupons', config)
+        dispatch({
+            type: COUPON_LIST_MY_SUCCESS,
+            payload: data
+        })
+    } catch (error) {
+        dispatch({
+            type: COUPON_LIST_MY_FAIL,
             payload: error.response && error.response.data.message ? error.response.data.message : error.message
         })
     }

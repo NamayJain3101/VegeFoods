@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import { Col, Container, Row } from 'react-bootstrap'
 import Subscribe from '../Components/Subscribe'
 import { AdminData } from '../Data/AdminData'
+import { Link } from 'react-router-dom'
+import { CgClose } from 'react-icons/cg'
 
 const AdminScreen = ({ history }) => {
 
@@ -25,6 +27,9 @@ const AdminScreen = ({ history }) => {
         <div>
             <AdminWrapper>
                 <Container>
+                    <div className="back mb-4 mb-md-5">
+                        <Link to='/my-account' className='btn btn-danger mb-0'><CgClose /></Link>
+                    </div>
                     <Row className='option-container w-100 m-0'>
                         {AdminData.map(item => {
                             return (
@@ -46,6 +51,20 @@ const AdminScreen = ({ history }) => {
 
 const AdminWrapper = styled.div`
     padding: 5rem 2rem;
+    position: relative;
+    .back {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 0;
+        border-radius: 50%;
+    }
+    .back > a {
+        border-radius: 0;
+        border-bottom-left-radius: 50%;
+        border-bottom-right-radius: 50%;
+        font-size: 1.3rem;
+    }
     hr {
         margin-bottom: 2rem !important;
     }
@@ -85,6 +104,7 @@ const AdminWrapper = styled.div`
     }
     @media(max-width: 701px) {
         padding: 2rem;
+        padding-top: 4rem;
     }
 `
 

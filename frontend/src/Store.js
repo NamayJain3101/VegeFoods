@@ -6,7 +6,7 @@ import { productBestReducer, productCreateReducer, productCreateReviewReducer, p
 import { cartReducer } from './Reducers/cartReducers'
 import { addToWishlistReducer, removeFromWishlistReducer, userDetailsReducer, userloginReducer, userRegisterReducer, userUpdateProfileReducer, userWishlistReducer, userListStatsReducer, userListReducer, userDeleteReducer, userUpdateReducer } from './Reducers/userReducer'
 import { orderCancelReducer, orderCreateReducer, orderDeliverReducer, orderDetailsReducer, orderListMyReducer, orderListReducer, orderListStatsReducer } from './Reducers/orderReducers'
-import { couponCreateReducer, couponDeleteReducer, couponGetReducer, couponListReducer, couponUpdateReducer } from './Reducers/couponReducer'
+import { couponCreateReducer, couponDeleteReducer, couponGetReducer, couponListMyReducer, couponListReducer, couponUpdateReducer } from './Reducers/couponReducer'
 
 const reducer = combineReducers({
     //Products
@@ -37,6 +37,11 @@ const reducer = combineReducers({
     orderListMy: orderListMyReducer,
     orderCancel: orderCancelReducer,
 
+    //Coupons
+    couponListMy: couponListMyReducer,
+    couponGet: couponGetReducer,
+    couponUpdate: couponUpdateReducer,
+
     //Admin
     userList: userListReducer,
     userListStats: userListStatsReducer,
@@ -48,13 +53,9 @@ const reducer = combineReducers({
     productDelete: productDeleteReducer,
     productCreate: productCreateReducer,
     productUpdate: productUpdateReducer,
-
-    //Coupons
     couponCreate: couponCreateReducer,
     couponList: couponListReducer,
     couponDelete: couponDeleteReducer,
-    couponGet: couponGetReducer,
-    couponUpdate: couponUpdateReducer,
 })
 
 const cartItemsFromStorage = localStorage.getItem('cartItems-VegeFoods') ? JSON.parse(localStorage.getItem('cartItems-VegeFoods')) : []

@@ -31,6 +31,7 @@ import WalletScreen from './Screens/WalletScreen'
 import PrintInvoiceScreen from './Screens/PrintInvoiceScreen'
 import CouponListScreen from './Screens/CouponListScreen'
 import CouponCreateScreen from './Screens/CouponCreateScreen'
+import MyCouponsScreen from './Screens/MyCouponsScreen'
 
 const App = () => {
 	return (
@@ -56,6 +57,7 @@ const App = () => {
 				<Route path='/register' exact component={RegisterScreen} />
 				<Route path='/my-account/profile' exact component={ProfileScreen} />
 				<Route path='/my-account/myOrders' exact component={MyOrdersScreen} />
+				<Route path='/my-account/myCoupons' exact component={MyCouponsScreen} />
 				<Route path='/my-account' exact component={AccountPage} />
 				<Route path='/my-wallet' exact component={WalletScreen} />
 				<Route path='/wishlist' exact component={WishlistScreen} />

@@ -1,4 +1,4 @@
-import { COUPON_CREATE_FAIL, COUPON_CREATE_REQUEST, COUPON_CREATE_RESET, COUPON_CREATE_SUCCESS, COUPON_DELETE_FAIL, COUPON_DELETE_REQUEST, COUPON_DELETE_SUCCESS, COUPON_GET_FAIL, COUPON_GET_REQUEST, COUPON_GET_RESET, COUPON_GET_SUCCESS, COUPON_LIST_FAIL, COUPON_LIST_REQUEST, COUPON_LIST_SUCCESS, COUPON_UPDATE_FAIL, COUPON_UPDATE_REQUEST, COUPON_UPDATE_RESET, COUPON_UPDATE_SUCCESS } from "../Constants/couponConstants"
+import { COUPON_CREATE_FAIL, COUPON_CREATE_REQUEST, COUPON_CREATE_RESET, COUPON_CREATE_SUCCESS, COUPON_DELETE_FAIL, COUPON_DELETE_REQUEST, COUPON_DELETE_SUCCESS, COUPON_GET_FAIL, COUPON_GET_REQUEST, COUPON_GET_RESET, COUPON_GET_SUCCESS, COUPON_LIST_FAIL, COUPON_LIST_MY_FAIL, COUPON_LIST_MY_REQUEST, COUPON_LIST_MY_SUCCESS, COUPON_LIST_REQUEST, COUPON_LIST_SUCCESS, COUPON_UPDATE_FAIL, COUPON_UPDATE_REQUEST, COUPON_UPDATE_RESET, COUPON_UPDATE_SUCCESS } from "../Constants/couponConstants"
 
 export const couponCreateReducer = (state = {}, action) => {
     switch (action.type) {
@@ -110,6 +110,28 @@ export const couponUpdateReducer = (state = {}, action) => {
             }
         case COUPON_UPDATE_RESET:
             return {}
+        default:
+            return {...state }
+    }
+}
+
+export const couponListMyReducer = (state = { coupons: [] }, action) => {
+    switch (action.type) {
+        case COUPON_LIST_MY_REQUEST:
+            return {
+                ...state,
+                loading: true
+            }
+        case COUPON_LIST_MY_SUCCESS:
+            return {
+                loading: false,
+                coupons: action.payload
+            }
+        case COUPON_LIST_MY_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            }
         default:
             return {...state }
     }

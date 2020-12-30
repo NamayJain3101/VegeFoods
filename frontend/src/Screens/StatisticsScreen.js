@@ -10,6 +10,8 @@ import { buildStyles, CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { listOrderStats } from '../Actions/orderActions'
 import { listUserStats } from '../Actions/userActions'
+import { Link } from 'react-router-dom'
+import { CgClose } from 'react-icons/cg'
 
 const Statistics = ({ history }) => {
 
@@ -40,6 +42,9 @@ const Statistics = ({ history }) => {
         <div>
             <AdminWrapper>
                 <Container>
+                    <div className="back mb-4 mb-md-5">
+                        <Link to='/my-account' className='btn btn-danger mb-0'><CgClose /></Link>
+                    </div>
                     {(loading || userLoading) ? <Loader /> : (error || userError) ? <Message variant='danger'>{error}</Message> : (
                         <Row className='w-100 m-0 data-container mb-5'>
                             <Col md={6} className='my-4 my-md-5'>
@@ -113,8 +118,22 @@ const Statistics = ({ history }) => {
 
 const AdminWrapper = styled.div`
     padding: 5rem 2rem;
+    position: relative;
     hr {
         margin-bottom: 2rem !important;
+    }
+    .back {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 0;
+        border-radius: 50%;
+    }
+    .back > a {
+        border-radius: 0;
+        border-bottom-left-radius: 50%;
+        border-bottom-right-radius: 50%;
+        font-size: 1.3rem;
     }
     .container {
         padding: 0;
@@ -155,6 +174,7 @@ const AdminWrapper = styled.div`
     }
     @media(max-width: 701px) {
         padding: 2rem;
+        padding-top: 4rem;
     }
 `
 
