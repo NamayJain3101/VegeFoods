@@ -7,7 +7,6 @@ import Loader from '../Components/Loader'
 import Message from '../Components/Message'
 import { Col, ListGroupItem, Row, Table } from 'react-bootstrap'
 import { isMobile } from 'react-device-detect'
-import { confirmAlert } from 'react-confirm-alert'
 
 const PrintInvoiceScreen = ({ history, match }) => {
 

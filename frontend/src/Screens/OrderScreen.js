@@ -208,7 +208,7 @@ const OrderScreen = ({ match, history }) => {
                                                 <Button variant='danger' type='button' className='my-2 text-capitalize px-3 py-2' onClick={cancelOrderHandler}>Cancel Order</Button>
                                             )
                                         )}
-                                        {isMobile && userInfo && order && order.user && (userInfo._id === order.user._id) && (
+                                        {!isMobile && userInfo && order && order.user && (userInfo._id === order.user._id) && (
                                             <Link to={`/orders/${order._id}/print`} className='m-0 mt-3 btn btn-success'>Print invoice</Link>
                                         )}
                                     </Col>
