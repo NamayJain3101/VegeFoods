@@ -14,6 +14,7 @@ import { USER_DETAILS_RESET } from '../Constants/usersConstants'
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css'
 import { Link } from 'react-router-dom'
+import { isMobile } from 'react-device-detect'
 
 const OrderScreen = ({ match, history }) => {
 
@@ -207,7 +208,7 @@ const OrderScreen = ({ match, history }) => {
                                                 <Button variant='danger' type='button' className='my-2 text-capitalize px-3 py-2' onClick={cancelOrderHandler}>Cancel Order</Button>
                                             )
                                         )}
-                                        {userInfo && order && order.user && (userInfo._id === order.user._id) && (
+                                        {isMobile && userInfo && order && order.user && (userInfo._id === order.user._id) && (
                                             <Link to={`/orders/${order._id}/print`} className='m-0 mt-3 btn btn-success'>Print invoice</Link>
                                         )}
                                     </Col>

@@ -30,21 +30,6 @@ const PrintInvoiceScreen = ({ history, match }) => {
             if (!isMobile) {
                 window.print()
                 history.push('/my-account/myOrders')
-            } else {
-                confirmAlert({
-                    title: `Unable to download on mobile`,
-                    message: '(Use PC/Laptop to download invoice)',
-                    buttons: [
-                        {
-                            label: 'OK',
-                            onClick: () => history.push(`/orders/${orderId}`)
-                        },
-                        {
-                            label: 'Cancel',
-                            onClick: () => history.push(`/orders/${orderId}`)
-                        },
-                    ],
-                })
             }
         } else {
             if (!userInfo) {
