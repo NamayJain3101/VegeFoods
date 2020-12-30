@@ -27,7 +27,7 @@ const MyCouponsScreen = ({ history }) => {
             duration: 1500,
             smooth: 'easeInOutQuint'
         })
-        if (!userInfo || !userInfo.isAdmin) {
+        if (!userInfo) {
             history.push('/')
         } else {
             dispatch(listMyCoupons())

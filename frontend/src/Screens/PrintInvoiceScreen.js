@@ -29,6 +29,8 @@ const PrintInvoiceScreen = ({ history, match }) => {
             if (!isMobile) {
                 window.print()
                 history.push('/my-account/myOrders')
+            } else {
+                history.push(`/orders/${orderId}`)
             }
         } else {
             if (!userInfo) {
