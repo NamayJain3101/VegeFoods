@@ -1,7 +1,6 @@
 import express from 'express'
 import multer from 'multer'
 import path from 'path'
-import resizer from 'node-image-resizer'
 
 const router = express.Router()
 
