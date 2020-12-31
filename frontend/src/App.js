@@ -1,7 +1,7 @@
 import React from 'react'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import 'react-toastify/dist/ReactToastify.min.css'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom'
 import Footer from './Components/Footer'
 import Navbar from './Components/Navbar'
 import HomeScreen from './Screens/HomeScreen'
@@ -66,6 +66,7 @@ const App = () => {
 				<Route path='/place-order' exact component={PlaceOrderScreen} />
 				<Route path='/orders/:id' exact component={OrderScreen} />
 				<Route path='/orders/:id/print' exact component={PrintInvoiceScreen} />
+				<Redirect to='/'></Redirect>
 			</Switch>
 			<Footer />
 		</BrowserRouter>
