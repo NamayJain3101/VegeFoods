@@ -5,6 +5,7 @@ import helmet from 'helmet'
 import cors from 'cors'
 import connectDB from './config/db.js'
 import path from 'path'
+import expressStaticGzip from "express-static-gzip"
 
 import productRoutes from './routes/productRoutes.js'
 import userRoutes from './routes/userRoutes.js'
