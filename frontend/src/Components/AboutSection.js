@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom'
 import { Button, Col, Container, Row } from 'react-bootstrap'
 import styled from 'styled-components'
 
-import Veg3 from '../Assets/Veg3.jpg'
+import Veg3 from '../Assets/Veg3.webp'
 
 const AboutSection = ({ history }) => {
     return (

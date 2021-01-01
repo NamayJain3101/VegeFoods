@@ -1,8 +1,8 @@
 import React from 'react'
 
-import Veg1 from '../Assets/veg1.jpg'
-import Veg2 from '../Assets/veg2.jpg'
-import Veg3 from '../Assets/Veg3.jpg'
+import Veg1 from '../Assets/veg1.webp'
+import Veg2 from '../Assets/veg2.webp'
+import Veg3 from '../Assets/Veg3.webp'
 
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';

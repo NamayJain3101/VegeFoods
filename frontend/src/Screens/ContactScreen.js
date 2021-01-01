@@ -5,7 +5,7 @@ import Hero from '../Components/Hero'
 import Subscribe from '../Components/Subscribe'
 import { ContactData } from '../Data/ContactData'
 
-import Veg1 from '../Assets/veg1.jpg'
+import Veg1 from '../Assets/veg1.webp'
 import styled from 'styled-components'
 import { Container } from 'react-bootstrap'
 

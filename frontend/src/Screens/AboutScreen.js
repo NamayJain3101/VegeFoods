@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import * as Scroll from 'react-scroll'
 import { Animated } from 'react-animated-css'
 
-import Veg1 from '../Assets/veg1.jpg'
+import Veg1 from '../Assets/veg1.webp'
 import AboutSection from '../Components/AboutSection'
 import Hero from '../Components/Hero'
 import Services from '../Components/Services'

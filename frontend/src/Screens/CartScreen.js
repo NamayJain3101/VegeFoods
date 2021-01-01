@@ -1,6 +1,6 @@
 import React from 'react'
 import Hero from '../Components/Hero'
-import Veg1 from '../Assets/veg1.jpg'
+import Veg1 from '../Assets/veg1.webp'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { toast, ToastContainer } from 'react-toastify'

@@ -8,7 +8,7 @@ import { AccountData } from '../Data/AccountData'
 import Subscribe from '../Components/Subscribe'
 import { logout } from '../Actions/userActions'
 
-import Veg1 from '../Assets/veg1.jpg'
+import Veg1 from '../Assets/veg1.webp'
 import { AiOutlineLogout } from 'react-icons/ai'
 import { RiAdminLine } from 'react-icons/ri'
 import { ImStatsDots } from 'react-icons/im'

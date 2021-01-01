@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import * as Scroll from 'react-scroll'
-import Veg1 from '../Assets/veg1.jpg'
+import Veg1 from '../Assets/veg1.webp'
 import Hero from '../Components/Hero'
 import Subscribe from '../Components/Subscribe'
 import { Button, Col, Container, Row } from 'react-bootstrap'

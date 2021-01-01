@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Button, Col, Container, Row } from 'react-bootstrap'
 import Subscribe from '../Components/Subscribe'
-import LoginImg from '../Assets/login.png'
+import LoginImg from '../Assets/login.webp'
 import Tilt from 'react-tilt'
 import * as Scroll from 'react-scroll'
 import { Animated } from "react-animated-css"
