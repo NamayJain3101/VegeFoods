@@ -92,12 +92,19 @@ const MainCarouselWrapper = styled.div`
     .desc h1, .desc h5{
         font-family: 'Amatic SC', cursive !important;
     }
+    .desc h1 {
+        font-size: 2rem;
+    } 
+    .desc h5 {
+        font-size: 1rem;
+        font-weight: bold;
+    }
     @media (min-width: 701px) {
         .desc h1 {
-            font-size: 6rem;
+            font-size: 4rem;
         } 
         .desc h5 {
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: bold;
         }
     }
