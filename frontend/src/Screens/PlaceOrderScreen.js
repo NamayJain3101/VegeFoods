@@ -74,7 +74,7 @@ const PlaceOrderScreen = ({ history }) => {
                 }
                 document.body.appendChild(script)
             }
-            if (!user.wallet) {
+            if (!user.name) {
                 dispatch(getUserDetails('profile'))
             }
             if (!window.paypal) {
